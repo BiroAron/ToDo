@@ -1,42 +1,41 @@
-<template>
-    <div>
-      <div id="clear">
-        <button @click="clear">Clear</button>
-      </div>
-      <AddItem :items="items" />
-      <ul>
-        <li v-for="(item, index) in items" :key="index">
-          {{ item }} <button @click="removeItem(index)">Remove</button>
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import { ref } from 'vue'
-  import AddItem from './ToDoAdd.vue'
-  
-  export default {
-    name: 'ToDoList',
-    components: {
-      AddItem
-    },
-    setup() {
-      const items = ref([])
-  
-      function removeItem(index:number) {
-        items.value.splice(index, 1)
-      }
-  
-      function clear() {
-        items.value.splice(0)
-      }
-  
-      return {
-        items,
-        removeItem,
-        clear
-      }
+<script setup lang="ts">
+    import { ref } from 'vue'
+
+    var items = ref([])
+    const todoInput = ref('')
+
+    function addItem(){
+        const newItem = todoInput.value
+        if(newItem != '')
+        items.value.push(newItem)
+        todoInput.value = ''
     }
-  }
-  </script>
+
+    function removeItem(index){
+        items.value.splice(index, 1)
+    }
+
+    function clear(){
+        items.value.splice(0)
+    }
+
+</script>
+
+<template>
+
+    <div id="clear">
+        <button @click="clear">Clear</button>
+    </div>
+    <div>
+        <input type = "text" placeholder="ToDo" v-model="todoInput"/>
+        <div>
+            <button @click="addItem">Add</button>
+        </div>
+    </div>
+    <ul >
+        <li v-for="(item, index) in items" :key="index">
+        {{ item }} <button @click="removeItem(index)">Remove</button>
+        </li>
+    </ul>
+
+</template>
