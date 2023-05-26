@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <Header @toggle-visibility="toggleVisibility"></Header> -->
+		<Header></Header>
 		<div :style="{ display: shouldShow ? 'block' : 'none' }">
 			<div id="clear">
 				<button @click="clear">Clear</button>
@@ -14,8 +14,8 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import ToDoForm from './ToDoForm.vue'
-	//import Header from './Header.vue'
 	import ToDoItem from './ToDoItem.vue'
+	import Header from './Header.vue'
 
 	interface Todo {
 		title: string;
@@ -35,9 +35,7 @@
 		todos.value.splice(index, 1);
 	}
 
-	// function toggleVisibility(){
-	// 	shouldShow.value = !shouldShow.value;
-	// }
+
 
 	function clear() {
 		todos.value.splice(0);
