@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Header></Header>
+		<Header @toggle-visibility="toggleVisibility"></Header>
 		<div :style="{ display: shouldShow ? 'block' : 'none' }">
 			<div id="clear">
 				<button @click="clear">Clear</button>
@@ -35,7 +35,9 @@
 		todos.value.splice(index, 1);
 	}
 
-
+	function toggleVisibility(){
+		shouldShow.value = !shouldShow.value;
+	}
 
 	function clear() {
 		todos.value.splice(0);
