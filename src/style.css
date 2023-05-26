@@ -1,0 +1,25 @@
+:root {
+  font-family: 'Neue Haas Grotesk Display Pro', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+#app {
+  padding-top: 5%;
+  margin: 0 auto;
+  text-align: center;
+  width:35%;
+  min-width: 600px;
+}
+
