@@ -12,3 +12,37 @@
         </div>
     </header>
 </template>
+
+<script setup lang="ts">
+
+</script>
+
+<style scoped>
+header{
+  display: flex;
+  justify-content: space-between;
+}
+
+header button{
+  width: 60px;
+  height: 60x;
+  left: 950px;
+  top: 90px;
+  border-radius: 30px;
+  outline: none;
+  border: none;
+  background: #38CB89;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.headerText{
+  font-weight: 600;
+  font-size: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
