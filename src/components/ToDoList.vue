@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- <Header @toggle-visibility="toggleVisibility"></Header> -->
+		<Header @toggle-visibility="toggleVisibility"></Header>
 		<div :style="{ display: shouldShow ? 'block' : 'none' }">
 			<div id="clear">
 				<button @click="clear">Clear</button>
@@ -14,7 +14,7 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import ToDoForm from './ToDoForm.vue'
-	//import Header from './Header.vue'
+	import Header from './Header.vue'
 	import ToDoItem from './ToDoItem.vue'
 
 	interface Todo {
