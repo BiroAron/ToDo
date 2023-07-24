@@ -35,9 +35,9 @@
 		todos.value.splice(index, 1);
 	}
 
-	// function toggleVisibility(){
-	// 	shouldShow.value = !shouldShow.value;
-	// }
+	function toggleVisibility(){
+		shouldShow.value = !shouldShow.value;
+	}
 
 	function clear() {
 		todos.value.splice(0);

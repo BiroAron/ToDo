@@ -31,7 +31,6 @@
          }
          if (newTodo.title !== '') {
              emit('addTodo', newTodo)
-             //console.log(newTodo)
              todoInput.value = ''
              priorityInput.value = 'low'
              todoDescription.value = ''
