@@ -1,13 +1,17 @@
 <template>
-	<div>
-		<Header @toggle-visibility="toggleVisibility"></Header>
-		<div :style="{ display: shouldShow ? 'block' : 'none' }">
-			<div id="clear">
-				<button @click="clear">Clear</button>
+	<div class="w-1/2 mx-auto max-w-xl">
+		<div class="px-5">
+			<Header @toggle-visibility="toggleVisibility"></Header>
+			<div class="flex justify-center align-center">
+				<div :style="{ display: shouldShow ? 'block' : 'none' }">
+					<div id="clear" class="flex justify-center align-center">
+						<button class="bg-transparent p-2 rounded-md mb-2 border border-black " @click="clear">Clear</button>
+					</div>
+					<ToDoForm @add-todo="addTodo" />
+				</div>
 			</div>
-			<ToDoForm @add-todo="addTodo" />
+			<ToDoItem :todos="todos" @delete-item="removeItem" />
 		</div>
-		<ToDoItem :todos="todos" @delete-item="removeItem" />
 	</div>
 </template>
 
@@ -16,12 +20,7 @@
 	import ToDoForm from './ToDoForm.vue'
 	import Header from './Header.vue'
 	import ToDoItem from './ToDoItem.vue'
-
-	interface Todo {
-		title: string;
-		priority: string;
-		text: string;
-	}
+	import { Todo } from './types';
 
 	const shouldShow = ref(true);
 
