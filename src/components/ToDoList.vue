@@ -33,7 +33,8 @@
   	// 	!isNewElementFormActive.value && !todos.length)
 
 	function addTodo(todo: Todo) {
-		todos.push(todo);
+		const todoCopy = {...todo};
+		todos.push(todoCopy);
 	}
 
 	function removeItem(index: number) {

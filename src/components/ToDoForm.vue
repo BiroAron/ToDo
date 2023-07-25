@@ -1,6 +1,6 @@
 <template>
     <div class="input">
-        <div class="inputRow1">
+        <div>
             <input id="addItemInput" type="text" placeholder="Title" v-model="newTodo.title" class="border p-2 rounded-md"/>
             <select class="border p-2 rounded-md" id="addPriorityInput" v-model="newTodo.priority">
                 <option value="low">Low</option>
@@ -8,8 +8,8 @@
                 <option value="high">High</option>
             </select>
         </div>
-        <div class="inputRow2">
-            <textarea id="addItemDescrition" type="text" placeholder="Description" v-model="newTodo.text"></textarea>
+        <div>
+            <textarea id="addItemDescription" type="text" placeholder="Description" v-model="newTodo.text"></textarea>
             <input type="checkbox">
         </div>
     </div>
@@ -21,26 +21,25 @@
 </template>
   
 <script setup lang="ts">
-    import { ref } from 'vue'
+    import { reactive } from 'vue'
     import { Todo } from './types';
 
     const emit = defineEmits<{(e:'addTodo', newTodo: Todo):void}>();
 
-    const newTodo = ref<Todo>({
+    const newTodo = reactive<Todo>({
         title: '',
         priority: 'low',
         text: ''
     });
 
     function addItem() {
-         if (newTodo.value.title !== '') {
-             emit('addTodo', newTodo.value);
-             newTodo.value = {
-                 title: '',
-                 priority: 'low',
-                 text: ''
-             };
+         if (newTodo.title !== '') {
+            emit('addTodo', newTodo);
+            console.log(newTodo.priority);
+            newTodo.title = '';
+            newTodo.text = '';
+            newTodo.priority = 'low';
+            };
          }
-     }
     
 </script>
