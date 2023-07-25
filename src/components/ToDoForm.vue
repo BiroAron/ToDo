@@ -1,7 +1,7 @@
 <template>
     <div class="input">
         <div class="inputRow1">
-            <input id="addItemInput" type="text" placeholder="Title" v-model="newTodo.title" class="p-2 rounded-md"/>
+            <input id="addItemInput" type="text" placeholder="Title" v-model="newTodo.title" class="border p-2 rounded-md"/>
             <select class="border p-2 rounded-md" id="addPriorityInput" v-model="newTodo.priority">
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="flex justify-center align-center">
-        <button class="bg-transparent p-2 rounded-md mb-2 border border-black " id="addItem" @click="addItem()">Add</button>
+        <button class="bg-transparent p-2  rounded-md mb-2" id="addItem" @click="addItem()">Add</button>
     </div>
     
 
@@ -24,6 +24,7 @@
     import { ref } from 'vue'
     import { Todo } from './types';
 
+    const emit = defineEmits<{(e:'addTodo', newTodo: Todo):void}>();
 
     const newTodo = ref<Todo>({
         title: '',
@@ -41,6 +42,5 @@
              };
          }
      }
-    const emit = defineEmits<{(e:'addTodo', newTodo: Todo):void}>();
     
 </script>

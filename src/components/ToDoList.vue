@@ -3,42 +3,49 @@
 		<div class="px-5">
 			<Header @toggle-visibility="toggleVisibility"></Header>
 			<div class="flex justify-center align-center">
-				<div :style="{ display: shouldShow ? 'block' : 'none' }">
+				<div :class="isNewElementFormActive ? 'block' : 'hidden'">
 					<div id="clear" class="flex justify-center align-center">
-						<button class="bg-transparent p-2 rounded-md mb-2 border border-black " @click="clear">Clear</button>
+						<button class="bg-transparent p-2 rounded-md mb-2 border border-black" @click="clear">Clear</button>
 					</div>
 					<ToDoForm @add-todo="addTodo" />
 				</div>
 			</div>
 			<ToDoItem :todos="todos" @delete-item="removeItem" />
+			<!-- <div :class="isDisplayed ? 'block' : 'hidden'"> 
+			</div> -->
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+
+	import { reactive, ref } from 'vue'
 	import ToDoForm from './ToDoForm.vue'
 	import Header from './Header.vue'
-	import ToDoItem from './ToDoItem.vue'
+	import ToDoItem from './ToDoItems.vue'
 	import { Todo } from './types';
 
-	const shouldShow = ref(true);
+	const isNewElementFormActive = ref(true);
 
-	const todos = ref<Todo[]>([]);
+	const todos = reactive<Todo[]>([]);
+
+	// const isDisplayed = computed(() => 
+  	// 	!isNewElementFormActive.value && !todos.length)
 
 	function addTodo(todo: Todo) {
-		todos.value.push(todo);
+		todos.push(todo);
 	}
 
 	function removeItem(index: number) {
-		todos.value.splice(index, 1);
+		todos.splice(index, 1);
 	}
 
 	function toggleVisibility(){
-		shouldShow.value = !shouldShow.value;
+		isNewElementFormActive.value = !isNewElementFormActive.value;
 	}
 
 	function clear() {
-		todos.value.splice(0);
+		todos.splice(0);
 	}
+
 </script>

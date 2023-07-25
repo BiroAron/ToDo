@@ -9,11 +9,11 @@
 
 <script setup lang='ts'>
 
-  const props = defineProps(['todos']);
-  console.log(props)
-  console.log(typeof(props))
+  defineProps(['todos']);
+  const emit = defineEmits<{(e:'deleteItem', index: number):void}>();
+
   function deleteItem(index:number){
     emit('deleteItem', index);
   }
-  const emit = defineEmits<{(e:'deleteItem', index: number):void}>();
+
 </script>
