@@ -1,7 +1,12 @@
 <template>
   <ul>
-    <li v-for="(todo, index) in todos" :key="index">
-      {{ todo.title }} - {{ todo.text }} - {{ todo.priority }}
+    <li v-for="(todo, index) in todos" :key="index" class="mb-3">
+      {{ todo.title }}
+
+      {{ todo.priority }}
+
+      {{ todo.text }}
+
       <button @click="deleteItem(index)">Remove</button>
     </li>
   </ul>

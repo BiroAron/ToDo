@@ -4,7 +4,7 @@
       To do list
     </div>
     <div
-      class="w-16 h-16 left-72 top-10 rounded-full outline-none border-none bg-green-500 flex justify-center items-center cursor-pointer"
+      class="w-12 h-12 left-72 top-10 rounded-full outline-none border-none bg-green-500 flex justify-center items-center cursor-pointer"
     >
       <button @click="toggleVisibility">
         <PlusIcon />
