@@ -21,16 +21,11 @@
       ></textarea>
     </div>
     <div class="flex justify-start align-center">
-      <button
-        class="bg-green-500 py-2 px-8 mx-1 rounded-xl"
-        id="addItem"
-        @click="addItem()"
-      >
+      <button class="bg-green-500 py-2 px-8 mx-1 rounded-xl" @click="addItem()">
         Save
       </button>
       <button
         class="bg-gray-300 py-2 px-7 mx-1 rounded-xl"
-        id="addItem"
         @click="emptyForm()"
       >
         Delete
@@ -54,9 +49,7 @@ const newTodo = reactive<Todo>({
 function addItem() {
   if (newTodo.title !== '') {
     emit('addTodo', newTodo)
-    newTodo.title = ''
-    newTodo.text = ''
-    newTodo.priority = 'low'
+    emptyForm()
   }
 }
 
