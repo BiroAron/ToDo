@@ -9,15 +9,15 @@
           class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
         />
       </div>
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center font-semibold text-white">
         <select
           class="border bg-gray-300 py-1 px-5 rounded-3xl focus:outline-none"
           v-model="newTodo.priority"
           :class="updatePriorityClass"
         >
-          <option class="bg-low" value="low">Low</option>
-          <option class="bg-medium" value="medium">Medium</option>
-          <option class="bg-high" value="high">High</option>
+          <option class="bg-low" value="Low">Low</option>
+          <option class="bg-medium" value="Medium">Medium</option>
+          <option class="bg-high" value="High">High</option>
         </select>
       </div>
     </div>
@@ -53,17 +53,18 @@ import { reactive, computed } from 'vue'
 import { Todo } from './types'
 
 const updatePriorityClass = computed(() => ({
-  'bg-low': newTodo.priority === 'low',
-  'bg-medium': newTodo.priority === 'medium',
-  'bg-high': newTodo.priority === 'high'
+  'bg-low': newTodo.priority === 'Low',
+  'bg-medium': newTodo.priority === 'Medium',
+  'bg-high': newTodo.priority === 'High'
 }))
 
 const emit = defineEmits<{ (e: 'addTodo', newTodo: Todo): void }>()
 
 const newTodo = reactive<Todo>({
   title: '',
-  priority: 'low',
-  text: ''
+  priority: 'Low',
+  text: '',
+  state: false
 })
 
 function addItem() {
@@ -76,6 +77,6 @@ function addItem() {
 function emptyForm() {
   newTodo.title = ''
   newTodo.text = ''
-  newTodo.priority = 'low'
+  newTodo.priority = 'Low'
 }
 </script>

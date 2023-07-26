@@ -1,6 +1,8 @@
 <template>
-  <div class="w-1/2 mx-auto max-w-xl min-w-[414px]">
-    <div class="px-5">
+  <div
+    class="w-1/2 h-screen mx-auto max-w-xl min-w-[375px] phone:bg-red-200 desktop:bg-blue-200"
+  >
+    <div class="px-5 h-screen">
       <Header @toggle-visibility="toggleVisibility"></Header>
       <div class="flex justify-center align-center">
         <div
@@ -18,12 +20,14 @@
       >
         <EmptyListImage />
       </div>
-      <button
-        class="bg-transparent p-2 rounded-md mb-2 border border-black"
-        @click="clear"
-      >
-        Clear
-      </button>
+      <div class="flex justify-center align-center">
+        <button
+          class="bg-transparent p-2 rounded-md mb-2 border border-black"
+          @click="clear"
+        >
+          Clear
+        </button>
+      </div>
     </div>
   </div>
 </template>
