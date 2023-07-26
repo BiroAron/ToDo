@@ -7,13 +7,11 @@
   </ul>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
+defineProps(['todos'])
+const emit = defineEmits<{ (e: 'deleteItem', index: number): void }>()
 
-  defineProps(['todos']);
-  const emit = defineEmits<{(e:'deleteItem', index: number):void}>();
-
-  function deleteItem(index:number){
-    emit('deleteItem', index);
-  }
-
+function deleteItem(index: number) {
+  emit('deleteItem', index)
+}
 </script>
