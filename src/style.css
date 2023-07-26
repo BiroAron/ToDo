@@ -1,25 +1,15 @@
-:root {
-  font-family: 'Neue Haas Grotesk Display Pro', sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+@layer base{
+  /* your custom styles here */
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+ 
+@layer utilities{
+  /* your utility classes here */
 }
-
-#app {
-  padding-top: 5%;
-  margin: 0 auto;
-  text-align: center;
-  width:35%;
-  min-width: 600px;
+ 
+@layer components{
+   /* your components classes here */
 }
-
