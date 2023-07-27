@@ -10,7 +10,7 @@
           <ToDoForm @add-todo="addTodo" />
         </div>
       </div>
-      <ToDoItem :todos="todos" @delete-item="removeItem" />
+      <ToDoItems :todos="todos" @delete-item="deleteItem" />
       <div class="flex justify-center align-middle"></div>
       <div
         :class="getEmptyListImageVisibility"
@@ -34,7 +34,7 @@
 import { computed, reactive, ref } from 'vue'
 import ToDoForm from './ToDoForm.vue'
 import Header from './Header.vue'
-import ToDoItem from './ToDoItems.vue'
+import ToDoItems from './ToDoItems.vue'
 import { Todo } from '../types/Todo'
 import EmptyListImage from './EmptyListImage.vue'
 
@@ -54,7 +54,7 @@ function addTodo(todo: Todo) {
   toggleVisibility()
 }
 
-function removeItem(index: number) {
+function deleteItem(index: number) {
   todos.splice(index, 1)
 }
 
