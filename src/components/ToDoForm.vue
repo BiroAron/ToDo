@@ -22,14 +22,12 @@
       </div>
     </div>
     <div>
-      <div>
-        <textarea
-          class="w-full p-2 mt-5 flex placeholder-gray-500 font-semibold focus:outline-none"
-          type="text"
-          placeholder="Description"
-          v-model="newTodo.text"
-        ></textarea>
-      </div>
+      <textarea
+        class="w-full p-2 mt-5 flex placeholder-gray-500 font-semibold focus:outline-none"
+        type="text"
+        placeholder="Description"
+        v-model="newTodo.text"
+      ></textarea>
     </div>
     <div class="flex justify-start align-center mt-4">
       <button
@@ -50,7 +48,7 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import { Todo } from './types'
+import { Todo } from '../types/Todo'
 
 const updatePriorityClass = computed(() => ({
   'bg-low': newTodo.priority === 'Low',
@@ -64,11 +62,11 @@ const newTodo = reactive<Todo>({
   title: '',
   priority: 'Low',
   text: '',
-  state: false
+  isChecked: false
 })
 
 function addItem() {
-  if (newTodo.title !== '') {
+  if (newTodo.title) {
     emit('addTodo', newTodo)
     emptyForm()
   }

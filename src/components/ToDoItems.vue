@@ -34,12 +34,12 @@
           <div class="flex justify-center items-end phone:items-center">
             <div
               class="w-8 h-8 rounded-full border-4 border-black relative"
-              :class="todo.state ? 'border-green-500' : 'border-black'"
+              :class="getCheckButtonCircleColor(todo)"
               @click="toggleTaskState(todo)"
             >
               <CheckedIcon
                 class="absolute bottom-0 left-0"
-                :class="todo.state ? 'block' : 'hidden'"
+                :class="getChecIconVisisbility(todo)"
               />
             </div>
           </div>
@@ -53,30 +53,36 @@
 </template>
 
 <script setup lang="ts">
-import { Todo } from './types'
+import { Todo } from '../types/Todo'
 import CheckedIcon from './CheckedIcon.vue'
 
-defineProps(['todos'])
+interface Props {
+  todos: Todo[]
+}
+
+defineProps<Props>()
 const emit = defineEmits<{ (e: 'deleteItem', index: number): void }>()
 
+const colorMap: Record<string, string> = {
+  High: 'bg-high',
+  Medium: 'bg-medium',
+  Low: 'bg-low'
+}
+
+function getChecIconVisisbility(todo: Todo) {
+  return todo.isChecked ? 'block' : 'hidden'
+}
+
+function getCheckButtonCircleColor(todo: Todo) {
+  return todo.isChecked ? 'border-green-500' : 'border-black'
+}
+
 function updatePriorityClass(priority: string) {
-  let priorityColor
-  switch (priority) {
-    case 'High':
-      priorityColor = 'bg-high'
-      break
-    case 'Medium':
-      priorityColor = 'bg-medium'
-      break
-    default:
-      priorityColor = 'bg-low'
-      break
-  }
-  return priorityColor
+  return colorMap[priority] || 'bg-low'
 }
 
 function toggleTaskState(todo: Todo) {
-  todo.state = !todo.state
+  todo.isChecked = !todo.isChecked
 }
 
 function deleteItem(index: number) {

@@ -1,12 +1,10 @@
 <template>
-  <div
-    class="w-1/2 h-screen mx-auto max-w-xl min-w-[375px] phone:bg-red-200 desktop:bg-blue-200"
-  >
+  <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px]">
     <div class="px-5 h-screen">
       <Header @toggle-visibility="toggleVisibility"></Header>
       <div class="flex justify-center align-center">
         <div
-          :class="isNewElementFormActive ? 'block' : 'hidden'"
+          :class="getTodoFormVisibility"
           class="mb-10 border border-black rounded-xl border-2"
         >
           <ToDoForm @add-todo="addTodo" />
@@ -15,7 +13,7 @@
       <ToDoItem :todos="todos" @delete-item="removeItem" />
       <div class="flex justify-center align-middle"></div>
       <div
-        :class="shouldEmptyListImageBeDisplayed ? 'block' : 'hidden'"
+        :class="getEmptyListImageVisibility"
         class="flex justify-center align-center"
       >
         <EmptyListImage />
@@ -37,16 +35,18 @@ import { computed, reactive, ref } from 'vue'
 import ToDoForm from './ToDoForm.vue'
 import Header from './Header.vue'
 import ToDoItem from './ToDoItems.vue'
-import { Todo } from './types'
+import { Todo } from '../types/Todo'
 import EmptyListImage from './EmptyListImage.vue'
 
-const shouldEmptyListImageBeDisplayed = computed(
-  () => !isNewElementFormActive.value && !todos.length
-)
-
-const isNewElementFormActive = ref(true)
-
+const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
+
+const getTodoFormVisibility = computed(() =>
+  isNewElementFormActive.value ? 'block' : 'hidden'
+)
+const getEmptyListImageVisibility = computed(() =>
+  !isNewElementFormActive.value && !todos.length ? 'block' : 'hidden'
+)
 
 function addTodo(todo: Todo) {
   const todoCopy = { ...todo }

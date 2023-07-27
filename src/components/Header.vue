@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import PlusIcon from './PlusIcon.vue'
 
-const emit = defineEmits<{ (e: 'toggleVisibility'): void }>()
+const emit = defineEmits(['toggleVisibility'])
 
 function toggleVisibility() {
   emit('toggleVisibility')

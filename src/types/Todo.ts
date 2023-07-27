@@ -1,6 +1,6 @@
-export type Todo = {
+export interface Todo {
   title: string
   priority: string
   text: string
-  state: boolean
+  isChecked: boolean
 }
