@@ -44,6 +44,7 @@ const todos = reactive<Todo[]>([])
 const getTodoFormVisibility = computed(() =>
   isNewElementFormActive.value ? 'block' : 'hidden'
 )
+
 const getEmptyListImageVisibility = computed(() =>
   !isNewElementFormActive.value && !todos.length ? 'block' : 'hidden'
 )
