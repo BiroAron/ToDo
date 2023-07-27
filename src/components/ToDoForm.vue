@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full p-5 rounded-md font-custom">
     <div class="flex justify-between">
-      <div class="mr-2">
+      <div>
         <input
           type="text"
           placeholder="Title"
@@ -9,16 +9,46 @@
           class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
         />
       </div>
-      <div class="flex justify-center items-center font-semibold text-white">
-        <select
-          class="border bg-gray-300 py-1 px-5 rounded-3xl focus:outline-none"
-          v-model="newTodo.priority"
-          :class="updatePriorityClass"
+      <div class="relative w-20 top-0">
+        <div
+          class="flex cursor-pointer mb-0 justify-center p-1/2 my-3 rounded-3xl font-semibold text-white"
+          :class="priorityClass(newTodo.priority)"
+          @click="toggleDropdown"
         >
-          <option class="bg-low" value="Low">Low</option>
-          <option class="bg-medium" value="Medium">Medium</option>
-          <option class="bg-high" value="High">High</option>
-        </select>
+          {{ newTodo.priority }}
+        </div>
+
+        <ul
+          class="absolute bg-white mt-2 rounded-xl font-medium border border-black border-2 right-0"
+          :class="getDropdownState"
+        >
+          <div class="flex flex-col items-start">
+            <li>
+              <p
+                class="block px-3 text-gray-800"
+                @click="updatePriority('Low')"
+              >
+                Low
+              </p>
+            </li>
+            <li>
+              <p
+                class="block px-3 text-gray-800"
+                @click="updatePriority('Medium')"
+              >
+                Medium
+              </p>
+            </li>
+            <li>
+              <p
+                class="block px-3 text-gray-800"
+                @click="updatePriority('High')"
+              >
+                High
+              </p>
+            </li>
+          </div>
+        </ul>
       </div>
     </div>
     <div>
@@ -47,16 +77,22 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { Todo } from '../types/Todo'
 
-const updatePriorityClass = computed(() => ({
-  'bg-low': newTodo.priority === 'Low',
-  'bg-medium': newTodo.priority === 'Medium',
-  'bg-high': newTodo.priority === 'High'
-}))
+const colorMap: Record<string, string> = {
+  High: 'bg-high',
+  Medium: 'bg-medium',
+  Low: 'bg-low'
+}
 
 const emit = defineEmits<{ (e: 'addTodo', newTodo: Todo): void }>()
+
+const isDropdownOpen = ref(false)
+
+const getDropdownState = computed(() =>
+  isDropdownOpen.value ? 'block' : 'hidden'
+)
 
 const newTodo = reactive<Todo>({
   title: '',
@@ -64,6 +100,13 @@ const newTodo = reactive<Todo>({
   text: '',
   isChecked: false
 })
+
+const priorityClass = (priority: string) => colorMap[priority] || 'bg-low'
+
+function updatePriority(priority: string) {
+  newTodo.priority = priority
+  toggleDropdown()
+}
 
 function addItem() {
   if (newTodo.title) {
@@ -76,5 +119,9 @@ function emptyForm() {
   newTodo.title = ''
   newTodo.text = ''
   newTodo.priority = 'Low'
+}
+
+function toggleDropdown() {
+  isDropdownOpen.value = !isDropdownOpen.value
 }
 </script>

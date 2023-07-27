@@ -2,7 +2,7 @@
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px]">
     <div class="px-5 h-screen">
       <Header @toggle-visibility="toggleVisibility"></Header>
-      <div class="flex justify-center align-center">
+      <div class="">
         <div
           :class="getTodoFormVisibility"
           class="mb-10 border border-black rounded-xl border-2"
