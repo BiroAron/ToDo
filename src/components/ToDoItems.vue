@@ -13,7 +13,7 @@
           <div class="flex justify-center">
             <div
               class="flex mb-4 px-6 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
-              :class="updatePriorityClass(todo.priority)"
+              :class="priorityClass(todo.priority)"
             >
               {{ todo.priority }}
             </div>
@@ -21,7 +21,7 @@
           <div class="flex justify-center align-center">
             <div
               class="flex p-2 my-3 rounded-3xl font-semibold text-white desktop:hidden"
-              :class="updatePriorityClass(todo.priority)"
+              :class="priorityClass(todo.priority)"
             ></div>
           </div>
         </div>
@@ -77,9 +77,7 @@ function getCheckButtonCircleColor(todo: Todo) {
   return todo.isChecked ? 'border-green-500' : 'border-black'
 }
 
-function updatePriorityClass(priority: string) {
-  return colorMap[priority] || 'bg-low'
-}
+const priorityClass = (priority: string) => colorMap[priority] || 'bg-low'
 
 function toggleTaskState(todo: Todo) {
   todo.isChecked = !todo.isChecked
