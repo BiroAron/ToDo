@@ -64,10 +64,16 @@
         </button>
         <button
           class="bg-gray-300 py-2 px-7 rounded-xl font-semibold text-black flex justify-center align-center"
-          @click="deleteItem(index)"
+          @click="changePopupState"
         >
           Delete
         </button>
+        <DeleteConfirmationPopup
+          :index="index"
+          @close-popup="changePopupState"
+          @delete-item="deleteItem"
+          :class="getPopupState"
+        ></DeleteConfirmationPopup>
       </div>
     </div>
   </div>
@@ -75,8 +81,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+
 import { Todo } from '../../types/Todo'
 import { colorMap } from '../../types/ColorMap'
+import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 
 interface Props {
   todo: Todo
@@ -91,10 +99,13 @@ const emit = defineEmits<{
 }>()
 
 const isDropdownOpen = ref(false)
+const isPopupActive = ref(false)
 
 const getDropdownState = computed(() =>
   isDropdownOpen.value ? 'block' : 'hidden'
 )
+
+const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
 function handleSaveClick() {
   modifyTodo()
@@ -133,5 +144,9 @@ function emptyForm() {
 
 function toggleDropdown() {
   isDropdownOpen.value = !isDropdownOpen.value
+}
+
+function changePopupState() {
+  isPopupActive.value = !isPopupActive.value
 }
 </script>

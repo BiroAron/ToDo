@@ -45,15 +45,12 @@
       </div>
     </div>
   </div>
-  <!-- <div class="flex justify-center align-center">
-    <button @click="deleteItem(index)">Remove</button>
-  </div> -->
   <ToDoForm
     :todo="todo"
     :index="index"
     @modify-todo="modifyTodo(todo, index)"
     @toggle-edit-visibility="toggleEditVisibility"
-    @delete-item="deleteItem"
+    @delete-item="deleteItem(index)"
     :class="getEditModeVisibility"
   />
 </template>
@@ -77,23 +74,21 @@ const emit = defineEmits<{
 }>()
 
 const editingTodoVisibility = ref(false)
-const todoElementVisibility = ref(true)
 
 const getEditModeVisibility = computed(() =>
   editingTodoVisibility.value ? 'block' : 'hidden'
 )
 
 const getTodoElementVisibility = computed(() =>
-  todoElementVisibility.value ? 'blok' : 'hidden'
+  editingTodoVisibility.value ? 'hidden phone:hidden' : 'block'
 )
 
 function toggleEditVisibility() {
   editingTodoVisibility.value = !editingTodoVisibility.value
-  todoElementVisibility.value = !todoElementVisibility.value
 }
 
 function getChecIconVisisbility(todo: Todo) {
-  return todo.isChecked ? 'block' : 'hidden'
+  return todo.isChecked ? 'block' : 'hidden phone:hidden'
 }
 
 function getCheckButtonCircleColor(todo: Todo) {

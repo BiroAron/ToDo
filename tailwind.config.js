@@ -12,7 +12,8 @@ export default {
         high: '#22c55e' // Red
       },
       spacing: {
-        128: '32rem'
+        128: '32rem',
+        '20p': '20%'
       }
     },
     screens: {
