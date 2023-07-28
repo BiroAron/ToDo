@@ -1,5 +1,5 @@
 <template>
-  <header class="pt-16 flex justify-between items-center pb-10 font-custom">
+  <header class="pt-16 flex justify-between items-center pb-10">
     <div
       class="font-semibold text-6xl phone:text-5xl flex justify-center items-center"
     >
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import PlusIcon from './PlusIcon.vue'
+import PlusIcon from '../icons/PlusIcon.vue'
 
 const emit = defineEmits(['toggleVisibility'])
 

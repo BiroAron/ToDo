@@ -1,6 +1,7 @@
 <template>
   <div
     class="w-full h-full p-3 rounded-xl font-custom border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
+    @click="setIsEditingTodo"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div
@@ -10,7 +11,7 @@
       </div>
       <div class="flex justify-center">
         <div
-          class="flex mb-4 px-6 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
+          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
           :class="priorityClass(todo.priority)"
         >
           {{ todo.priority }}
@@ -46,11 +47,15 @@
   <div class="flex justify-center align-center">
     <button @click="deleteItem(index)">Remove</button>
   </div>
+  <ToDoForm :todo="todo" @modify-todo="modifyTodo(todo, index)" />
 </template>
 
 <script setup lang="ts">
-import { Todo } from '../types/Todo'
-import CheckedIcon from './CheckedIcon.vue'
+import { ref } from 'vue'
+import CheckedIcon from '../icons/CheckedIcon.vue'
+import ToDoForm from './ToDoForm.vue'
+import { Todo } from '../../types/Todo'
+import { colorMap } from '../../types/ColorMap'
 
 interface Props {
   todo: Todo
@@ -58,12 +63,15 @@ interface Props {
 }
 defineProps<Props>()
 
-const emit = defineEmits<{ (e: 'deleteItem', index: number): void }>()
+const emit = defineEmits<{
+  (e: 'deleteItem', index: number): void
+  (e: 'modifyTodo', todo: Todo, index: number): void
+}>()
 
-const colorMap: Record<string, string> = {
-  High: 'bg-high',
-  Medium: 'bg-medium',
-  Low: 'bg-low'
+const EditingTodo = ref(false)
+
+function setIsEditingTodo() {
+  EditingTodo.value = !EditingTodo.value
 }
 
 function getChecIconVisisbility(todo: Todo) {
@@ -78,6 +86,11 @@ const priorityClass = (priority: string) => colorMap[priority] || 'bg-low'
 
 function toggleTaskState(todo: Todo) {
   todo.isChecked = !todo.isChecked
+  setIsEditingTodo()
+}
+
+function modifyTodo(todo: Todo, index: number) {
+  emit('modifyTodo', todo, index)
 }
 
 function deleteItem(index: number) {

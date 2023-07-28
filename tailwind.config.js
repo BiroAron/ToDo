@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/components/*.{vue,ts}', './index.html'],
+  content: ['./src/components/*/*.{vue,ts}', './index.html'],
   theme: {
     extend: {
       fontFamily: {
@@ -9,7 +9,7 @@ export default {
       colors: {
         low: '#22c55e', // Green
         medium: '#d97706', // Orange
-        high: '#dc2626' // Red
+        high: '#22c55e' // Red
       },
       spacing: {
         128: '32rem'
