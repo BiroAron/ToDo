@@ -12,16 +12,16 @@
       </div>
       <div class="flex justify-center">
         <div
-          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
-          :class="priorityClass(todo.priority)"
+          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-black phone:hidden"
+          :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
         </div>
       </div>
       <div class="flex justify-center align-center">
         <div
-          class="flex p-2 my-3 rounded-3xl font-semibold text-white desktop:hidden"
-          :class="priorityClass(todo.priority)"
+          class="flex p-2 my-3 rounded-3xl font-semibold text-black desktop:hidden"
+          :class="priorityColor(todo.priority)"
         ></div>
       </div>
     </div>
@@ -45,13 +45,15 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-center align-center">
+  <!-- <div class="flex justify-center align-center">
     <button @click="deleteItem(index)">Remove</button>
-  </div>
+  </div> -->
   <ToDoForm
     :todo="todo"
+    :index="index"
     @modify-todo="modifyTodo(todo, index)"
     @toggle-edit-visibility="toggleEditVisibility"
+    @delete-item="deleteItem"
     :class="getEditModeVisibility"
   />
 </template>
@@ -98,7 +100,9 @@ function getCheckButtonCircleColor(todo: Todo) {
   return todo.isChecked ? 'border-green-500' : 'border-black'
 }
 
-const priorityClass = (priority: string) => colorMap[priority] || 'bg-low'
+function priorityColor(priority: string) {
+  return colorMap[priority]
+}
 
 function toggleTaskState(todo: Todo) {
   todo.isChecked = !todo.isChecked

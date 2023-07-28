@@ -12,7 +12,7 @@
         </div>
         <div class="relative w-30">
           <div
-            class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-3xl font-semibold text-white"
+            class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-3xl font-semibold text-black"
             :class="priorityColorChange(props.todo.priority)"
             @click="toggleDropdown"
           >
@@ -64,7 +64,7 @@
         </button>
         <button
           class="bg-gray-300 py-2 px-7 rounded-xl font-semibold text-black flex justify-center align-center"
-          @click="emptyForm()"
+          @click="deleteItem(index)"
         >
           Delete
         </button>
@@ -80,12 +80,14 @@ import { colorMap } from '../../types/ColorMap'
 
 interface Props {
   todo: Todo
+  index: number
 }
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'modifyTodo', todo: Todo): void
   (e: 'toggleEditVisibility'): void
+  (e: 'deleteItem', index: number): void
 }>()
 
 const isDropdownOpen = ref(false)
@@ -105,7 +107,6 @@ function priorityColorChange(priority: string) {
 
 function updatePriority(priority: string) {
   props.todo.priority = priority
-  console.log(colorMap[priority])
   toggleDropdown()
 }
 
@@ -118,6 +119,10 @@ function modifyTodo() {
 
 function toggleEditVisibility() {
   emit('toggleEditVisibility')
+}
+
+function deleteItem(index: number) {
+  emit('deleteItem', index)
 }
 
 function emptyForm() {

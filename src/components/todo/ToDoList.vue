@@ -4,7 +4,7 @@
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
       <div class="">
         <div :class="getTodoFormVisibility">
-          <ToDoForm :todo="emptyTodo" @modify-todo="addTodo" />
+          <ToDoForm :todo="emptyTodo" :index="-1" @modify-todo="addTodo" />
         </div>
       </div>
       <ToDoItems
