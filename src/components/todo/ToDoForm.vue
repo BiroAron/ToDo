@@ -13,7 +13,7 @@
         <div class="relative w-30">
           <div
             class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-3xl font-semibold text-white"
-            :class="priorityColorChange"
+            :class="priorityColorChange(props.todo.priority)"
             @click="toggleDropdown"
           >
             {{ props.todo.priority }}
@@ -27,7 +27,7 @@
               <li>
                 <p
                   class="block px-3 text-gray-800"
-                  @click="updatePriority('low')"
+                  @click="updatePriority('Low')"
                 >
                   Low
                 </p>
@@ -35,13 +35,13 @@
               <li>
                 <p
                   class="block px-3 text-gray-80"
-                  @click="updatePriority('medium')"
+                  @click="updatePriority('Medium')"
                 >
                   Medium
                 </p>
               </li>
               <li>
-                <p class="block px-3" @click="updatePriority('high')">High</p>
+                <p class="block px-3" @click="updatePriority('High')">High</p>
               </li>
             </div>
           </ul>
@@ -58,7 +58,7 @@
       <div class="flex justify-start align-center mt-4">
         <button
           class="bg-green-500 py-2 px-8 mr-2 rounded-xl font-semibold text-white flex justify-center align-center"
-          @click="modifyTodo()"
+          @click="handleSaveClick()"
         >
           Save
         </button>
@@ -83,7 +83,10 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const emit = defineEmits<{ (e: 'modifyTodo', todo: Todo): void }>()
+const emit = defineEmits<{
+  (e: 'modifyTodo', todo: Todo): void
+  (e: 'toggleEditVisibility'): void
+}>()
 
 const isDropdownOpen = ref(false)
 
@@ -91,13 +94,18 @@ const getDropdownState = computed(() =>
   isDropdownOpen.value ? 'block' : 'hidden'
 )
 
-const priorityColorChange = computed(
-  () => (priority: string) => colorMap[priority]
-)
+function handleSaveClick() {
+  modifyTodo()
+  toggleEditVisibility()
+}
+
+function priorityColorChange(priority: string) {
+  return colorMap[priority]
+}
 
 function updatePriority(priority: string) {
-  // console.log(colorMap.High)
   props.todo.priority = priority
+  console.log(colorMap[priority])
   toggleDropdown()
 }
 
@@ -106,6 +114,10 @@ function modifyTodo() {
     emit('modifyTodo', props.todo)
     emptyForm()
   }
+}
+
+function toggleEditVisibility() {
+  emit('toggleEditVisibility')
 }
 
 function emptyForm() {

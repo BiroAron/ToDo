@@ -1,7 +1,8 @@
 <template>
   <div
     class="w-full h-full p-3 rounded-xl font-custom border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
-    @click="setIsEditingTodo"
+    @click="toggleEditVisibility"
+    :class="getTodoElementVisibility"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div
@@ -47,11 +48,16 @@
   <div class="flex justify-center align-center">
     <button @click="deleteItem(index)">Remove</button>
   </div>
-  <ToDoForm :todo="todo" @modify-todo="modifyTodo(todo, index)" />
+  <ToDoForm
+    :todo="todo"
+    @modify-todo="modifyTodo(todo, index)"
+    @toggle-edit-visibility="toggleEditVisibility"
+    :class="getEditModeVisibility"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import CheckedIcon from '../icons/CheckedIcon.vue'
 import ToDoForm from './ToDoForm.vue'
 import { Todo } from '../../types/Todo'
@@ -68,10 +74,20 @@ const emit = defineEmits<{
   (e: 'modifyTodo', todo: Todo, index: number): void
 }>()
 
-const EditingTodo = ref(false)
+const editingTodoVisibility = ref(false)
+const todoElementVisibility = ref(true)
 
-function setIsEditingTodo() {
-  EditingTodo.value = !EditingTodo.value
+const getEditModeVisibility = computed(() =>
+  editingTodoVisibility.value ? 'block' : 'hidden'
+)
+
+const getTodoElementVisibility = computed(() =>
+  todoElementVisibility.value ? 'blok' : 'hidden'
+)
+
+function toggleEditVisibility() {
+  editingTodoVisibility.value = !editingTodoVisibility.value
+  todoElementVisibility.value = !todoElementVisibility.value
 }
 
 function getChecIconVisisbility(todo: Todo) {
@@ -86,7 +102,7 @@ const priorityClass = (priority: string) => colorMap[priority] || 'bg-low'
 
 function toggleTaskState(todo: Todo) {
   todo.isChecked = !todo.isChecked
-  setIsEditingTodo()
+  toggleEditVisibility()
 }
 
 function modifyTodo(todo: Todo, index: number) {

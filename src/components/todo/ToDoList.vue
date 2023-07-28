@@ -1,7 +1,7 @@
 <template>
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
     <div class="px-5 h-screen">
-      <Header @toggle-visibility="toggleVisibility"></Header>
+      <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
       <div class="">
         <div :class="getTodoFormVisibility">
           <ToDoForm :todo="emptyTodo" @modify-todo="addTodo" />
@@ -59,7 +59,7 @@ const getEmptyListImageVisibility = computed(() =>
 function addTodo(todo: Todo) {
   const todoCopy = { ...todo }
   todos.push(todoCopy)
-  toggleVisibility()
+  toggleNewTodoVisibility()
 }
 
 function editTodo(todo: Todo, index: number) {
@@ -74,7 +74,7 @@ function deleteItem(index: number) {
   todos.splice(index, 1)
 }
 
-function toggleVisibility() {
+function toggleNewTodoVisibility() {
   isNewElementFormActive.value = !isNewElementFormActive.value
 }
 

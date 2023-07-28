@@ -26,7 +26,6 @@ const emit = defineEmits<{
 }>()
 
 function modifyTodo(todo: Todo, index: number) {
-  //console.log(todo.text + ' ' + index)
   emit('modifyTodo', todo, index)
 }
 

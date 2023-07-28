@@ -8,7 +8,7 @@
     <div
       class="w-12 h-12 phone:w-10 phone:h-10 left-72 top-10 rounded-full outline-none border-none bg-green-500 flex justify-center items-center cursor-pointer"
     >
-      <button @click="toggleVisibility">
+      <button @click="toggleNewVisibility">
         <PlusIcon />
       </button>
     </div>
@@ -18,9 +18,9 @@
 <script setup lang="ts">
 import PlusIcon from '../icons/PlusIcon.vue'
 
-const emit = defineEmits(['toggleVisibility'])
+const emit = defineEmits(['toggleNewVisibility'])
 
-function toggleVisibility() {
-  emit('toggleVisibility')
+function toggleNewVisibility() {
+  emit('toggleNewVisibility')
 }
 </script>
