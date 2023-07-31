@@ -1,8 +1,8 @@
 <template>
   <div
     class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
-    @click="toggleEditVisibility"
     :class="getTodoElementVisibility"
+    @click="toggleEditVisibility"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div
@@ -35,7 +35,7 @@
         <div
           class="w-8 h-8 rounded-full border-4 border-black relative"
           :class="getCheckButtonCircleColor(todo)"
-          @click="toggleTaskState(todo)"
+          @click="toggleTaskState(index)"
         >
           <CheckedIcon
             class="absolute bottom-0 left-0"
@@ -46,11 +46,12 @@
     </div>
   </div>
   <ToDoForm
+    :class="getEditModeVisibility"
     :todo="todo"
     :index="index"
     @toggle-edit-visibility="toggleEditVisibility"
     @delete-item="deleteItem(index)"
-    :class="getEditModeVisibility"
+    @update-todo-priority="updateTodoPriority"
   />
 </template>
 
@@ -67,28 +68,30 @@ interface Props {
 }
 defineProps<Props>()
 
+const emit = defineEmits<{
+  (e: 'deleteItem', index: number): void
+  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'toggleTaskState', index: number): void
+}>()
+
 const colorMap: ColorMap = {
   High: 'bg-high',
   Medium: 'bg-medium',
   Low: 'bg-low'
 }
 
-const emit = defineEmits<{
-  (e: 'deleteItem', index: number): void
-}>()
-
-const editingTodoVisibility = ref(false)
+const isEditingTodoVisible = ref(false)
 
 const getEditModeVisibility = computed(() =>
-  editingTodoVisibility.value ? 'block' : 'hidden'
+  isEditingTodoVisible.value ? 'block' : 'hidden'
 )
 
 const getTodoElementVisibility = computed(() =>
-  editingTodoVisibility.value ? 'hidden phone:hidden' : 'block'
+  isEditingTodoVisible.value ? 'hidden phone:hidden' : 'block'
 )
 
 function toggleEditVisibility() {
-  editingTodoVisibility.value = !editingTodoVisibility.value
+  isEditingTodoVisible.value = !isEditingTodoVisible.value
 }
 
 function getChecIconVisisbility(todo: Todo) {
@@ -103,9 +106,13 @@ function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
 }
 
-function toggleTaskState(todo: Todo) {
-  todo.isChecked = !todo.isChecked
+function toggleTaskState(index: number) {
+  emit('toggleTaskState', index)
   toggleEditVisibility()
+}
+
+function updateTodoPriority(priority: TodoPriority, index: number) {
+  emit('updateTodoPriority', priority, index)
 }
 
 function deleteItem(index: number) {

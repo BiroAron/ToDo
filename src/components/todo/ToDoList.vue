@@ -2,21 +2,27 @@
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
     <div class="px-5 h-screen">
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
-      <div class="">
-        <div :class="getTodoFormVisibility">
-          <ToDoForm
-            :todo="emptyTodo"
-            :index="-1"
-            @add-todo="addTodo"
-            @delete-item="deleteItem"
-          />
-        </div>
+      <div :class="getTodoFormVisibility">
+        <ToDoForm
+          :todo="emptyTodo"
+          :index="-1"
+          @add-todo="addTodo"
+          @delete-item="deleteNewItem"
+          @update-todo-priority="updateNewTodoPriority"
+          @empty-form="emptyForm"
+        />
       </div>
-      <ToDoItems :todos="todos"> </ToDoItems>
+      <ToDoItems
+        :todos="todos"
+        @update-todo-priority="updateTodoPriority"
+        @toggle-task-state="toggleTaskState"
+        @delete-item="deleteItem"
+      >
+      </ToDoItems>
       <div class="flex justify-center align-middle"></div>
       <div
-        :class="getEmptyListImageVisibility"
         class="flex justify-center align-center"
+        :class="getEmptyListImageVisibility"
       >
         <EmptyListImage />
       </div>
@@ -38,7 +44,7 @@ import ToDoForm from './ToDoForm.vue'
 import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
-import { Todo } from '../../types/Todo'
+import { Todo, TodoPriority } from '../../types/Todo'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
@@ -63,12 +69,34 @@ function addTodo(todo: Todo) {
   toggleNewTodoVisibility()
 }
 
-function deleteItem() {
+function deleteNewItem() {
   toggleNewTodoVisibility()
+}
+
+function deleteItem(index: number) {
+  todos.splice(index, 1)
+}
+
+function emptyForm() {
+  emptyTodo.value.title = ''
+  emptyTodo.value.text = ''
+  emptyTodo.value.priority = 'Low'
+}
+
+function toggleTaskState(index: number) {
+  todos[index].isChecked = !todos[index].isChecked
 }
 
 function toggleNewTodoVisibility() {
   isNewElementFormActive.value = !isNewElementFormActive.value
+}
+
+function updateNewTodoPriority(priority: TodoPriority) {
+  emptyTodo.value.priority = priority
+}
+
+function updateTodoPriority(priority: TodoPriority, index: number) {
+  todos[index].priority = priority
 }
 
 function clear() {

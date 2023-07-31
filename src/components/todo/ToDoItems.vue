@@ -4,7 +4,9 @@
       <ToDoItem
         :todo="todo"
         :index="index"
-        @delete-item="deleteItem(todos, index)"
+        @delete-item="deleteItem(index)"
+        @update-todo-priority="updateTodoPriority"
+        @toggle-task-state="toggleTaskState"
       />
     </li>
   </ul>
@@ -12,14 +14,28 @@
 
 <script setup lang="ts">
 import ToDoItem from './ToDoItem.vue'
-import { Todo } from '../../types/Todo'
+import { Todo, TodoPriority } from '../../types/Todo'
 
 interface Props {
   todos: Todo[]
 }
 defineProps<Props>()
 
-function deleteItem(todos: Todo[], index: number) {
-  todos.splice(index, 1)
+const emit = defineEmits<{
+  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'toggleTaskState', index: number): void
+  (e: 'deleteItem', index: number): void
+}>()
+
+function toggleTaskState(index: number) {
+  emit('toggleTaskState', index)
+}
+
+function updateTodoPriority(priority: TodoPriority, index: number) {
+  emit('updateTodoPriority', priority, index)
+}
+
+function deleteItem(index: number) {
+  emit('deleteItem', index)
 }
 </script>

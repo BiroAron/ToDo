@@ -4,10 +4,10 @@
       <div class="flex justify-between">
         <div>
           <input
-            type="text"
-            placeholder="Title"
             v-model="props.todo.title"
             class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
+            type="text"
+            placeholder="Title"
           />
         </div>
         <div class="relative w-30">
@@ -18,7 +18,6 @@
           >
             {{ props.todo.priority }}
           </div>
-
           <ul
             class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border border-black border-2 right-0"
             :class="getDropdownState"
@@ -26,22 +25,27 @@
             <div class="flex flex-col items-start">
               <li>
                 <p
-                  class="block px-3 text-gray-800"
-                  @click="updatePriority('Low')"
+                  class="block px-3 text-black cursor-pointer"
+                  @click="updatePriority('Low', index)"
                 >
                   Low
                 </p>
               </li>
               <li>
                 <p
-                  class="block px-3 text-gray-80"
-                  @click="updatePriority('Medium')"
+                  class="block px-3 text-black cursor-pointer"
+                  @click="updatePriority('Medium', index)"
                 >
                   Medium
                 </p>
               </li>
               <li>
-                <p class="block px-3" @click="updatePriority('High')">High</p>
+                <p
+                  class="block px-3 text-black cursor-pointer"
+                  @click="updatePriority('High', index)"
+                >
+                  High
+                </p>
               </li>
             </div>
           </ul>
@@ -49,10 +53,10 @@
       </div>
       <div>
         <textarea
+          v-model="props.todo.text"
           class="w-full p-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
           type="text"
           placeholder="Description"
-          v-model="props.todo.text"
         ></textarea>
       </div>
       <div class="flex justify-start align-center mt-4">
@@ -70,9 +74,9 @@
         </button>
         <DeleteConfirmationPopup
           :index="index"
+          :class="getPopupState"
           @close-popup="changePopupState"
           @delete-item="deleteItem"
-          :class="getPopupState"
         ></DeleteConfirmationPopup>
       </div>
     </div>
@@ -96,6 +100,8 @@ const emit = defineEmits<{
   (e: 'addTodo', todo: Todo): void
   (e: 'toggleEditVisibility'): void
   (e: 'deleteItem', index: number): void
+  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'emptyForm'): void
 }>()
 
 const colorMap: ColorMap = {
@@ -122,8 +128,8 @@ function priorityColorChange(priority: TodoPriority) {
   return colorMap[priority]
 }
 
-function updatePriority(priority: TodoPriority) {
-  props.todo.priority = priority
+function updatePriority(priority: TodoPriority, index: number) {
+  emit('updateTodoPriority', priority, index)
   toggleDropdown()
 }
 
@@ -135,9 +141,7 @@ function addTodo(index: number) {
 }
 
 function emptyForm() {
-  props.todo.title = ''
-  props.todo.text = ''
-  props.todo.priority = 'Low'
+  emit('emptyForm')
 }
 
 function toggleDropdown() {

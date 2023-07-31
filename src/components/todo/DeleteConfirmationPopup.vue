@@ -13,7 +13,7 @@
         </button>
         <button
           class="bg-red-500 text-white px-4 ml-1 py-2 rounded"
-          @click="deleItem(index)"
+          @click="deleteItem(index)"
         >
           Delete
         </button>
@@ -33,7 +33,7 @@ const emit = defineEmits<{
   (e: 'closePopup'): void
 }>()
 
-function deleItem(index: number) {
+function deleteItem(index: number) {
   emit('deleteItem', index)
 }
 
