@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full p-3 rounded-xl font-custom border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
+    class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
     @click="toggleEditVisibility"
     :class="getTodoElementVisibility"
   >
@@ -12,7 +12,7 @@
       </div>
       <div class="flex justify-center">
         <div
-          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-black phone:hidden"
+          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
@@ -48,7 +48,6 @@
   <ToDoForm
     :todo="todo"
     :index="index"
-    @modify-todo="modifyTodo(todo, index)"
     @toggle-edit-visibility="toggleEditVisibility"
     @delete-item="deleteItem(index)"
     :class="getEditModeVisibility"
@@ -59,8 +58,8 @@
 import { computed, ref } from 'vue'
 import CheckedIcon from '../icons/CheckedIcon.vue'
 import ToDoForm from './ToDoForm.vue'
-import { Todo } from '../../types/Todo'
-import { colorMap } from '../../types/ColorMap'
+import { Todo, TodoPriority } from '../../types/Todo'
+import { ColorMap } from '../../types/ColorMap'
 
 interface Props {
   todo: Todo
@@ -68,9 +67,14 @@ interface Props {
 }
 defineProps<Props>()
 
+const colorMap: ColorMap = {
+  High: 'bg-high',
+  Medium: 'bg-medium',
+  Low: 'bg-low'
+}
+
 const emit = defineEmits<{
   (e: 'deleteItem', index: number): void
-  (e: 'modifyTodo', todo: Todo, index: number): void
 }>()
 
 const editingTodoVisibility = ref(false)
@@ -95,17 +99,13 @@ function getCheckButtonCircleColor(todo: Todo) {
   return todo.isChecked ? 'border-green-500' : 'border-black'
 }
 
-function priorityColor(priority: string) {
+function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
 }
 
 function toggleTaskState(todo: Todo) {
   todo.isChecked = !todo.isChecked
   toggleEditVisibility()
-}
-
-function modifyTodo(todo: Todo, index: number) {
-  emit('modifyTodo', todo, index)
 }
 
 function deleteItem(index: number) {

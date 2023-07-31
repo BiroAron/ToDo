@@ -12,7 +12,7 @@
         </div>
         <div class="relative w-30">
           <div
-            class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-3xl font-semibold text-black"
+            class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-3xl font-semibold text-white"
             :class="priorityColorChange(props.todo.priority)"
             @click="toggleDropdown"
           >
@@ -58,7 +58,7 @@
       <div class="flex justify-start align-center mt-4">
         <button
           class="bg-green-500 py-2 px-8 mr-2 rounded-xl font-semibold text-white flex justify-center align-center"
-          @click="handleSaveClick()"
+          @click="handleSaveClick(index)"
         >
           Save
         </button>
@@ -82,8 +82,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { Todo } from '../../types/Todo'
-import { colorMap } from '../../types/ColorMap'
+import { Todo, TodoPriority } from '../../types/Todo'
+import { ColorMap } from '../../types/ColorMap'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 
 interface Props {
@@ -93,10 +93,16 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'modifyTodo', todo: Todo): void
+  (e: 'addTodo', todo: Todo): void
   (e: 'toggleEditVisibility'): void
   (e: 'deleteItem', index: number): void
 }>()
+
+const colorMap: ColorMap = {
+  High: 'bg-high',
+  Medium: 'bg-medium',
+  Low: 'bg-low'
+}
 
 const isDropdownOpen = ref(false)
 const isPopupActive = ref(false)
@@ -107,33 +113,25 @@ const getDropdownState = computed(() =>
 
 const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
-function handleSaveClick() {
-  modifyTodo()
+function handleSaveClick(index: number) {
+  addTodo(index)
   toggleEditVisibility()
 }
 
-function priorityColorChange(priority: string) {
+function priorityColorChange(priority: TodoPriority) {
   return colorMap[priority]
 }
 
-function updatePriority(priority: string) {
+function updatePriority(priority: TodoPriority) {
   props.todo.priority = priority
   toggleDropdown()
 }
 
-function modifyTodo() {
+function addTodo(index: number) {
   if (props.todo.title) {
-    emit('modifyTodo', props.todo)
-    emptyForm()
+    emit('addTodo', props.todo)
+    if (index === -1) emptyForm()
   }
-}
-
-function toggleEditVisibility() {
-  emit('toggleEditVisibility')
-}
-
-function deleteItem(index: number) {
-  emit('deleteItem', index)
 }
 
 function emptyForm() {
@@ -148,5 +146,15 @@ function toggleDropdown() {
 
 function changePopupState() {
   isPopupActive.value = !isPopupActive.value
+}
+
+function toggleEditVisibility() {
+  emit('toggleEditVisibility')
+}
+
+function deleteItem(index: number) {
+  emit('deleteItem', index)
+  changePopupState()
+  emptyForm()
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <header class="pt-16 flex justify-between items-center pb-10">
+  <header class="pt-16 flex justify-between items-center pb-5">
     <div
       class="font-semibold text-6xl phone:text-5xl flex justify-center items-center"
     >

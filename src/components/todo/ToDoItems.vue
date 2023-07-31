@@ -4,8 +4,7 @@
       <ToDoItem
         :todo="todo"
         :index="index"
-        @delete-item="deleteItem(index)"
-        @modify-todo="modifyTodo(todo, index)"
+        @delete-item="deleteItem(todos, index)"
       />
     </li>
   </ul>
@@ -20,16 +19,7 @@ interface Props {
 }
 defineProps<Props>()
 
-const emit = defineEmits<{
-  (e: 'deleteItem', index: number): void
-  (e: 'modifyTodo', todo: Todo, index: number): void
-}>()
-
-function modifyTodo(todo: Todo, index: number) {
-  emit('modifyTodo', todo, index)
-}
-
-function deleteItem(index: number) {
-  emit('deleteItem', index)
+function deleteItem(todos: Todo[], index: number) {
+  todos.splice(index, 1)
 }
 </script>

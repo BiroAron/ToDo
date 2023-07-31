@@ -4,14 +4,15 @@
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
       <div class="">
         <div :class="getTodoFormVisibility">
-          <ToDoForm :todo="emptyTodo" :index="-1" @modify-todo="addTodo" />
+          <ToDoForm
+            :todo="emptyTodo"
+            :index="-1"
+            @add-todo="addTodo"
+            @delete-item="deleteItem"
+          />
         </div>
       </div>
-      <ToDoItems
-        :todos="todos"
-        @delete-item="deleteItem"
-        @modify-todo="editTodo"
-      />
+      <ToDoItems :todos="todos"> </ToDoItems>
       <div class="flex justify-center align-middle"></div>
       <div
         :class="getEmptyListImageVisibility"
@@ -58,20 +59,12 @@ const getEmptyListImageVisibility = computed(() =>
 
 function addTodo(todo: Todo) {
   const todoCopy = { ...todo }
-  todos.push(todoCopy)
+  todos.unshift(todoCopy)
   toggleNewTodoVisibility()
 }
 
-function editTodo(todo: Todo, index: number) {
-  if (index >= 0 && index < todos.length) {
-    todos[index] = { ...todo }
-  } else {
-    console.error('Invalid index')
-  }
-}
-
-function deleteItem(index: number) {
-  todos.splice(index, 1)
+function deleteItem() {
+  toggleNewTodoVisibility()
 }
 
 function toggleNewTodoVisibility() {

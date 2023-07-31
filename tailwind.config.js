@@ -9,7 +9,7 @@ export default {
       colors: {
         low: '#22c55e', // Green
         medium: '#d97706', // Orange
-        high: '#22c55e' // Red
+        high: 'red' // Red
       },
       spacing: {
         128: '32rem',
