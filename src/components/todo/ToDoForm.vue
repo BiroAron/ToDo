@@ -4,7 +4,7 @@
       <div class="flex justify-between">
         <div>
           <input
-            v-model="props.todo.title"
+            v-model="localTodo.title"
             class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
             type="text"
             placeholder="Title"
@@ -16,7 +16,7 @@
             :class="priorityColorChange(props.todo.priority)"
             @click="toggleDropdown"
           >
-            {{ props.todo.priority }}
+            {{ localTodo.priority }}
           </div>
           <ul
             class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border border-black border-2 right-0"
@@ -53,7 +53,7 @@
       </div>
       <div>
         <textarea
-          v-model="props.todo.text"
+          v-model="localTodo.text"
           class="w-full p-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
           type="text"
           placeholder="Description"
@@ -85,7 +85,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
@@ -98,10 +97,10 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'addTodo', todo: Todo): void
+  (e: 'editTodo', todo: Todo, index: number): void
   (e: 'toggleEditVisibility'): void
   (e: 'deleteItem', index: number): void
   (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
-  (e: 'emptyForm'): void
 }>()
 
 const colorMap: ColorMap = {
@@ -110,6 +109,7 @@ const colorMap: ColorMap = {
   Low: 'bg-low'
 }
 
+const localTodo = ref(props.todo)
 const isDropdownOpen = ref(false)
 const isPopupActive = ref(false)
 
@@ -120,7 +120,7 @@ const getDropdownState = computed(() =>
 const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
 function handleSaveClick(index: number) {
-  addTodo(index)
+  modifyTodo(index)
   toggleEditVisibility()
 }
 
@@ -133,15 +133,19 @@ function updatePriority(priority: TodoPriority, index: number) {
   toggleDropdown()
 }
 
-function addTodo(index: number) {
+function modifyTodo(index: number) {
   if (props.todo.title) {
-    emit('addTodo', props.todo)
-    if (index === -1) emptyForm()
+    if (index === -1) {
+      emit('addTodo', localTodo.value)
+      emptyForm()
+    } else emit('editTodo', localTodo.value, index)
   }
 }
 
 function emptyForm() {
-  emit('emptyForm')
+  localTodo.value.title = ''
+  localTodo.value.text = ''
+  localTodo.value.priority = 'Low'
 }
 
 function toggleDropdown() {

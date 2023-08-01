@@ -9,7 +9,6 @@
           @add-todo="addTodo"
           @delete-item="deleteNewItem"
           @update-todo-priority="updateNewTodoPriority"
-          @empty-form="emptyForm"
         />
       </div>
       <ToDoItems
@@ -17,6 +16,7 @@
         @update-todo-priority="updateTodoPriority"
         @toggle-task-state="toggleTaskState"
         @delete-item="deleteItem"
+        @edit-todo="editTodo"
       >
       </ToDoItems>
       <div class="flex justify-center align-middle"></div>
@@ -48,6 +48,7 @@ import { Todo, TodoPriority } from '../../types/Todo'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
+
 const emptyTodo = ref<Todo>({
   title: '',
   priority: 'Low',
@@ -65,7 +66,7 @@ const getEmptyListImageVisibility = computed(() =>
 
 function addTodo(todo: Todo) {
   const todoCopy = { ...todo }
-  todos.unshift(todoCopy)
+  todos.push(todoCopy)
   toggleNewTodoVisibility()
 }
 
@@ -75,12 +76,6 @@ function deleteNewItem() {
 
 function deleteItem(index: number) {
   todos.splice(index, 1)
-}
-
-function emptyForm() {
-  emptyTodo.value.title = ''
-  emptyTodo.value.text = ''
-  emptyTodo.value.priority = 'Low'
 }
 
 function toggleTaskState(index: number) {
@@ -96,10 +91,15 @@ function updateNewTodoPriority(priority: TodoPriority) {
 }
 
 function updateTodoPriority(priority: TodoPriority, index: number) {
+  console.log(priority)
   todos[index].priority = priority
 }
 
 function clear() {
   todos.splice(0)
+}
+
+function editTodo(todo: Todo, index: number) {
+  todos[index] = todo
 }
 </script>

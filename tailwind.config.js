@@ -7,9 +7,9 @@ export default {
         custom: ['Neue Haas Grotesk Display Pro', 'sans-serif']
       },
       colors: {
-        low: '#22c55e', // Green
-        medium: '#d97706', // Orange
-        high: 'red' // Red
+        low: '#38CBCB', // Green
+        medium: '#FFAB00', // Orange
+        high: '#FF481F' // Red
       },
       spacing: {
         128: '32rem',

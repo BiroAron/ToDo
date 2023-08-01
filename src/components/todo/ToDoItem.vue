@@ -52,6 +52,7 @@
     @toggle-edit-visibility="toggleEditVisibility"
     @delete-item="deleteItem(index)"
     @update-todo-priority="updateTodoPriority"
+    @edit-todo="editTodo"
   />
 </template>
 
@@ -70,6 +71,7 @@ defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'deleteItem', index: number): void
+  (e: 'editTodo', todo: Todo, index: number): void
   (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
   (e: 'toggleTaskState', index: number): void
 }>()
@@ -117,5 +119,9 @@ function updateTodoPriority(priority: TodoPriority, index: number) {
 
 function deleteItem(index: number) {
   emit('deleteItem', index)
+}
+
+function editTodo(todo: Todo, index: number) {
+  emit('editTodo', todo, index)
 }
 </script>
