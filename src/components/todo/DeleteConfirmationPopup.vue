@@ -1,19 +1,21 @@
 <template>
   <div
-    class="fixed inset-0 flex items-start justify-center backdrop-blur-sm backdrop-filter bg-black bg-opacity-60"
+    class="fixed inset-0 flex items-start justify-center backdrop-blur-sm bg-black bg-opacity-60"
   >
     <div class="bg-white p-4 rounded-xl shadow-md mt-20p font-medium">
-      <p class="text-center">Do you want to delete this element?</p>
-      <div class="flex justify-center mt-4">
+      <p class="text-center font-semibold">
+        Do you want to delete this element?
+      </p>
+      <div class="flex justify-center mt-4 font-semibold">
         <button
-          class="bg-gray-500 text-white px-4 mr-1 py-2 rounded"
+          class="bg-secondary text-black px-4 mr-1 py-2 rounded-xl"
           @click="closePopup"
         >
           Close
         </button>
         <button
-          class="bg-red-500 text-white px-4 ml-1 py-2 rounded"
-          @click="deleItem(index)"
+          class="bg-high text-white px-4 ml-1 py-2 rounded-xl"
+          @click="deleteItem(index)"
         >
           Delete
         </button>
@@ -33,7 +35,7 @@ const emit = defineEmits<{
   (e: 'closePopup'): void
 }>()
 
-function deleItem(index: number) {
+function deleteItem(index: number) {
   emit('deleteItem', index)
 }
 

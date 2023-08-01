@@ -91,7 +91,6 @@ function updateNewTodoPriority(priority: TodoPriority) {
 }
 
 function updateTodoPriority(priority: TodoPriority, index: number) {
-  console.log(priority)
   todos[index].priority = priority
 }
 

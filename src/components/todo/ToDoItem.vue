@@ -101,7 +101,7 @@ function getChecIconVisisbility(todo: Todo) {
 }
 
 function getCheckButtonCircleColor(todo: Todo) {
-  return todo.isChecked ? 'border-green-500' : 'border-black'
+  return todo.isChecked ? 'border-primary' : 'border-black'
 }
 
 function priorityColor(priority: TodoPriority) {
