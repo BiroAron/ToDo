@@ -74,6 +74,7 @@ const emit = defineEmits<{
   (e: 'editTodo', todo: Todo, index: number): void
   (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
   (e: 'toggleTaskState', index: number): void
+  (e: 'updateItemList', index: number): void
 }>()
 
 const colorMap: ColorMap = {
@@ -110,6 +111,7 @@ function priorityColor(priority: TodoPriority) {
 
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
+  updateItemList(index)
   toggleEditVisibility()
 }
 
@@ -123,5 +125,9 @@ function deleteItem(index: number) {
 
 function editTodo(todo: Todo, index: number) {
   emit('editTodo', todo, index)
+}
+
+function updateItemList(index: number) {
+  emit('updateItemList', index)
 }
 </script>

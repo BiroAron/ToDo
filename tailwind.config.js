@@ -3,6 +3,9 @@ export default {
   content: ['./src/components/*/*.{vue,ts}', './index.html'],
   theme: {
     extend: {
+      minWidth: {
+        custom: '25px'
+      },
       fontFamily: {
         custom: ['Neue Haas Grotesk Display Pro', 'sans-serif']
       },

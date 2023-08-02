@@ -2,6 +2,7 @@
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
     <div class="px-5 h-screen">
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
+      <Searchbar class="mb-10" />
       <div :class="getTodoFormVisibility">
         <ToDoForm
           :todo="emptyTodo"
@@ -11,14 +12,17 @@
           @update-todo-priority="updateNewTodoPriority"
         />
       </div>
+
       <ToDoItems
         :todos="todos"
         @update-todo-priority="updateTodoPriority"
+        @update-item-list="updateItemList"
         @toggle-task-state="toggleTaskState"
         @delete-item="deleteItem"
         @edit-todo="editTodo"
       >
       </ToDoItems>
+
       <div class="flex justify-center align-middle"></div>
       <div
         class="flex justify-center align-center"
@@ -45,11 +49,13 @@ import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
 import { Todo, TodoPriority } from '../../types/Todo'
+import Searchbar from './Searchbar.vue'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
 
 const emptyTodo = ref<Todo>({
+  id: -1,
   title: '',
   priority: 'Low',
   text: '',
@@ -100,5 +106,15 @@ function clear() {
 
 function editTodo(todo: Todo, index: number) {
   todos[index] = todo
+}
+
+function updateItemList(index: number) {
+  const todoSave: Todo = todos[index]
+  todos.splice(index, 1)[0]
+  if (todoSave.isChecked) {
+    todos.push(todoSave)
+  } else {
+    todos.unshift(todoSave)
+  }
 }
 </script>

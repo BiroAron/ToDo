@@ -6,6 +6,7 @@
         :index="index"
         @delete-item="deleteItem(index)"
         @update-todo-priority="updateTodoPriority"
+        @update-item-list="updateItemList(index)"
         @toggle-task-state="toggleTaskState"
         @edit-todo="editTodo"
       />
@@ -27,6 +28,7 @@ const emit = defineEmits<{
   (e: 'toggleTaskState', index: number): void
   (e: 'deleteItem', index: number): void
   (e: 'editTodo', todo: Todo, index: number): void
+  (e: 'updateItemList', index: number): void
 }>()
 
 function toggleTaskState(index: number) {
@@ -43,5 +45,9 @@ function deleteItem(index: number) {
 
 function editTodo(todo: Todo, index: number) {
   emit('editTodo', todo, index)
+}
+
+function updateItemList(index: number) {
+  emit('updateItemList', index)
 }
 </script>
