@@ -1,18 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/components/*.{vue,ts}', './index.html'],
+  content: ['./src/components/*/*.{vue,ts}', './index.html'],
   theme: {
     extend: {
       fontFamily: {
         custom: ['Neue Haas Grotesk Display Pro', 'sans-serif']
       },
       colors: {
-        low: '#22c55e', // Green
-        medium: '#d97706', // Orange
-        high: '#dc2626' // Red
+        low: '#38CBCB', // Blue
+        medium: '#FFAB00', // Orange
+        high: '#FF481F', // Red
+        primary: '#38CB89', // Green
+        secondary: '#E6E6E6'
       },
       spacing: {
-        128: '32rem'
+        128: '32rem',
+        '20p': '20%'
       }
     },
     screens: {
