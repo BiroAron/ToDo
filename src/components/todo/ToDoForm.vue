@@ -2,17 +2,22 @@
   <div class="mb-10 border border-black rounded-xl border-2">
     <div class="w-full h-full px-3 py-4 rounded-md font-custom">
       <div class="flex justify-between">
-        <TodoTitle :todo="todo" @update-title="updateTitle"></TodoTitle>
+        <TodoTitle
+          :title="localTodo.title"
+          @update-title="updateTitle"
+        ></TodoTitle>
         <ToDoPriority
-          :todo="todo"
+          :todo="localTodo"
           :index="index"
-          @update-todo-priority="updateTodoPriority"
+          @update-priority="updatePriority"
         ></ToDoPriority>
       </div>
-      <ToDoDescription :todo="todo" @update-description="updateDescription">
-      </ToDoDescription>
+      <ToDoDescription
+        :description="localTodo.text"
+        @update-description="updateDescription"
+      ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
-        <ToDoSaveButton @handle-save-click="handleSaveClick"> </ToDoSaveButton>
+        <ToDoSaveButton @handle-save-click="handleSaveClick"></ToDoSaveButton>
         <ToDoDeleteButton
           @change-popup-state="changePopupState"
         ></ToDoDeleteButton>
@@ -48,12 +53,11 @@ const emit = defineEmits<{
   (e: 'editTodo', todo: Todo, index: number): void
   (e: 'toggleEditVisibility'): void
   (e: 'deleteItem', index: number): void
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
 }>()
 
-const localTodo = ref(props.todo)
-const isPopupActive = ref(false)
+const localTodo = computed(() => Object.assign({}, props.todo))
 
+const isPopupActive = ref(false)
 const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
 function updateTitle(title: string) {
@@ -61,7 +65,11 @@ function updateTitle(title: string) {
 }
 
 function updateDescription(description: string) {
-  localTodo.value.title = description
+  localTodo.value.text = description
+}
+
+function updatePriority(priority: TodoPriority) {
+  localTodo.value.priority = priority
 }
 
 function handleSaveClick() {
@@ -70,17 +78,19 @@ function handleSaveClick() {
 }
 
 function modifyTodo(index: number) {
-  if (!props.todo.title) {
+  const currentLocalTodo = localTodo.value
+
+  if (!currentLocalTodo.title) {
     return
   }
 
   if (index === -1) {
-    emit('addTodo', localTodo.value)
+    emit('addTodo', currentLocalTodo)
     emptyForm()
     return
   }
 
-  emit('editTodo', localTodo.value, index)
+  emit('editTodo', currentLocalTodo, index)
 }
 
 function emptyForm() {
@@ -101,9 +111,5 @@ function deleteItem(index: number) {
   emit('deleteItem', index)
   changePopupState()
   emptyForm()
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
 }
 </script>

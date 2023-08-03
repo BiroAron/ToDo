@@ -9,13 +9,11 @@
           :index="-1"
           @add-todo="addTodo"
           @delete-item="deleteNewItem"
-          @update-todo-priority="updateNewTodoPriority"
         />
       </div>
 
       <ToDoItems
         :todos="todos"
-        @update-todo-priority="updateTodoPriority"
         @update-item-list="updateItemList"
         @toggle-task-state="toggleTaskState"
         @delete-item="deleteItem"
@@ -48,14 +46,13 @@ import ToDoForm from './ToDoForm.vue'
 import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
-import { Todo, TodoPriority } from '../../types/Todo'
+import { Todo } from '../../types/Todo'
 import Searchbar from './Searchbar.vue'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
 
 const emptyTodo = ref<Todo>({
-  id: -1,
   title: '',
   priority: 'Low',
   text: '',
@@ -92,20 +89,13 @@ function toggleNewTodoVisibility() {
   isNewElementFormActive.value = !isNewElementFormActive.value
 }
 
-function updateNewTodoPriority(priority: TodoPriority) {
-  emptyTodo.value.priority = priority
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  todos[index].priority = priority
-}
-
 function clear() {
   todos.splice(0)
 }
 
 function editTodo(todo: Todo, index: number) {
-  todos[index] = todo
+  const todoCopy = { ...todo }
+  todos[index] = todoCopy
 }
 
 function updateItemList(index: number) {

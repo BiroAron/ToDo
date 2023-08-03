@@ -15,7 +15,7 @@
         <li>
           <p
             class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('Low', index)"
+            @click="updatePriority(priority.Low, index)"
           >
             Low
           </p>
@@ -23,7 +23,7 @@
         <li>
           <p
             class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('Medium', index)"
+            @click="updatePriority(priority.Medium, index)"
           >
             Medium
           </p>
@@ -31,7 +31,7 @@
         <li>
           <p
             class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('High', index)"
+            @click="updatePriority(priority.High, index)"
           >
             High
           </p>
@@ -42,24 +42,24 @@
   <div class="flex justify-center space-x-2 desktop:hidden">
     <div
       class="p-2 my-3 rounded-full font-semibold text-black bg-low h-5 w-5"
-      :class="priorityBorderChange('Low')"
-      @click="updatePriorityMobile('Low', index)"
+      :class="priorityBorderChange(priority.Low)"
+      @click="updatePriorityMobile(priority.Low, index)"
     ></div>
     <div
       class="p-2 my-3 rounded-full font-semibold text-black bg-medium h-5 w-5"
-      :class="priorityBorderChange('Medium')"
-      @click="updatePriorityMobile('Medium', index)"
+      :class="priorityBorderChange(priority.Medium)"
+      @click="updatePriorityMobile(priority.Medium, index)"
     ></div>
     <div
       class="p-2 my-3 rounded-full font-semibold text-black bg-high h-5 w-5"
-      :class="priorityBorderChange('High')"
-      @click="updatePriorityMobile('High', index)"
+      :class="priorityBorderChange(priority.High)"
+      @click="updatePriorityMobile(priority.High, index)"
     ></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, toRef, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
 interface Props {
@@ -69,7 +69,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'updatePriority', priority: TodoPriority, index: number): void
 }>()
 
 const colorMap: ColorMap = {
@@ -77,7 +77,13 @@ const colorMap: ColorMap = {
   Medium: 'bg-medium',
   Low: 'bg-low'
 }
-const localTodo = ref(props.todo)
+
+const priority: Record<TodoPriority, TodoPriority> = {
+  Low: 'Low',
+  Medium: 'Medium',
+  High: 'High'
+}
+const localTodo = toRef(props, 'todo')
 const isDropdownOpen = ref(false)
 
 const getDropdownState = computed(() =>
@@ -94,7 +100,8 @@ function priorityBorderChange(priority: TodoPriority) {
 }
 
 function updatePriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  localTodo.value.priority = priority
+  emit('updatePriority', priority, index)
   toggleDropdown()
 }
 
@@ -103,7 +110,7 @@ function toggleDropdown() {
 }
 
 function updatePriorityMobile(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  emit('updatePriority', priority, index)
   isDropdownOpen.value = false
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <textarea
-    v-model="localTodo.text"
+    :value="description"
+    @input="handleInput"
     class="w-full p-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
     type="text"
     placeholder="Description"
@@ -8,13 +9,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Todo } from '../../types/Todo'
-
 interface Props {
-  todo: Todo
+  description: string
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 
-const localTodo = ref(props.todo)
+const emit = defineEmits<{
+  (e: 'updateDescription', title: string): void
+}>()
+
+function handleInput(event: Event) {
+  const newDescription = (event.target as HTMLInputElement).value
+  emit('updateDescription', newDescription)
+}
 </script>

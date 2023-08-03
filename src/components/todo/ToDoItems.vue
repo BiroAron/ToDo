@@ -5,7 +5,6 @@
         :todo="todo"
         :index="index"
         @delete-item="deleteItem(index)"
-        @update-todo-priority="updateTodoPriority"
         @update-item-list="updateItemList(index)"
         @toggle-task-state="toggleTaskState"
         @edit-todo="editTodo"
@@ -33,10 +32,6 @@ const emit = defineEmits<{
 
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
 }
 
 function deleteItem(index: number) {

@@ -39,7 +39,7 @@
         >
           <CheckedIcon
             class="absolute bottom-0 left-0"
-            :class="getChecIconVisisbility(todo)"
+            :class="getCheckIconVisibility(todo)"
           />
         </div>
       </div>
@@ -49,10 +49,9 @@
     :class="getEditModeVisibility"
     :todo="todo"
     :index="index"
-    @toggle-edit-visibility="toggleEditVisibility"
     @delete-item="deleteItem(index)"
-    @update-todo-priority="updateTodoPriority"
     @edit-todo="editTodo"
+    @toggle-edit-visibility="toggleEditVisibility"
   />
 </template>
 
@@ -72,7 +71,6 @@ defineProps<Props>()
 const emit = defineEmits<{
   (e: 'deleteItem', index: number): void
   (e: 'editTodo', todo: Todo, index: number): void
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
   (e: 'toggleTaskState', index: number): void
   (e: 'updateItemList', index: number): void
 }>()
@@ -86,18 +84,18 @@ const colorMap: ColorMap = {
 const isEditingTodoVisible = ref(false)
 
 const getEditModeVisibility = computed(() =>
-  isEditingTodoVisible.value ? 'block' : 'hidden'
+  isEditingTodoVisible.value ? 'block' : ' hiden '
 )
 
 const getTodoElementVisibility = computed(() =>
-  isEditingTodoVisible.value ? 'hidden phone:hidden' : 'block'
+  isEditingTodoVisible.value ? ' hiden phone:hiden ' : 'block'
 )
 
 function toggleEditVisibility() {
   isEditingTodoVisible.value = !isEditingTodoVisible.value
 }
 
-function getChecIconVisisbility(todo: Todo) {
+function getCheckIconVisibility(todo: Todo) {
   return todo.isChecked ? 'block' : 'hidden phone:hidden'
 }
 
@@ -113,10 +111,6 @@ function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
   updateItemList(index)
   toggleEditVisibility()
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
 }
 
 function deleteItem(index: number) {
