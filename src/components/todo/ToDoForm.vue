@@ -17,10 +17,16 @@
         @update-description="updateDescription"
       ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
-        <ToDoSaveButton @handle-save-click="handleSaveClick"></ToDoSaveButton>
-        <ToDoDeleteButton
-          @change-popup-state="changePopupState"
-        ></ToDoDeleteButton>
+        <ToDoButton
+          :buttonstyles="'bg-primary text-white'"
+          :button-name="'Save'"
+          @handle-click="handleSaveClick"
+        ></ToDoButton>
+        <ToDoButton
+          :buttonstyles="'bg-gray-300 text-black'"
+          :button-name="'Delete'"
+          @handle-click="changePopupState"
+        ></ToDoButton>
         <DeleteConfirmationPopup
           :index="index"
           :class="getPopupState"
@@ -33,14 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 import TodoTitle from './ToDoTitle.vue'
 import ToDoDescription from './ToDoDescription.vue'
 import ToDoPriority from './ToDoPriority.vue'
-import ToDoSaveButton from './ToDoSaveButton.vue'
-import ToDoDeleteButton from './ToDoDeleteButton.vue'
+import ToDoButton from './Button.vue'
 
 interface Props {
   todo: Todo
@@ -55,21 +60,26 @@ const emit = defineEmits<{
   (e: 'deleteItem', index: number): void
 }>()
 
-const localTodo = computed(() => Object.assign({}, props.todo))
+const localTodo = reactive<Todo>({
+  title: props.todo.title,
+  priority: props.todo.priority,
+  text: props.todo.text,
+  isChecked: props.todo.isChecked
+})
 
 const isPopupActive = ref(false)
 const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
 function updateTitle(title: string) {
-  localTodo.value.title = title
+  localTodo.title = title
 }
 
 function updateDescription(description: string) {
-  localTodo.value.text = description
+  localTodo.text = description
 }
 
 function updatePriority(priority: TodoPriority) {
-  localTodo.value.priority = priority
+  localTodo.priority = priority
 }
 
 function handleSaveClick() {
@@ -78,7 +88,7 @@ function handleSaveClick() {
 }
 
 function modifyTodo(index: number) {
-  const currentLocalTodo = localTodo.value
+  const currentLocalTodo = localTodo
 
   if (!currentLocalTodo.title) {
     return
@@ -94,9 +104,9 @@ function modifyTodo(index: number) {
 }
 
 function emptyForm() {
-  localTodo.value.title = ''
-  localTodo.value.text = ''
-  localTodo.value.priority = 'Low'
+  localTodo.title = ''
+  localTodo.text = ''
+  localTodo.priority = 'Low'
 }
 
 function changePopupState() {
@@ -111,5 +121,6 @@ function deleteItem(index: number) {
   emit('deleteItem', index)
   changePopupState()
   emptyForm()
+  toggleEditVisibility()
 }
 </script>

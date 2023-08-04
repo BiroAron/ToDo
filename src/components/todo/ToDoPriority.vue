@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRef, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
 interface Props {
@@ -83,7 +83,7 @@ const priority: Record<TodoPriority, TodoPriority> = {
   Medium: 'Medium',
   High: 'High'
 }
-const localTodo = toRef(props, 'todo')
+const localTodo = reactive(props.todo)
 const isDropdownOpen = ref(false)
 
 const getDropdownState = computed(() =>
@@ -95,12 +95,12 @@ function priorityColorChange(priority: TodoPriority) {
 }
 
 function priorityBorderChange(priority: TodoPriority) {
-  if (priority === props.todo.priority) return 'border border-black border-2'
+  if (priority === localTodo.priority) return 'border border-black border-2'
   else return 'border-none'
 }
 
 function updatePriority(priority: TodoPriority, index: number) {
-  localTodo.value.priority = priority
+  localTodo.priority = priority
   emit('updatePriority', priority, index)
   toggleDropdown()
 }
@@ -110,6 +110,7 @@ function toggleDropdown() {
 }
 
 function updatePriorityMobile(priority: TodoPriority, index: number) {
+  localTodo.priority = priority
   emit('updatePriority', priority, index)
   isDropdownOpen.value = false
 }

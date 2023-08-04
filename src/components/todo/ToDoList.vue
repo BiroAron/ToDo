@@ -2,7 +2,8 @@
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
     <div class="px-5 h-screen">
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
-      <Searchbar class="mb-10" />
+
+      <Searchbar class="mb-15" @set-search-query="setSearcQuery" />
       <div :class="getTodoFormVisibility">
         <ToDoForm
           :todo="emptyTodo"
@@ -51,8 +52,9 @@ import Searchbar from './Searchbar.vue'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
+const searchQuery = ref('')
 
-const emptyTodo = ref<Todo>({
+const emptyTodo = reactive<Todo>({
   title: '',
   priority: 'Low',
   text: '',
@@ -67,9 +69,18 @@ const getEmptyListImageVisibility = computed(() =>
   !isNewElementFormActive.value && !todos.length ? 'block' : 'hidden'
 )
 
+function setSearcQuery(searchSentence: string) {
+  searchQuery.value = searchSentence
+}
+
 function addTodo(todo: Todo) {
-  const todoCopy = { ...todo }
-  todos.push(todoCopy)
+  const todoCopy = reactive<Todo>({
+    title: todo.title,
+    priority: todo.priority,
+    text: todo.text,
+    isChecked: todo.isChecked
+  })
+  todos.unshift(todoCopy)
   toggleNewTodoVisibility()
 }
 
@@ -94,7 +105,12 @@ function clear() {
 }
 
 function editTodo(todo: Todo, index: number) {
-  const todoCopy = { ...todo }
+  const todoCopy = reactive<Todo>({
+    title: todo.title,
+    priority: todo.priority,
+    text: todo.text,
+    isChecked: todo.isChecked
+  })
   todos[index] = todoCopy
 }
 

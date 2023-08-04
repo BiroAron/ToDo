@@ -46,7 +46,7 @@
     </div>
   </div>
   <ToDoForm
-    :class="getEditModeVisibility"
+    v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"
     @delete-item="deleteItem(index)"
@@ -83,12 +83,8 @@ const colorMap: ColorMap = {
 
 const isEditingTodoVisible = ref(false)
 
-const getEditModeVisibility = computed(() =>
-  isEditingTodoVisible.value ? 'block' : ' hiden '
-)
-
 const getTodoElementVisibility = computed(() =>
-  isEditingTodoVisible.value ? ' hiden phone:hiden ' : 'block'
+  isEditingTodoVisible.value ? ' hidden phone:hiden ' : 'block'
 )
 
 function toggleEditVisibility() {

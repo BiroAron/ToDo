@@ -14,6 +14,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import SearchIcon from '../icons/SearchIcon.vue'
-</script>
+<script setup lang="ts"></script>
