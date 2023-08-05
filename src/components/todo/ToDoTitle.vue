@@ -1,7 +1,6 @@
 <template>
   <input
-    :value="title"
-    @input="handleInput"
+    v-model="localTitle"
     class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
     type="text"
     placeholder="Title"
@@ -9,17 +8,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
-  title: string
+  description: string
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const localTitle = computed({
+  get: () => props.description,
+  set: (newTitle) => emit('updateTitle', newTitle)
+})
 
 const emit = defineEmits<{
   (e: 'updateTitle', title: string): void
 }>()
-
-function handleInput(event: Event) {
-  const newTitle = (event.target as HTMLInputElement).value
-  emit('updateTitle', newTitle)
-}
 </script>

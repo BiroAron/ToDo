@@ -4,14 +4,13 @@
       <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
 
       <Searchbar class="mb-15" @set-search-query="setSearcQuery" />
-      <div :class="getTodoFormVisibility">
-        <ToDoForm
-          :todo="emptyTodo"
-          :index="-1"
-          @add-todo="addTodo"
-          @delete-item="deleteNewItem"
-        />
-      </div>
+      <ToDoForm
+        v-if="isNewElementFormActive"
+        :todo="emptyTodo"
+        :index="-1"
+        @add-todo="addTodo"
+        @delete-item="deleteNewItem"
+      ></ToDoForm>
 
       <ToDoItems
         :todos="todos"
@@ -22,13 +21,8 @@
       >
       </ToDoItems>
 
-      <div class="flex justify-center align-middle"></div>
-      <div
-        class="flex justify-center align-center"
-        :class="getEmptyListImageVisibility"
-      >
-        <EmptyListImage />
-      </div>
+      <EmptyListImage v-if="getEmptyListImageVisibility" />
+
       <div class="flex justify-center align-center">
         <button
           class="bg-transparent p-2 rounded-md mb-2 border border-black"
@@ -54,19 +48,27 @@ const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
 const searchQuery = ref('')
 
+const currentTimestamp: number = Date.now()
+
+const currentDate: Date = new Date(currentTimestamp)
+const day: number = currentDate.getDate()
+const month: number = currentDate.getMonth() + 1
+const year: number = currentDate.getFullYear()
+
+const currentDateString: string = `${day.toString().padStart(2, '0')}/${month
+  .toString()
+  .padStart(2, '0')}/${year}`
+
 const emptyTodo = reactive<Todo>({
   title: '',
   priority: 'Low',
   text: '',
-  isChecked: false
+  isChecked: false,
+  date: currentDateString
 })
 
-const getTodoFormVisibility = computed(() =>
-  isNewElementFormActive.value ? 'block' : 'hidden'
-)
-
-const getEmptyListImageVisibility = computed(() =>
-  !isNewElementFormActive.value && !todos.length ? 'block' : 'hidden'
+const getEmptyListImageVisibility = computed(
+  () => !isNewElementFormActive.value && !todos.length
 )
 
 function setSearcQuery(searchSentence: string) {
@@ -78,7 +80,8 @@ function addTodo(todo: Todo) {
     title: todo.title,
     priority: todo.priority,
     text: todo.text,
-    isChecked: todo.isChecked
+    isChecked: todo.isChecked,
+    date: todo.date
   })
   todos.unshift(todoCopy)
   toggleNewTodoVisibility()
@@ -109,7 +112,8 @@ function editTodo(todo: Todo, index: number) {
     title: todo.title,
     priority: todo.priority,
     text: todo.text,
-    isChecked: todo.isChecked
+    isChecked: todo.isChecked,
+    date: todo.date
   })
   todos[index] = todoCopy
 }

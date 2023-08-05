@@ -5,29 +5,39 @@
     @click="toggleEditVisibility"
   >
     <div class="flex justify-between w-full phone:pl-5">
-      <div
-        class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
-      >
-        {{ todo.title }}
+      <div class="flex flex-col w-full">
+        <div
+          class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
+        >
+          {{ todo.title }}
+        </div>
+        <div
+          class="text-gray-500 font-semibold text-sm flex flex-column items-center"
+        >
+          <CalendarIcon class="mr-1" />
+          <div class="pt-1">
+            {{ todo.date }}
+          </div>
+        </div>
       </div>
       <div class="flex justify-center">
         <div
-          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
+          class="flex mb-8 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
         </div>
       </div>
-      <div class="flex justify-center align-center">
+      <div class="flex items-center">
         <div
-          class="flex p-2 my-3 rounded-3xl font-semibold text-black desktop:hidden"
+          class="flex p-2 rounded-3xl font-semibold text-black desktop:hidden"
           :class="priorityColor(todo.priority)"
         ></div>
       </div>
     </div>
     <div class="flex justify-between">
       <div
-        class="w-full mt-5 flex text-gray-500 font-semibold text-xl phone:hidden"
+        class="w-full mt-3 flex text-gray-500 font-semibold text-xl phone:hidden"
       >
         {{ todo.text }}
       </div>
@@ -37,14 +47,12 @@
           :class="getCheckButtonCircleColor(todo)"
           @click="toggleTaskState(index)"
         >
-          <CheckedIcon
-            class="absolute bottom-0 left-0"
-            :class="getCheckIconVisibility(todo)"
-          />
+          <CheckedIcon v-if="todo.isChecked" class="absolute bottom-0 left-0" />
         </div>
       </div>
     </div>
   </div>
+
   <ToDoForm
     v-if="isEditingTodoVisible"
     :todo="todo"
@@ -58,6 +66,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import CheckedIcon from '../icons/CheckedIcon.vue'
+import CalendarIcon from '../icons/CalendarIcon.vue'
 import ToDoForm from './ToDoForm.vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
@@ -89,10 +98,6 @@ const getTodoElementVisibility = computed(() =>
 
 function toggleEditVisibility() {
   isEditingTodoVisible.value = !isEditingTodoVisible.value
-}
-
-function getCheckIconVisibility(todo: Todo) {
-  return todo.isChecked ? 'block' : 'hidden phone:hidden'
 }
 
 function getCheckButtonCircleColor(todo: Todo) {

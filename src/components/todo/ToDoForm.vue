@@ -18,18 +18,18 @@
       ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
         <ToDoButton
-          :buttonstyles="'bg-primary text-white'"
-          :button-name="'Save'"
-          @handle-click="handleSaveClick"
+          buttonstyles="bg-primary text-white"
+          button-name="Save"
+          @click="handleSaveClick"
         ></ToDoButton>
         <ToDoButton
-          :buttonstyles="'bg-gray-300 text-black'"
-          :button-name="'Delete'"
-          @handle-click="changePopupState"
+          buttonstyles="bg-gray-300 text-black"
+          button-name="Delete"
+          @click="changePopupState"
         ></ToDoButton>
         <DeleteConfirmationPopup
+          v-if="isPopupActive"
           :index="index"
-          :class="getPopupState"
           @close-popup="changePopupState"
           @delete-item="deleteItem"
         ></DeleteConfirmationPopup>
@@ -39,13 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 import TodoTitle from './ToDoTitle.vue'
 import ToDoDescription from './ToDoDescription.vue'
 import ToDoPriority from './ToDoPriority.vue'
-import ToDoButton from './Button.vue'
+import ToDoButton from './BaseButton.vue'
 
 interface Props {
   todo: Todo
@@ -64,11 +64,11 @@ const localTodo = reactive<Todo>({
   title: props.todo.title,
   priority: props.todo.priority,
   text: props.todo.text,
-  isChecked: props.todo.isChecked
+  isChecked: props.todo.isChecked,
+  date: props.todo.date
 })
 
 const isPopupActive = ref(false)
-const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
 
 function updateTitle(title: string) {
   localTodo.title = title

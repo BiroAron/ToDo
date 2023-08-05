@@ -2,7 +2,6 @@
   <button
     class="py-2 px-8 mr-2 rounded-xl font-semibold flex justify-center align-center"
     :class="buttonstyles"
-    @click="handleClick"
   >
     {{ buttonName }}
   </button>
@@ -14,10 +13,4 @@ interface Props {
   buttonstyles: string
 }
 defineProps<Props>()
-
-const emit = defineEmits(['handleClick'])
-
-function handleClick() {
-  emit('handleClick')
-}
 </script>

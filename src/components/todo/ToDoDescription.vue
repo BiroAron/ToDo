@@ -1,7 +1,6 @@
 <template>
   <textarea
-    :value="description"
-    @input="handleInput"
+    v-model="localDescription"
     class="w-full p-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
     type="text"
     placeholder="Description"
@@ -9,17 +8,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
   description: string
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const localDescription = computed({
+  get: () => props.description,
+  set: (newDescription) => emit('updateDescription', newDescription)
+})
 
 const emit = defineEmits<{
   (e: 'updateDescription', title: string): void
 }>()
-
-function handleInput(event: Event) {
-  const newDescription = (event.target as HTMLInputElement).value
-  emit('updateDescription', newDescription)
-}
 </script>
