@@ -1,11 +1,14 @@
 <template>
-  <div class="mb-10 border border-black rounded-xl border-2">
+  <div class="mb-10 border border-black rounded-xl border-2" ref="todoFormRef">
     <div class="w-full h-full px-3 py-4 rounded-md font-custom">
       <div class="flex justify-between">
-        <TodoTitle
-          :title="localTodo.title"
-          @update-title="updateTitle"
-        ></TodoTitle>
+        <div class="flex flex-col w-full">
+          <TodoTitle
+            :title="localTodo.title"
+            @update-title="updateTitle"
+          ></TodoTitle>
+          <ToDoDate :date="localTodo.date"></ToDoDate>
+        </div>
         <ToDoPriority
           :todo="localTodo"
           :index="index"
@@ -41,11 +44,13 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
+import { onClickOutside } from '@vueuse/core'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 import TodoTitle from './ToDoTitle.vue'
 import ToDoDescription from './ToDoDescription.vue'
 import ToDoPriority from './ToDoPriority.vue'
 import ToDoButton from './BaseButton.vue'
+import ToDoDate from './ToDoDate.vue'
 
 interface Props {
   todo: Todo
@@ -56,8 +61,9 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'addTodo', todo: Todo): void
   (e: 'editTodo', todo: Todo, index: number): void
-  (e: 'toggleEditVisibility'): void
+  (e: 'toggleEdit'): void
   (e: 'deleteItem', index: number): void
+  (e: 'closeEdit'): void
 }>()
 
 const localTodo = reactive<Todo>({
@@ -69,6 +75,11 @@ const localTodo = reactive<Todo>({
 })
 
 const isPopupActive = ref(false)
+const todoFormRef = ref()
+
+onClickOutside(todoFormRef, () => {
+  emit('closeEdit')
+})
 
 function updateTitle(title: string) {
   localTodo.title = title
@@ -84,7 +95,7 @@ function updatePriority(priority: TodoPriority) {
 
 function handleSaveClick() {
   modifyTodo(props.index)
-  toggleEditVisibility()
+  toggleEdit()
 }
 
 function modifyTodo(index: number) {
@@ -113,14 +124,14 @@ function changePopupState() {
   isPopupActive.value = !isPopupActive.value
 }
 
-function toggleEditVisibility() {
-  emit('toggleEditVisibility')
+function toggleEdit() {
+  emit('toggleEdit')
 }
 
 function deleteItem(index: number) {
   emit('deleteItem', index)
   changePopupState()
   emptyForm()
-  toggleEditVisibility()
+  toggleEdit()
 }
 </script>

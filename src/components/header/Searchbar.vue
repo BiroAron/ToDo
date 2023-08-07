@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full px-2 py-1 flex items-center justify-between rounded-xl border border-black border-2 mb-6 font-semibold"
+    class="w-full px-3 py-3 flex items-center justify-between rounded-xl border border-black border-2 mb-6 font-semibold"
   >
     <div class="flex felx-row items-center justify-center">
       <SearchIcon class="min-w-custom" />
@@ -13,5 +13,3 @@
     <button class="bg-black text-white px-3 py-1 rounded-lg">Search</button>
   </div>
 </template>
-
-<script setup lang="ts"></script>

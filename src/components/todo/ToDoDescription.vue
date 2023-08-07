@@ -1,7 +1,7 @@
 <template>
   <textarea
     v-model="localDescription"
-    class="w-full p-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
+    class="w-full pt-2 mt-1 flex placeholder-gray-500 font-semibold focus:outline-none"
     type="text"
     placeholder="Description"
   ></textarea>

@@ -11,12 +11,12 @@
 import { computed } from 'vue'
 
 interface Props {
-  description: string
+  title: string
 }
 const props = defineProps<Props>()
 
 const localTitle = computed({
-  get: () => props.description,
+  get: () => props.title,
   set: (newTitle) => emit('updateTitle', newTitle)
 })
 

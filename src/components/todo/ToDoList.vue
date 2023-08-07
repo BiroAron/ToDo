@@ -1,7 +1,7 @@
 <template>
   <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
     <div class="px-5 h-screen">
-      <Header @toggle-new-visibility="toggleNewTodoVisibility"></Header>
+      <Header @toggle-new-todo="toggleNewTodo"></Header>
 
       <Searchbar class="mb-15" @set-search-query="setSearcQuery" />
       <ToDoForm
@@ -10,6 +10,7 @@
         :index="-1"
         @add-todo="addTodo"
         @delete-item="deleteNewItem"
+        @close-edit="closeEdit"
       ></ToDoForm>
 
       <ToDoItems
@@ -21,15 +22,14 @@
       >
       </ToDoItems>
 
-      <EmptyListImage v-if="getEmptyListImageVisibility" />
+      <EmptyListImage v-if="getEmptyListImage" />
 
-      <div class="flex justify-center align-center">
-        <button
-          class="bg-transparent p-2 rounded-md mb-2 border border-black"
+      <div class="flex justify-center items-center">
+        <BaseButton
+          buttonstyles="bg-white text-black border border-black"
+          button-name="Clear"
           @click="clear"
-        >
-          Clear
-        </button>
+        ></BaseButton>
       </div>
     </div>
   </div>
@@ -42,7 +42,8 @@ import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
 import { Todo } from '../../types/Todo'
-import Searchbar from './Searchbar.vue'
+import Searchbar from '../header/Searchbar.vue'
+import BaseButton from './BaseButton.vue'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
@@ -67,7 +68,7 @@ const emptyTodo = reactive<Todo>({
   date: currentDateString
 })
 
-const getEmptyListImageVisibility = computed(
+const getEmptyListImage = computed(
   () => !isNewElementFormActive.value && !todos.length
 )
 
@@ -84,22 +85,26 @@ function addTodo(todo: Todo) {
     date: todo.date
   })
   todos.unshift(todoCopy)
-  toggleNewTodoVisibility()
+  toggleNewTodo()
 }
 
 function deleteNewItem() {
-  toggleNewTodoVisibility()
+  toggleNewTodo()
 }
 
 function deleteItem(index: number) {
   todos.splice(index, 1)
 }
 
+function closeEdit() {
+  isNewElementFormActive.value = false
+}
+
 function toggleTaskState(index: number) {
   todos[index].isChecked = !todos[index].isChecked
 }
 
-function toggleNewTodoVisibility() {
+function toggleNewTodo() {
   isNewElementFormActive.value = !isNewElementFormActive.value
 }
 

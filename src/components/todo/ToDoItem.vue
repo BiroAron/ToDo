@@ -2,7 +2,7 @@
   <div
     class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
     :class="getTodoElementVisibility"
-    @click="toggleEditVisibility"
+    @click="toggleEdit"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div class="flex flex-col w-full">
@@ -59,12 +59,14 @@
     :index="index"
     @delete-item="deleteItem(index)"
     @edit-todo="editTodo"
-    @toggle-edit-visibility="toggleEditVisibility"
+    @toggle-edit="toggleEdit"
+    @close-edit="closeEdit"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+
 import CheckedIcon from '../icons/CheckedIcon.vue'
 import CalendarIcon from '../icons/CalendarIcon.vue'
 import ToDoForm from './ToDoForm.vue'
@@ -93,11 +95,15 @@ const colorMap: ColorMap = {
 const isEditingTodoVisible = ref(false)
 
 const getTodoElementVisibility = computed(() =>
-  isEditingTodoVisible.value ? ' hidden phone:hiden ' : 'block'
+  isEditingTodoVisible.value ? ' hidden phone:hidden ' : 'block'
 )
 
-function toggleEditVisibility() {
+function toggleEdit() {
   isEditingTodoVisible.value = !isEditingTodoVisible.value
+}
+
+function closeEdit() {
+  isEditingTodoVisible.value = false
 }
 
 function getCheckButtonCircleColor(todo: Todo) {
@@ -111,7 +117,7 @@ function priorityColor(priority: TodoPriority) {
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
   updateItemList(index)
-  toggleEditVisibility()
+  toggleEdit()
 }
 
 function deleteItem(index: number) {
