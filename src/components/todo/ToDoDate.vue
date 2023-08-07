@@ -2,8 +2,7 @@
   <input
     class="flex w-32 text-gray-500 font-semibold placeholder-black focus:outline-none"
     type="date"
-    :value="formattedDate"
-    @input="handleDateChange"
+    v-model="localDate"
   />
 </template>
 
@@ -22,12 +21,12 @@ const formattedDate = computed<string>(() =>
   parsedDate.toISOString().slice(0, 10)
 )
 
+const localDate = computed({
+  get: () => formattedDate,
+  set: (newDate) => emit('updateDate', newDate.value)
+})
+
 const emit = defineEmits<{
   (e: 'updateDate', date: string): void
 }>()
-
-function handleDateChange(event: Event) {
-  const inputElement = event.target as HTMLInputElement
-  emit('updateDate', inputElement.value)
-}
 </script>
