@@ -14,7 +14,7 @@
       ></ToDoForm>
 
       <ToDoItems
-        :todos="todos"
+        :todos="filteredTodos"
         @update-item-list="updateItemList"
         @toggle-task-state="toggleTaskState"
         @delete-item="deleteItem"
@@ -71,6 +71,14 @@ const emptyTodo = reactive<Todo>({
 const getEmptyListImage = computed(
   () => !isNewElementFormActive.value && !todos.length
 )
+
+const filteredTodos = computed(() => {
+  return todos.filter((todo) => {
+    const searchLower = searchQuery.value.toLowerCase()
+    const titleLower = todo.title.toLowerCase()
+    return titleLower.includes(searchLower)
+  })
+})
 
 function setSearcQuery(searchSentence: string) {
   searchQuery.value = searchSentence
