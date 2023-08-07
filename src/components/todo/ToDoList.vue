@@ -4,6 +4,9 @@
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
       <Searchbar class="mb-15" @set-search-query="setSearcQuery" />
+
+      <Filter></Filter>
+
       <ToDoForm
         v-if="isNewElementFormActive"
         :todo="emptyTodo"
@@ -41,9 +44,10 @@ import ToDoForm from './ToDoForm.vue'
 import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
-import { Todo } from '../../types/Todo'
 import Searchbar from '../header/Searchbar.vue'
 import BaseButton from './BaseButton.vue'
+import Filter from '../header/Filter.vue'
+import { Todo } from '../../types/Todo'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])

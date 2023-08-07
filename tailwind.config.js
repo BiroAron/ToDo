@@ -22,8 +22,8 @@ export default {
       }
     },
     screens: {
-      desktop: '701px',
-      phone: { max: '700px' }
+      desktop: '751px',
+      phone: { max: '750px' }
     }
   },
   plugins: []
