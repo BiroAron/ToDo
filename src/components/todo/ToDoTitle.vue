@@ -1,6 +1,6 @@
 <template>
   <input
-    v-model="localTodo.title"
+    v-model="localTitle"
     class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none"
     type="text"
     placeholder="Title"
@@ -8,13 +8,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Todo } from '../../types/Todo'
+import { computed } from 'vue'
 
 interface Props {
-  todo: Todo
+  title: string
 }
 const props = defineProps<Props>()
 
-const localTodo = ref(props.todo)
+const localTitle = computed({
+  get: () => props.title,
+  set: (newTitle) => emit('updateTitle', newTitle)
+})
+
+const emit = defineEmits<{
+  (e: 'updateTitle', title: string): void
+}>()
 </script>

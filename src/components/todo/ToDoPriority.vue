@@ -8,58 +8,37 @@
       {{ localTodo.priority }}
     </div>
     <ul
+      v-if="isDropdownOpen"
       class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border border-black border-2 right-0"
-      :class="getDropdownState"
     >
       <div class="flex flex-col items-start">
-        <li>
+        <li v-for="priorityOption in priorityOptions" :key="priorityOption">
           <p
             class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('Low', index)"
+            @click="updatePriority(priorityOption, index)"
           >
-            Low
-          </p>
-        </li>
-        <li>
-          <p
-            class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('Medium', index)"
-          >
-            Medium
-          </p>
-        </li>
-        <li>
-          <p
-            class="block px-3 text-black cursor-pointer"
-            @click="updatePriority('High', index)"
-          >
-            High
+            {{ priorityOption }}
           </p>
         </li>
       </div>
     </ul>
   </div>
-  <div class="flex justify-center space-x-2 desktop:hidden">
+  <div class="flex justify-center items-center space-x-2 desktop:hidden">
     <div
-      class="p-2 my-3 rounded-full font-semibold text-black bg-low h-5 w-5"
-      :class="priorityBorderChange('Low')"
-      @click="updatePriorityMobile('Low', index)"
-    ></div>
-    <div
-      class="p-2 my-3 rounded-full font-semibold text-black bg-medium h-5 w-5"
-      :class="priorityBorderChange('Medium')"
-      @click="updatePriorityMobile('Medium', index)"
-    ></div>
-    <div
-      class="p-2 my-3 rounded-full font-semibold text-black bg-high h-5 w-5"
-      :class="priorityBorderChange('High')"
-      @click="updatePriorityMobile('High', index)"
+      v-for="priorityOption in priorityOptions"
+      :key="priorityOption"
+      class="p-2 rounded-full font-semibold text-black"
+      :class="[
+        priorityColorChange(priorityOption),
+        priorityBorderChange(priorityOption)
+      ]"
+      @click="updatePriorityMobile(priorityOption, index)"
     ></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
 interface Props {
@@ -69,32 +48,32 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'updatePriority', priority: TodoPriority, index: number): void
 }>()
+
+const priorityOptions: TodoPriority[] = ['Low', 'Medium', 'High']
 
 const colorMap: ColorMap = {
   High: 'bg-high',
   Medium: 'bg-medium',
   Low: 'bg-low'
 }
-const localTodo = ref(props.todo)
-const isDropdownOpen = ref(false)
 
-const getDropdownState = computed(() =>
-  isDropdownOpen.value ? 'block' : 'hidden'
-)
+const localTodo = reactive(props.todo)
+const isDropdownOpen = ref(false)
 
 function priorityColorChange(priority: TodoPriority) {
   return colorMap[priority]
 }
 
 function priorityBorderChange(priority: TodoPriority) {
-  if (priority === props.todo.priority) return 'border border-black border-2'
-  else return 'border-none'
+  if (priority === localTodo.priority) return 'border border-black border-1'
+  return 'border-none'
 }
 
 function updatePriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  localTodo.priority = priority
+  emit('updatePriority', priority, index)
   toggleDropdown()
 }
 
@@ -103,7 +82,8 @@ function toggleDropdown() {
 }
 
 function updatePriorityMobile(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  localTodo.priority = priority
+  emit('updatePriority', priority, index)
   isDropdownOpen.value = false
 }
 </script>

@@ -1,8 +1,7 @@
 <template>
-  <div class="flex phone:w-96 phone:h-96 desktop:h-full desktop:w-full">
+  <div class="flex justify-center align-center desktop:w-full">
     <svg
       width="100%"
-      height="100%"
       viewBox="0 0 410 403"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

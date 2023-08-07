@@ -2,32 +2,42 @@
   <div
     class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
     :class="getTodoElementVisibility"
-    @click="toggleEditVisibility"
+    @click="toggleEdit"
   >
     <div class="flex justify-between w-full phone:pl-5">
-      <div
-        class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
-      >
-        {{ todo.title }}
+      <div class="flex flex-col w-full">
+        <div
+          class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
+        >
+          {{ todo.title }}
+        </div>
+        <div
+          class="text-gray-500 font-semibold text-sm flex flex-column items-center"
+        >
+          <CalendarIcon class="mr-1" />
+          <div class="pt-1">
+            {{ todo.date }}
+          </div>
+        </div>
       </div>
       <div class="flex justify-center">
         <div
-          class="flex mb-4 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
+          class="flex mb-8 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
         </div>
       </div>
-      <div class="flex justify-center align-center">
+      <div class="flex items-center">
         <div
-          class="flex p-2 my-3 rounded-3xl font-semibold text-black desktop:hidden"
+          class="flex p-2 rounded-3xl font-semibold text-black desktop:hidden"
           :class="priorityColor(todo.priority)"
         ></div>
       </div>
     </div>
     <div class="flex justify-between">
       <div
-        class="w-full mt-5 flex text-gray-500 font-semibold text-xl phone:hidden"
+        class="w-full mt-3 flex text-gray-500 font-semibold text-xl phone:hidden"
       >
         {{ todo.text }}
       </div>
@@ -37,28 +47,28 @@
           :class="getCheckButtonCircleColor(todo)"
           @click="toggleTaskState(index)"
         >
-          <CheckedIcon
-            class="absolute bottom-0 left-0"
-            :class="getChecIconVisisbility(todo)"
-          />
+          <CheckedIcon v-if="todo.isChecked" class="absolute bottom-0 left-0" />
         </div>
       </div>
     </div>
   </div>
+
   <ToDoForm
-    :class="getEditModeVisibility"
+    v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"
-    @toggle-edit-visibility="toggleEditVisibility"
     @delete-item="deleteItem(index)"
-    @update-todo-priority="updateTodoPriority"
     @edit-todo="editTodo"
+    @toggle-edit="toggleEdit"
+    @close-edit="closeEdit"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+
 import CheckedIcon from '../icons/CheckedIcon.vue'
+import CalendarIcon from '../icons/CalendarIcon.vue'
 import ToDoForm from './ToDoForm.vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
@@ -72,8 +82,8 @@ defineProps<Props>()
 const emit = defineEmits<{
   (e: 'deleteItem', index: number): void
   (e: 'editTodo', todo: Todo, index: number): void
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
   (e: 'toggleTaskState', index: number): void
+  (e: 'updateItemList', index: number): void
 }>()
 
 const colorMap: ColorMap = {
@@ -84,20 +94,16 @@ const colorMap: ColorMap = {
 
 const isEditingTodoVisible = ref(false)
 
-const getEditModeVisibility = computed(() =>
-  isEditingTodoVisible.value ? 'block' : 'hidden'
-)
-
 const getTodoElementVisibility = computed(() =>
-  isEditingTodoVisible.value ? 'hidden phone:hidden' : 'block'
+  isEditingTodoVisible.value ? ' hidden phone:hidden ' : 'block'
 )
 
-function toggleEditVisibility() {
+function toggleEdit() {
   isEditingTodoVisible.value = !isEditingTodoVisible.value
 }
 
-function getChecIconVisisbility(todo: Todo) {
-  return todo.isChecked ? 'block' : 'hidden phone:hidden'
+function closeEdit() {
+  isEditingTodoVisible.value = false
 }
 
 function getCheckButtonCircleColor(todo: Todo) {
@@ -110,11 +116,8 @@ function priorityColor(priority: TodoPriority) {
 
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
-  toggleEditVisibility()
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  updateItemList(index)
+  toggleEdit()
 }
 
 function deleteItem(index: number) {
@@ -123,5 +126,9 @@ function deleteItem(index: number) {
 
 function editTodo(todo: Todo, index: number) {
   emit('editTodo', todo, index)
+}
+
+function updateItemList(index: number) {
+  emit('updateItemList', index)
 }
 </script>

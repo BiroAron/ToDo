@@ -1,24 +1,38 @@
 <template>
-  <div class="mb-10 border border-black rounded-xl border-2">
+  <div class="mb-10 border border-black rounded-xl border-2" ref="todoFormRef">
     <div class="w-full h-full px-3 py-4 rounded-md font-custom">
       <div class="flex justify-between">
-        <TodoTitle :todo="todo" @update-title="updateTitle"></TodoTitle>
+        <div class="flex flex-col w-full">
+          <TodoTitle
+            :title="localTodo.title"
+            @update-title="updateTitle"
+          ></TodoTitle>
+          <ToDoDate :date="localTodo.date"></ToDoDate>
+        </div>
         <ToDoPriority
-          :todo="todo"
+          :todo="localTodo"
           :index="index"
-          @update-todo-priority="updateTodoPriority"
+          @update-priority="updatePriority"
         ></ToDoPriority>
       </div>
-      <ToDoDescription :todo="todo" @update-description="updateDescription">
-      </ToDoDescription>
+      <ToDoDescription
+        :description="localTodo.text"
+        @update-description="updateDescription"
+      ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
-        <ToDoSaveButton @handle-save-click="handleSaveClick"> </ToDoSaveButton>
-        <ToDoDeleteButton
-          @change-popup-state="changePopupState"
-        ></ToDoDeleteButton>
+        <ToDoButton
+          buttonstyles="bg-primary text-white"
+          button-name="Save"
+          @click="handleSaveClick"
+        ></ToDoButton>
+        <ToDoButton
+          buttonstyles="bg-gray-300 text-black"
+          button-name="Delete"
+          @click="changePopupState"
+        ></ToDoButton>
         <DeleteConfirmationPopup
+          v-if="isPopupActive"
           :index="index"
-          :class="getPopupState"
           @close-popup="changePopupState"
           @delete-item="deleteItem"
         ></DeleteConfirmationPopup>
@@ -28,14 +42,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { Todo, TodoPriority } from '../../types/Todo'
+import { onClickOutside } from '@vueuse/core'
 import DeleteConfirmationPopup from './DeleteConfirmationPopup.vue'
 import TodoTitle from './ToDoTitle.vue'
 import ToDoDescription from './ToDoDescription.vue'
 import ToDoPriority from './ToDoPriority.vue'
-import ToDoSaveButton from './ToDoSaveButton.vue'
-import ToDoDeleteButton from './ToDoDeleteButton.vue'
+import ToDoButton from './BaseButton.vue'
+import ToDoDate from './ToDoDate.vue'
 
 interface Props {
   todo: Todo
@@ -46,64 +61,77 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'addTodo', todo: Todo): void
   (e: 'editTodo', todo: Todo, index: number): void
-  (e: 'toggleEditVisibility'): void
+  (e: 'toggleEdit'): void
   (e: 'deleteItem', index: number): void
-  (e: 'updateTodoPriority', priority: TodoPriority, index: number): void
+  (e: 'closeEdit'): void
 }>()
 
-const localTodo = ref(props.todo)
-const isPopupActive = ref(false)
+const localTodo = reactive<Todo>({
+  title: props.todo.title,
+  priority: props.todo.priority,
+  text: props.todo.text,
+  isChecked: props.todo.isChecked,
+  date: props.todo.date
+})
 
-const getPopupState = computed(() => (isPopupActive.value ? 'block' : 'hidden'))
+const isPopupActive = ref(false)
+const todoFormRef = ref()
+
+onClickOutside(todoFormRef, () => {
+  emit('closeEdit')
+})
 
 function updateTitle(title: string) {
-  localTodo.value.title = title
+  localTodo.title = title
 }
 
 function updateDescription(description: string) {
-  localTodo.value.title = description
+  localTodo.text = description
+}
+
+function updatePriority(priority: TodoPriority) {
+  localTodo.priority = priority
 }
 
 function handleSaveClick() {
   modifyTodo(props.index)
-  toggleEditVisibility()
+  toggleEdit()
 }
 
 function modifyTodo(index: number) {
-  if (!props.todo.title) {
+  const currentLocalTodo = localTodo
+
+  if (!currentLocalTodo.title) {
     return
   }
 
   if (index === -1) {
-    emit('addTodo', localTodo.value)
+    emit('addTodo', currentLocalTodo)
     emptyForm()
     return
   }
 
-  emit('editTodo', localTodo.value, index)
+  emit('editTodo', currentLocalTodo, index)
 }
 
 function emptyForm() {
-  localTodo.value.title = ''
-  localTodo.value.text = ''
-  localTodo.value.priority = 'Low'
+  localTodo.title = ''
+  localTodo.text = ''
+  localTodo.priority = 'Low'
 }
 
 function changePopupState() {
   isPopupActive.value = !isPopupActive.value
 }
 
-function toggleEditVisibility() {
-  emit('toggleEditVisibility')
+function toggleEdit() {
+  emit('toggleEdit')
 }
 
 function deleteItem(index: number) {
   emit('deleteItem', index)
   changePopupState()
   emptyForm()
-}
-
-function updateTodoPriority(priority: TodoPriority, index: number) {
-  emit('updateTodoPriority', priority, index)
+  toggleEdit()
 }
 </script>

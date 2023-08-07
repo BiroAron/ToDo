@@ -5,22 +5,21 @@
     >
       To do list
     </div>
-    <div
+    <button
       class="w-12 h-12 phone:w-10 phone:h-10 left-72 top-10 rounded-full outline-none border-none bg-primary flex justify-center items-center cursor-pointer"
+      @click="toggleNewTodo"
     >
-      <button @click="toggleNewVisibility">
-        <PlusIcon />
-      </button>
-    </div>
+      <PlusIcon />
+    </button>
   </header>
 </template>
 
 <script setup lang="ts">
 import PlusIcon from '../icons/PlusIcon.vue'
 
-const emit = defineEmits(['toggleNewVisibility'])
+const emit = defineEmits(['toggleNewTodo'])
 
-function toggleNewVisibility() {
-  emit('toggleNewVisibility')
+function toggleNewTodo() {
+  emit('toggleNewTodo')
 }
 </script>
