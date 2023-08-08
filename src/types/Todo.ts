@@ -3,7 +3,7 @@ export interface Todo {
   priority: TodoPriority
   text: string
   isChecked: boolean
-  date: number
+  date: string
 }
 
 export type TodoPriority = 'High' | 'Medium' | 'Low'

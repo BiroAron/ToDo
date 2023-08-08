@@ -16,7 +16,7 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ formatTimestampToDateString(todo.date) }}
+            {{ formatDate(todo.date) }}
           </div>
         </div>
       </div>
@@ -114,6 +114,15 @@ function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
 }
 
+function formatDate(inputDate: string): string {
+  const parts = inputDate.split('-')
+  const year = parts[0]
+  const month = parts[1]
+  const day = parts[2]
+
+  return `${day}.${month}.${year}`
+}
+
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
   updateItemList(index)
@@ -130,16 +139,5 @@ function editTodo(todo: Todo, index: number) {
 
 function updateItemList(index: number) {
   emit('updateItemList', index)
-}
-
-function formatTimestampToDateString(timestamp: number) {
-  const currentDate: Date = new Date(timestamp)
-  const day: number = currentDate.getDate()
-  const month: number = currentDate.getMonth() + 1
-  const year: number = currentDate.getFullYear()
-
-  return `${day.toString().padStart(2, '0')}.${month
-    .toString()
-    .padStart(2, '0')}.${year}`
 }
 </script>

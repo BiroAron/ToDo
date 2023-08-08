@@ -10,7 +10,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  date: number
+  date: string
 }
 const props = defineProps<Props>()
 
@@ -20,6 +20,6 @@ const localDate = computed({
 })
 
 const emit = defineEmits<{
-  (e: 'updateDate', date: number): void
+  (e: 'updateDate', date: string): void
 }>()
 </script>

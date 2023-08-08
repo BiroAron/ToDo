@@ -9,7 +9,7 @@
         class="mb-6"
         :sort-ascending="sortAscending"
         :active-button="activeButton"
-        @sort-filtered-todos="sortFilteredTodos"
+        @sort-filtered-todos="sortTodos"
         @toggle-sort-order="toggleSortOrder"
       ></Filter>
 
@@ -66,7 +66,7 @@ const emptyTodo = reactive<Todo>({
   priority: 'Low',
   text: '',
   isChecked: false,
-  date: Date.now()
+  date: formatTimestampToDateString(Date.now())
 })
 
 const getEmptyListImage = computed(
@@ -81,7 +81,18 @@ const filteredTodos = computed(() => {
   })
 })
 
-function sortFilteredTodos(sortCriteria: string) {
+function formatTimestampToDateString(timestamp: number) {
+  const currentDate: Date = new Date(timestamp)
+  const day: number = currentDate.getDate()
+  const month: number = currentDate.getMonth() + 1
+  const year: number = currentDate.getFullYear()
+
+  return `${year}-${month.toString().padStart(2, '0')}-${day
+    .toString()
+    .padStart(2, '0')}`
+}
+
+function sortTodos(sortCriteria: string) {
   const sortedTodos = [...todos]
   sortedTodos.sort((a, b) => {
     if (sortCriteria === 'title') {
@@ -90,6 +101,8 @@ function sortFilteredTodos(sortCriteria: string) {
       return sortByDescription(a, b)
     } else if (sortCriteria === 'date') {
       return sortByDate(a, b)
+    } else if (sortCriteria === 'priority') {
+      return sortByPriority(a, b)
     }
     return 0
   })
@@ -106,19 +119,35 @@ function sortByTitle(a: Todo, b: Todo) {
 function sortByDescription(a: Todo, b: Todo) {
   activeButton.value = 'description'
   return sortAscending.value
-    ? a.title.localeCompare(b.text)
-    : b.title.localeCompare(a.text)
+    ? a.text.localeCompare(b.text)
+    : b.text.localeCompare(a.text)
 }
 
 function sortByDate(a: Todo, b: Todo) {
   activeButton.value = 'date'
-  return sortAscending.value
-    ? a.date > b.date
-      ? 1
-      : -1
-    : b.date > a.date
-    ? 1
-    : -1
+
+  const dateA = new Date(a.date)
+  const dateB = new Date(b.date)
+
+  if (sortAscending.value) {
+    return dateA.getTime() - dateB.getTime()
+  } else {
+    return dateB.getTime() - dateA.getTime()
+  }
+}
+
+function sortByPriority(a: Todo, b: Todo) {
+  activeButton.value = 'priority'
+
+  const priorityOrder = ['Low', 'Medium', 'High']
+  const priorityA = priorityOrder.indexOf(a.priority)
+  const priorityB = priorityOrder.indexOf(b.priority)
+
+  if (sortAscending.value) {
+    return priorityA - priorityB
+  } else {
+    return priorityB - priorityA
+  }
 }
 
 function setSearchQuery(searchSentence: string) {
@@ -163,7 +192,7 @@ function clear() {
 
 function toggleSortOrder() {
   sortAscending.value = !sortAscending.value
-  sortFilteredTodos(activeButton.value)
+  sortTodos(activeButton.value)
 }
 
 function editTodo(todo: Todo, index: number) {
