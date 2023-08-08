@@ -37,7 +37,9 @@ const emit = defineEmits<{
   (e: 'toggleSortOrder'): void
 }>()
 
-const activeortButtonColor = computed(() =>
+const activeButton = computed(() => props.activeButton)
+
+const activetButtonColor = computed(() =>
   props.sortAscending
     ? 'bg-black text-white'
     : 'bg-primary text-white border-primary'
@@ -58,11 +60,9 @@ function toggleSortOrder() {
   emit('toggleSortOrder')
 }
 
-const activeButton = computed(() => props.activeButton)
-
 function buttonClasses(button: { name: string; sortCriteria: string }) {
   return activeButton.value === button.sortCriteria
-    ? activeortButtonColor.value
+    ? activetButtonColor.value
     : 'bg-white'
 }
 </script>

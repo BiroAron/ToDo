@@ -1,10 +1,10 @@
 <template>
   <button
     class="bg-black py-2 px-3 rounded-md font-semibold flex items-center"
-    :class="setBgColor"
+    :class="getBgColor"
   >
     <DownArrowIcon v-if="sortAscending"></DownArrowIcon>
-    <UpArrowIcon v-if="!sortAscending"></UpArrowIcon>
+    <UpArrowIcon v-else></UpArrowIcon>
   </button>
 </template>
 
@@ -18,7 +18,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const setBgColor = computed(() =>
+const getBgColor = computed(() =>
   props.sortAscending ? 'bg-black' : 'bg-primary'
 )
 </script>

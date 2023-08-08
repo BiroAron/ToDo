@@ -121,11 +121,9 @@ function sortByDate(a: Todo, b: Todo) {
   const dateA = new Date(a.date)
   const dateB = new Date(b.date)
 
-  if (sortAscending.value) {
-    return dateA.getTime() - dateB.getTime()
-  } else {
-    return dateB.getTime() - dateA.getTime()
-  }
+  if (sortAscending.value) return dateA.getTime() - dateB.getTime()
+
+  return dateB.getTime() - dateA.getTime()
 }
 
 function sortByPriority(a: Todo, b: Todo) {
@@ -133,11 +131,9 @@ function sortByPriority(a: Todo, b: Todo) {
   const priorityA = priorityOrder.indexOf(a.priority)
   const priorityB = priorityOrder.indexOf(b.priority)
 
-  if (sortAscending.value) {
-    return priorityA - priorityB
-  } else {
-    return priorityB - priorityA
-  }
+  if (sortAscending.value) return priorityA - priorityB
+
+  return priorityB - priorityA
 }
 
 function setSearchQuery(searchSentence: string) {
