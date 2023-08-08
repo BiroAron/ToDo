@@ -7,7 +7,11 @@
             :title="localTodo.title"
             @update-title="updateTitle"
           ></TodoTitle>
-          <ToDoDate :date="localTodo.date"></ToDoDate>
+          <ToDoDate
+            class="text-sm"
+            :date="localTodo.date"
+            @update-date="updateDate"
+          ></ToDoDate>
         </div>
         <ToDoPriority
           :todo="localTodo"
@@ -91,6 +95,10 @@ function updateDescription(description: string) {
 
 function updatePriority(priority: TodoPriority) {
   localTodo.priority = priority
+}
+
+function updateDate(date: number) {
+  localTodo.date = date
 }
 
 function handleSaveClick() {

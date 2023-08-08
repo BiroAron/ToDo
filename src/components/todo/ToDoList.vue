@@ -3,10 +3,12 @@
     <div class="px-5 h-screen">
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
-      <Searchbar @set-search-query="setSearcQuery" />
+      <Searchbar @set-search-query="setSearchQuery" />
 
       <Filter
         class="mb-6"
+        :sort-ascending="sortAscending"
+        :active-button="activeButton"
         @sort-filtered-todos="sortFilteredTodos"
         @toggle-sort-order="toggleSortOrder"
       ></Filter>
@@ -57,24 +59,14 @@ const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
 const searchQuery = ref('')
 const sortAscending = ref(true)
-
-const currentTimestamp: number = Date.now()
-
-const currentDate: Date = new Date(currentTimestamp)
-const day: number = currentDate.getDate()
-const month: number = currentDate.getMonth() + 1
-const year: number = currentDate.getFullYear()
-
-const currentDateString: string = `${day.toString().padStart(2, '0')}/${month
-  .toString()
-  .padStart(2, '0')}/${year}`
+const activeButton = ref('')
 
 const emptyTodo = reactive<Todo>({
   title: '',
   priority: 'Low',
   text: '',
   isChecked: false,
-  date: currentDateString
+  date: Date.now()
 })
 
 const getEmptyListImage = computed(
@@ -96,6 +88,8 @@ function sortFilteredTodos(sortCriteria: string) {
       return sortByTitle(a, b)
     } else if (sortCriteria === 'description') {
       return sortByDescription(a, b)
+    } else if (sortCriteria === 'date') {
+      return sortByDate(a, b)
     }
     return 0
   })
@@ -103,18 +97,31 @@ function sortFilteredTodos(sortCriteria: string) {
 }
 
 function sortByTitle(a: Todo, b: Todo) {
+  activeButton.value = 'title'
   return sortAscending.value
     ? a.title.localeCompare(b.title)
     : b.title.localeCompare(a.title)
 }
 
 function sortByDescription(a: Todo, b: Todo) {
+  activeButton.value = 'description'
   return sortAscending.value
     ? a.title.localeCompare(b.text)
     : b.title.localeCompare(a.text)
 }
 
-function setSearcQuery(searchSentence: string) {
+function sortByDate(a: Todo, b: Todo) {
+  activeButton.value = 'date'
+  return sortAscending.value
+    ? a.date > b.date
+      ? 1
+      : -1
+    : b.date > a.date
+    ? 1
+    : -1
+}
+
+function setSearchQuery(searchSentence: string) {
   searchQuery.value = searchSentence
 }
 
@@ -156,6 +163,7 @@ function clear() {
 
 function toggleSortOrder() {
   sortAscending.value = !sortAscending.value
+  sortFilteredTodos(activeButton.value)
 }
 
 function editTodo(todo: Todo, index: number) {

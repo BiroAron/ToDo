@@ -16,7 +16,7 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ todo.date }}
+            {{ formatTimestampToDateString(todo.date) }}
           </div>
         </div>
       </div>
@@ -130,5 +130,16 @@ function editTodo(todo: Todo, index: number) {
 
 function updateItemList(index: number) {
   emit('updateItemList', index)
+}
+
+function formatTimestampToDateString(timestamp: number) {
+  const currentDate: Date = new Date(timestamp)
+  const day: number = currentDate.getDate()
+  const month: number = currentDate.getMonth() + 1
+  const year: number = currentDate.getFullYear()
+
+  return `${day.toString().padStart(2, '0')}.${month
+    .toString()
+    .padStart(2, '0')}.${year}`
 }
 </script>
