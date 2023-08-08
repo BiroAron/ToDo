@@ -23,7 +23,7 @@ export default {
     },
     screens: {
       desktop: '751px',
-      phone: { max: '750px' }
+      phone: { max: '780px' }
     }
   },
   plugins: []

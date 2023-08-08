@@ -1,8 +1,6 @@
 <template>
   <header class="pt-16 flex justify-between items-center pb-12">
-    <div
-      class="font-semibold text-6xl phone:text-5xl flex justify-center items-center"
-    >
+    <div class="font-semibold text-6xl flex justify-center items-center">
       To do list
     </div>
     <button

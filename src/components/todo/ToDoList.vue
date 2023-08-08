@@ -3,10 +3,11 @@
     <div class="px-5 h-screen">
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
-      <Searchbar @set-search-query="setSearchQuery" />
+      <Searchbar v-if="todos.length" @set-search-query="setSearchQuery" />
 
       <Filter
-        class="mb-6"
+        v-if="todos.length && filteredTodos.length"
+        class="mb-6 px-1"
         :sort-ascending="sortAscending"
         :active-button="activeButton"
         @sort-todos="sortTodos"
@@ -32,14 +33,6 @@
       </ToDoItems>
 
       <EmptyListImage v-if="getEmptyListImage" />
-
-      <div class="flex justify-center items-center">
-        <BaseButton
-          buttonstyles="bg-white text-black border border-black"
-          button-name="Clear"
-          @click="clear"
-        ></BaseButton>
-      </div>
     </div>
   </div>
 </template>
@@ -51,12 +44,11 @@ import Header from '../header/Header.vue'
 import ToDoItems from './ToDoItems.vue'
 import EmptyListImage from '../icons/EmptyListIcon.vue'
 import Searchbar from '../header/Searchbar.vue'
-import BaseButton from './BaseButton.vue'
 import Filter from '../header/Filter.vue'
 import { Todo } from '../../types/Todo'
 
 const isNewElementFormActive = ref(false)
-const todos = reactive<Todo[]>([])
+const todos = reactive<Todo[]>(getFromLocalStorage())
 const searchQuery = ref('')
 const sortAscending = ref(true)
 const activeButton = ref('')
@@ -77,7 +69,8 @@ const filteredTodos = computed(() => {
   return todos.filter((todo) => {
     const searchLower = searchQuery.value.toLowerCase()
     const titleLower = todo.title.toLowerCase()
-    return titleLower.includes(searchLower)
+    const textLower = todo.text.toLowerCase()
+    return titleLower.includes(searchLower) || textLower.includes(searchLower)
   })
 })
 
@@ -94,6 +87,7 @@ function formatTimestampToDateString(timestamp: number) {
 
 function sortTodos(sortCriteria: string) {
   const sortedTodos = [...todos]
+  activeButton.value = sortCriteria
   sortedTodos.sort((a, b) => {
     switch (sortCriteria) {
       case 'title':
@@ -112,22 +106,18 @@ function sortTodos(sortCriteria: string) {
 }
 
 function sortByTitle(a: Todo, b: Todo) {
-  activeButton.value = 'title'
   return sortAscending.value
     ? a.title.localeCompare(b.title)
     : b.title.localeCompare(a.title)
 }
 
 function sortByDescription(a: Todo, b: Todo) {
-  activeButton.value = 'description'
   return sortAscending.value
     ? a.text.localeCompare(b.text)
     : b.text.localeCompare(a.text)
 }
 
 function sortByDate(a: Todo, b: Todo) {
-  activeButton.value = 'date'
-
   const dateA = new Date(a.date)
   const dateB = new Date(b.date)
 
@@ -139,8 +129,6 @@ function sortByDate(a: Todo, b: Todo) {
 }
 
 function sortByPriority(a: Todo, b: Todo) {
-  activeButton.value = 'priority'
-
   const priorityOrder = ['Low', 'Medium', 'High']
   const priorityA = priorityOrder.indexOf(a.priority)
   const priorityB = priorityOrder.indexOf(b.priority)
@@ -166,6 +154,7 @@ function addTodo(todo: Todo) {
   })
   todos.unshift(todoCopy)
   toggleNewTodo()
+  saveToLocalStorage()
 }
 
 function deleteNewItem() {
@@ -174,6 +163,7 @@ function deleteNewItem() {
 
 function deleteItem(index: number) {
   todos.splice(index, 1)
+  saveToLocalStorage()
 }
 
 function closeEdit() {
@@ -186,10 +176,6 @@ function toggleTaskState(index: number) {
 
 function toggleNewTodo() {
   isNewElementFormActive.value = !isNewElementFormActive.value
-}
-
-function clear() {
-  todos.splice(0)
 }
 
 function toggleSortOrder() {
@@ -216,5 +202,14 @@ function updateItemList(index: number) {
   } else {
     todos.unshift(todoSave)
   }
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem('todos', JSON.stringify(todos))
+}
+
+function getFromLocalStorage() {
+  const savedTodos = localStorage.getItem('todos')
+  return savedTodos ? JSON.parse(savedTodos) : []
 }
 </script>
