@@ -7,7 +7,7 @@
         :key="index"
         :class="buttonClasses(button)"
         :button-name="button.name"
-        @click="sortFilteredTodos(button.sortCriteria)"
+        @click="sortTodos(button.sortCriteria)"
       ></SortButton>
     </div>
     <div
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ArrowButton from './ArrowButton.vue'
-import SortButton from './SortButton.vue'
+import SortButton from './FilterButton.vue'
 
 interface Props {
   activeButton: string
@@ -33,7 +33,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'sortFilteredTodos', sortCriteria: string): void
+  (e: 'sortTodos', sortCriteria: string): void
   (e: 'toggleSortOrder'): void
 }>()
 
@@ -50,8 +50,8 @@ const sortButtons = [
   { name: 'Priority', sortCriteria: 'priority' }
 ]
 
-function sortFilteredTodos(sortCriteria: string) {
-  emit('sortFilteredTodos', sortCriteria)
+function sortTodos(sortCriteria: string) {
+  emit('sortTodos', sortCriteria)
 }
 
 function toggleSortOrder() {

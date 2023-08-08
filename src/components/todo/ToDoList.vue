@@ -9,7 +9,7 @@
         class="mb-6"
         :sort-ascending="sortAscending"
         :active-button="activeButton"
-        @sort-filtered-todos="sortTodos"
+        @sort-todos="sortTodos"
         @toggle-sort-order="toggleSortOrder"
       ></Filter>
 
@@ -95,16 +95,18 @@ function formatTimestampToDateString(timestamp: number) {
 function sortTodos(sortCriteria: string) {
   const sortedTodos = [...todos]
   sortedTodos.sort((a, b) => {
-    if (sortCriteria === 'title') {
-      return sortByTitle(a, b)
-    } else if (sortCriteria === 'description') {
-      return sortByDescription(a, b)
-    } else if (sortCriteria === 'date') {
-      return sortByDate(a, b)
-    } else if (sortCriteria === 'priority') {
-      return sortByPriority(a, b)
+    switch (sortCriteria) {
+      case 'title':
+        return sortByTitle(a, b)
+      case 'description':
+        return sortByDescription(a, b)
+      case 'date':
+        return sortByDate(a, b)
+      case 'priority':
+        return sortByPriority(a, b)
+      default:
+        return 0
     }
-    return 0
   })
   todos.splice(0, todos.length, ...sortedTodos)
 }
