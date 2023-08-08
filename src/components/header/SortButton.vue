@@ -1,5 +1,5 @@
 <template>
-  <button class="bg-gray-300 px-2 rounded-md font-semibold">
+  <button class="px-2 rounded-md font-semibold border border-black">
     {{ buttonName }}
   </button>
 </template>

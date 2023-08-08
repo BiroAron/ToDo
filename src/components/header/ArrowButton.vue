@@ -1,5 +1,5 @@
 <template>
-  <button class="bg-black py-1 px-2 rounded-md font-semibold flex items-center">
+  <button class="bg-black py-2 px-3 rounded-md font-semibold flex items-center">
     <DownArrowIcon></DownArrowIcon>
   </button>
 </template>

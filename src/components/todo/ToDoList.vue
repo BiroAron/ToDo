@@ -3,9 +3,13 @@
     <div class="px-5 h-screen">
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
-      <Searchbar class="mb-15" @set-search-query="setSearcQuery" />
+      <Searchbar @set-search-query="setSearcQuery" />
 
-      <Filter></Filter>
+      <Filter
+        class="mb-6"
+        @sort-filtered-todos="sortFilteredTodos"
+        @toggle-sort-order="toggleSortOrder"
+      ></Filter>
 
       <ToDoForm
         v-if="isNewElementFormActive"
@@ -52,6 +56,7 @@ import { Todo } from '../../types/Todo'
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
 const searchQuery = ref('')
+const sortAscending = ref(true)
 
 const currentTimestamp: number = Date.now()
 
@@ -83,6 +88,31 @@ const filteredTodos = computed(() => {
     return titleLower.includes(searchLower)
   })
 })
+
+function sortFilteredTodos(sortCriteria: string) {
+  const sortedTodos = [...todos]
+  sortedTodos.sort((a, b) => {
+    if (sortCriteria === 'title') {
+      return sortByTitle(a, b)
+    } else if (sortCriteria === 'description') {
+      return sortByDescription(a, b)
+    }
+    return 0
+  })
+  todos.splice(0, todos.length, ...sortedTodos)
+}
+
+function sortByTitle(a: Todo, b: Todo) {
+  return sortAscending.value
+    ? a.title.localeCompare(b.title)
+    : b.title.localeCompare(a.title)
+}
+
+function sortByDescription(a: Todo, b: Todo) {
+  return sortAscending.value
+    ? a.title.localeCompare(b.text)
+    : b.title.localeCompare(a.text)
+}
 
 function setSearcQuery(searchSentence: string) {
   searchQuery.value = searchSentence
@@ -122,6 +152,10 @@ function toggleNewTodo() {
 
 function clear() {
   todos.splice(0)
+}
+
+function toggleSortOrder() {
+  sortAscending.value = !sortAscending.value
 }
 
 function editTodo(todo: Todo, index: number) {
