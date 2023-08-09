@@ -20,7 +20,7 @@
         ></ToDoPriority>
       </div>
       <ToDoDescription
-        :description="localTodo.text"
+        :description="localTodo.description"
         @update-description="updateDescription"
       ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
@@ -73,7 +73,7 @@ const emit = defineEmits<{
 const localTodo = reactive<Todo>({
   title: props.todo.title,
   priority: props.todo.priority,
-  text: props.todo.text,
+  description: props.todo.description,
   isChecked: props.todo.isChecked,
   date: props.todo.date
 })
@@ -90,7 +90,7 @@ function updateTitle(title: string) {
 }
 
 function updateDescription(description: string) {
-  localTodo.text = description
+  localTodo.description = description
 }
 
 function updatePriority(priority: TodoPriority) {
@@ -124,7 +124,7 @@ function modifyTodo(index: number) {
 
 function emptyForm() {
   localTodo.title = ''
-  localTodo.text = ''
+  localTodo.description = ''
   localTodo.priority = 'Low'
 }
 

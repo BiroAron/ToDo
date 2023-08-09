@@ -33,6 +33,13 @@
       </ToDoItems>
 
       <EmptyListImage v-if="getEmptyListImage" />
+
+      <div
+        v-if="!filteredTodos.length"
+        class="flex text-xl font-semibold justify-center align-center"
+      >
+        There are no todos with this keyword
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +63,7 @@ const activeButton = ref('')
 const emptyTodo = reactive<Todo>({
   title: '',
   priority: 'Low',
-  text: '',
+  description: '',
   isChecked: false,
   date: formatTimestampToDateString(Date.now())
 })
@@ -69,7 +76,7 @@ const filteredTodos = computed(() => {
   return todos.filter((todo) => {
     const searchLower = searchQuery.value.toLowerCase()
     const titleLower = todo.title.toLowerCase()
-    const textLower = todo.text.toLowerCase()
+    const textLower = todo.description?.toLowerCase()
     return titleLower.includes(searchLower) || textLower.includes(searchLower)
   })
 })
@@ -113,8 +120,8 @@ function sortByTitle(a: Todo, b: Todo) {
 
 function sortByDescription(a: Todo, b: Todo) {
   return sortAscending.value
-    ? a.text.localeCompare(b.text)
-    : b.text.localeCompare(a.text)
+    ? a.description.localeCompare(b.description)
+    : b.description.localeCompare(a.description)
 }
 
 function sortByDate(a: Todo, b: Todo) {
@@ -144,7 +151,7 @@ function addTodo(todo: Todo) {
   const todoCopy = reactive<Todo>({
     title: todo.title,
     priority: todo.priority,
-    text: todo.text,
+    description: todo.description,
     isChecked: todo.isChecked,
     date: todo.date
   })
@@ -183,11 +190,12 @@ function editTodo(todo: Todo, index: number) {
   const todoCopy = reactive<Todo>({
     title: todo.title,
     priority: todo.priority,
-    text: todo.text,
+    description: todo.description,
     isChecked: todo.isChecked,
     date: todo.date
   })
   todos[index] = todoCopy
+  saveToLocalStorage()
 }
 
 function updateItemList(index: number) {

@@ -20,9 +20,9 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-center">
+      <div class="flex justify-center items-start">
         <div
-          class="flex mb-8 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
+          class="flex align-center w-24 py-0.5 rounded-3xl font-semibold text-white phone:hidden justify-center"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
@@ -39,7 +39,7 @@
       <div
         class="w-full mt-3 flex text-gray-500 font-semibold text-xl phone:hidden"
       >
-        {{ todo.text }}
+        {{ todo.description }}
       </div>
       <div class="flex justify-center items-end phone:items-center">
         <div

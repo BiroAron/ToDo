@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-30 phone:hidden">
+  <div class="relative w-24 phone:hidden">
     <div
-      class="flex cursor-pointer mb-0 px-8 py-1 justify-center my-3 rounded-full font-semibold text-white"
+      class="flex cursor-pointer mb-0 px-8 py-1 justify-center rounded-full font-semibold text-white"
       :class="priorityColorChange(todo.priority)"
       @click="toggleDropdown"
     >

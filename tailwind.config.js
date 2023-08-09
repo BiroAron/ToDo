@@ -14,7 +14,7 @@ export default {
         medium: '#FFAB00', // Orange
         high: '#FF481F', // Red
         primary: '#38CB89', // Green
-        secondary: '#E6E6E6'
+        secondary: '#E6E6E6' // Light gray
       },
       spacing: {
         128: '32rem',
@@ -22,7 +22,7 @@ export default {
       }
     },
     screens: {
-      desktop: '751px',
+      desktop: '781px',
       phone: { max: '780px' }
     }
   },
