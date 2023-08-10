@@ -9,7 +9,7 @@
     </div>
     <ul
       v-if="isDropdownOpen"
-      class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border border-black border-2 right-0"
+      class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border-black border-2 right-0"
     >
       <div class="flex flex-col items-start">
         <li v-for="priorityOption in priorityOptions" :key="priorityOption">

@@ -35,7 +35,9 @@
       <EmptyListImage v-if="getEmptyListImage" />
 
       <div
-        v-if="!filteredTodos.length"
+        v-if="
+          !filteredTodos.length && !getEmptyListImage && !isNewElementFormActive
+        "
         class="flex text-xl font-semibold justify-center align-center"
       >
         There are no todos with this keyword

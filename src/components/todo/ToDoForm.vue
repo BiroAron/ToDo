@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-10 border border-black rounded-xl border-2" ref="todoFormRef">
+  <div class="mb-10 border-black rounded-xl border-2" ref="todoFormRef">
     <div class="w-full h-full px-3 py-4 rounded-md font-custom">
       <div class="flex justify-between">
         <div class="flex flex-col w-full">
@@ -30,6 +30,7 @@
           @click="handleSaveClick"
         ></ToDoButton>
         <ToDoButton
+          v-if="index !== -1"
           buttonstyles="bg-gray-300 text-black"
           button-name="Delete"
           @click="changePopupState"

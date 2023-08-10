@@ -1,13 +1,13 @@
 <template>
   <div
-    class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between transform hover:scale-105 ease-out duration-300"
+    class="w-full h-full p-3 rounded-xl border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between transform hover:scale-105 ease-out duration-300"
     :class="getTodoElementVisibility"
     @click="toggleEdit"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div class="flex flex-col w-full">
         <div
-          class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
+          class="mr-2 text-3xl w-full font-semibold placeholder-black flex items-center"
         >
           {{ todo.title }}
         </div>
