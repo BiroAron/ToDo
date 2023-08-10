@@ -7,7 +7,7 @@
     <div class="flex justify-between w-full phone:pl-5">
       <div class="flex flex-col w-full">
         <div
-          class="mr-2 text-3xl w-full font-semibold placeholder-black flex items-center"
+          class="mr-2 text-3xl w-full font-semibold placeholder-black flex items-center phone:text-2xl"
         >
           {{ todo.title }}
         </div>

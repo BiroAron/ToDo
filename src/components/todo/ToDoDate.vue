@@ -1,6 +1,6 @@
 <template>
   <input
-    class="flex w-32 text-gray-500 font-semibold placeholder-black focus:outline-none"
+    class="flex w-32 text-gray-500 font-semibold placeholder-black focus:outline-none phone:text-sm"
     type="date"
     v-model="localDate"
   />

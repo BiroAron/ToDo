@@ -11,7 +11,8 @@
         :sort-ascending="sortAscending"
         :active-button="activeButton"
         @sort-todos="sortTodos"
-        @toggle-sort-order="toggleSortOrder"
+        @set-sort-order-ascending="setSortOrderAscending"
+        @set-sort-order-descending="setSortOrderDescending"
       ></Filter>
 
       <ToDoForm
@@ -183,8 +184,13 @@ function toggleNewTodo() {
   isNewElementFormActive.value = !isNewElementFormActive.value
 }
 
-function toggleSortOrder() {
-  sortAscending.value = !sortAscending.value
+function setSortOrderAscending() {
+  sortAscending.value = true
+  sortTodos(activeButton.value)
+}
+
+function setSortOrderDescending() {
+  sortAscending.value = false
   sortTodos(activeButton.value)
 }
 

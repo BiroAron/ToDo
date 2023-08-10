@@ -14,9 +14,15 @@
       class="flex items-center desktop:justify-end phone:justify-start phone:mt-2 w-full"
     >
       <ArrowButton
-        :sort-ascending="sortAscending"
-        @click="toggleSortOrder"
+        button-color="bg-black"
+        @click="setSortOrderAscending"
       ></ArrowButton>
+      <ArrowButton
+        class="ml-2"
+        button-color="bg-primary"
+        @click="setSortOrderDescending"
+      >
+      </ArrowButton>
     </div>
   </div>
 </template>
@@ -34,7 +40,8 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'sortTodos', sortCriteria: string): void
-  (e: 'toggleSortOrder'): void
+  (e: 'setSortOrderAscending'): void
+  (e: 'setSortOrderDescending'): void
 }>()
 
 const activeButton = computed(() => props.activeButton)
@@ -56,8 +63,12 @@ function sortTodos(sortCriteria: string) {
   emit('sortTodos', sortCriteria)
 }
 
-function toggleSortOrder() {
-  emit('toggleSortOrder')
+function setSortOrderAscending() {
+  emit('setSortOrderAscending')
+}
+
+function setSortOrderDescending() {
+  emit('setSortOrderDescending')
 }
 
 function buttonClasses(button: { name: string; sortCriteria: string }) {

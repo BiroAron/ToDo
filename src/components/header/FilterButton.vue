@@ -1,5 +1,7 @@
 <template>
-  <button class="px-2 rounded-md font-semibold border border-black">
+  <button
+    class="px-2 py-1 rounded-md font-semibold border border-black text-sm"
+  >
     {{ buttonName }}
   </button>
 </template>
