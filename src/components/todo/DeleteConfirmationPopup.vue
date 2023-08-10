@@ -2,7 +2,7 @@
   <div
     class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50 rounded-lg"
   >
-    <div class="bg-white p-4 rounded-xl shadow-md mt-16p font-medium">
+    <div class="bg-white p-4 rounded-xl shadow-md mt-16p font-medium mx-10">
       <h1 class="text-center font-semibold text-xl">
         Do you want to delete this element?
       </h1>

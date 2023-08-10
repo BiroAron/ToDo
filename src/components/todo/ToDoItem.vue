@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
+    class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between transform hover:scale-105 ease-out duration-300"
     :class="getTodoElementVisibility"
     @click="toggleEdit"
   >
