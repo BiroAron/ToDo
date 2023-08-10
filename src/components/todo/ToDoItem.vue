@@ -1,13 +1,13 @@
 <template>
   <div
-    class="w-full h-full p-3 rounded-xl border border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between"
+    class="w-full h-full p-3 rounded-xl border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between transform hover:scale-105 ease-out duration-300"
     :class="getTodoElementVisibility"
     @click="toggleEdit"
   >
     <div class="flex justify-between w-full phone:pl-5">
       <div class="flex flex-col w-full">
         <div
-          class="mr-2 text-3xl flex w-full font-semibold placeholder-black flex items-center"
+          class="mr-2 text-3xl w-full font-semibold placeholder-black flex items-center"
         >
           {{ todo.title }}
         </div>
@@ -16,13 +16,13 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ todo.date }}
+            {{ formatDate(todo.date) }}
           </div>
         </div>
       </div>
-      <div class="flex justify-center">
+      <div class="flex justify-center items-start">
         <div
-          class="flex mb-8 px-8 py-0.5 rounded-3xl font-semibold text-white phone:hidden"
+          class="flex align-center w-24 py-0.5 rounded-3xl font-semibold text-white phone:hidden justify-center"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
@@ -39,7 +39,7 @@
       <div
         class="w-full mt-3 flex text-gray-500 font-semibold text-xl phone:hidden"
       >
-        {{ todo.text }}
+        {{ todo.description }}
       </div>
       <div class="flex justify-center items-end phone:items-center">
         <div
@@ -54,6 +54,7 @@
   </div>
 
   <ToDoForm
+    class="transform hover:scale-105 ease-out duration-300"
     v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"
@@ -112,6 +113,15 @@ function getCheckButtonCircleColor(todo: Todo) {
 
 function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
+}
+
+function formatDate(inputDate: string): string {
+  const parts = inputDate.split('-')
+  const year = parts[0]
+  const month = parts[1]
+  const day = parts[2]
+
+  return `${day}.${month}.${year}`
 }
 
 function toggleTaskState(index: number) {

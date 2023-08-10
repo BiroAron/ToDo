@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-10 border border-black rounded-xl border-2" ref="todoFormRef">
+  <div class="mb-10 border-black rounded-xl border-2" ref="todoFormRef">
     <div class="w-full h-full px-3 py-4 rounded-md font-custom">
       <div class="flex justify-between">
         <div class="flex flex-col w-full">
@@ -7,7 +7,11 @@
             :title="localTodo.title"
             @update-title="updateTitle"
           ></TodoTitle>
-          <ToDoDate :date="localTodo.date"></ToDoDate>
+          <ToDoDate
+            class="text-sm"
+            :date="localTodo.date"
+            @update-date="updateDate"
+          ></ToDoDate>
         </div>
         <ToDoPriority
           :todo="localTodo"
@@ -16,7 +20,7 @@
         ></ToDoPriority>
       </div>
       <ToDoDescription
-        :description="localTodo.text"
+        :description="localTodo.description"
         @update-description="updateDescription"
       ></ToDoDescription>
       <div class="flex justify-start align-center mt-4">
@@ -26,6 +30,7 @@
           @click="handleSaveClick"
         ></ToDoButton>
         <ToDoButton
+          v-if="index !== -1"
           buttonstyles="bg-gray-300 text-black"
           button-name="Delete"
           @click="changePopupState"
@@ -69,7 +74,7 @@ const emit = defineEmits<{
 const localTodo = reactive<Todo>({
   title: props.todo.title,
   priority: props.todo.priority,
-  text: props.todo.text,
+  description: props.todo.description,
   isChecked: props.todo.isChecked,
   date: props.todo.date
 })
@@ -86,11 +91,15 @@ function updateTitle(title: string) {
 }
 
 function updateDescription(description: string) {
-  localTodo.text = description
+  localTodo.description = description
 }
 
 function updatePriority(priority: TodoPriority) {
   localTodo.priority = priority
+}
+
+function updateDate(date: string) {
+  localTodo.date = date
 }
 
 function handleSaveClick() {
@@ -116,7 +125,7 @@ function modifyTodo(index: number) {
 
 function emptyForm() {
   localTodo.title = ''
-  localTodo.text = ''
+  localTodo.description = ''
   localTodo.priority = 'Low'
 }
 

@@ -1,7 +1,7 @@
 export interface Todo {
   title: string
   priority: TodoPriority
-  text: string
+  description: string
   isChecked: boolean
   date: string
 }

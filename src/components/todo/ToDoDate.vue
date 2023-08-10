@@ -14,16 +14,9 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const parsedDate = new Date(props.date)
-parsedDate.setDate(parsedDate.getDate() + 1)
-
-const formattedDate = computed<string>(() =>
-  parsedDate.toISOString().slice(0, 10)
-)
-
 const localDate = computed({
-  get: () => formattedDate,
-  set: (newDate) => emit('updateDate', newDate.value)
+  get: () => props.date,
+  set: (newDate) => emit('updateDate', newDate)
 })
 
 const emit = defineEmits<{
