@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-24 phone:hidden">
     <div
-      class="flex cursor-pointer mb-0 px-8 py-1 justify-center rounded-full font-semibold text-white"
+      class="mb-0 flex cursor-pointer justify-center rounded-full px-8 py-1 font-semibold text-white"
       :class="priorityColorChange(todo.priority)"
       @click="toggleDropdown"
     >
@@ -9,12 +9,12 @@
     </div>
     <ul
       v-if="isDropdownOpen"
-      class="absolute bg-white mt-2 mr-2 rounded-xl font-medium border-black border-2 right-0"
+      class="absolute right-0 mr-2 mt-2 rounded-xl border-2 border-black bg-white font-medium"
     >
       <div class="flex flex-col items-start">
         <li v-for="priorityOption in priorityOptions" :key="priorityOption">
           <p
-            class="block px-3 text-black cursor-pointer"
+            class="block cursor-pointer px-3 text-black"
             @click="updatePriority(priorityOption, index)"
           >
             {{ priorityOption }}
@@ -23,11 +23,11 @@
       </div>
     </ul>
   </div>
-  <div class="flex justify-center items-center space-x-2 desktop:hidden">
+  <div class="flex items-center justify-center space-x-2 desktop:hidden">
     <div
       v-for="priorityOption in priorityOptions"
       :key="priorityOption"
-      class="p-2 rounded-full font-semibold text-black"
+      class="rounded-full p-2 font-semibold text-black"
       :class="[
         priorityColorChange(priorityOption),
         priorityBorderChange(priorityOption)

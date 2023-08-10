@@ -1,6 +1,6 @@
 <template>
   <button
-    class="py-2 px-8 mr-2 rounded-xl font-semibold flex justify-center align-center"
+    class="align-center mr-2 flex justify-center rounded-xl px-8 py-2 font-semibold phone:px-6 phone:py-1 phone:text-sm"
     :class="buttonstyles"
   >
     {{ buttonName }}

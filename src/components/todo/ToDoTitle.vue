@@ -1,7 +1,7 @@
 <template>
   <input
     v-model="localTitle"
-    class="text-3xl flex w-full font-semibold placeholder-black focus:outline-none h-full"
+    class="flex h-full w-full text-3xl font-semibold placeholder-black focus:outline-none phone:text-2xl"
     type="text"
     placeholder="Title"
   />

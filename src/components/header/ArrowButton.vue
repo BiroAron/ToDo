@@ -1,24 +1,19 @@
 <template>
   <button
-    class="bg-black py-2 px-3 rounded-md font-semibold flex items-center"
-    :class="getBgColor"
+    class="flex items-center rounded-md px-2 py-1 font-semibold"
+    :class="buttonColor"
   >
-    <DownArrowIcon v-if="sortAscending"></DownArrowIcon>
-    <UpArrowIcon v-else></UpArrowIcon>
+    <DownArrowIcon v-if="buttonColor === 'bg-black'"></DownArrowIcon>
+    <UpArrowIcon v-if="buttonColor === 'bg-primary'"></UpArrowIcon>
   </button>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import DownArrowIcon from '../icons/DownArrowIcon.vue'
 import UpArrowIcon from '../icons/UpArrowIcon.vue'
 
 interface Props {
-  sortAscending: boolean
+  buttonColor: string
 }
-const props = defineProps<Props>()
-
-const getBgColor = computed(() =>
-  props.sortAscending ? 'bg-black' : 'bg-primary'
-)
+defineProps<Props>()
 </script>

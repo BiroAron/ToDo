@@ -1,10 +1,12 @@
 <template>
-  <header class="pt-16 flex justify-between items-center pb-12">
-    <div class="font-semibold text-6xl flex justify-center items-center">
+  <header class="flex items-center justify-between pb-12 pt-16">
+    <div
+      class="flex items-center justify-center text-6xl font-semibold phone:text-5xl"
+    >
       To do list
     </div>
     <button
-      class="w-12 h-12 phone:w-10 phone:h-10 left-72 top-10 rounded-full outline-none border-none bg-primary flex justify-center items-center cursor-pointer"
+      class="left-72 top-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-none bg-primary outline-none phone:h-10 phone:w-10"
       @click="toggleNewTodo"
     >
       <PlusIcon />

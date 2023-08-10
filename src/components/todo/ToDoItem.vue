@@ -1,18 +1,18 @@
 <template>
   <div
-    class="w-full h-full p-3 rounded-xl border-black border-2 phone:flex phone:flex-row-reverse phone:space-x-3 phone:justify-between transform hover:scale-105 ease-out duration-300"
+    class="h-full w-full transform rounded-xl border-2 border-black p-3 duration-300 ease-out hover:scale-105 phone:flex phone:flex-row-reverse phone:justify-between phone:space-x-3"
     :class="getTodoElementVisibility"
     @click="toggleEdit"
   >
-    <div class="flex justify-between w-full phone:pl-5">
-      <div class="flex flex-col w-full">
+    <div class="flex w-full justify-between phone:pl-5">
+      <div class="flex w-full flex-col">
         <div
-          class="mr-2 text-3xl w-full font-semibold placeholder-black flex items-center"
+          class="mr-2 flex w-full items-center text-3xl font-semibold placeholder-black phone:text-2xl"
         >
           {{ todo.title }}
         </div>
         <div
-          class="text-gray-500 font-semibold text-sm flex flex-column items-center"
+          class="flex-column flex items-center text-sm font-semibold text-gray-500"
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
@@ -20,9 +20,9 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-center items-start">
+      <div class="flex items-start justify-center">
         <div
-          class="flex align-center w-24 py-0.5 rounded-3xl font-semibold text-white phone:hidden justify-center"
+          class="align-center flex w-24 justify-center rounded-3xl py-0.5 font-semibold text-white phone:hidden"
           :class="priorityColor(todo.priority)"
         >
           {{ todo.priority }}
@@ -30,20 +30,20 @@
       </div>
       <div class="flex items-center">
         <div
-          class="flex p-2 rounded-3xl font-semibold text-black desktop:hidden"
+          class="flex rounded-3xl p-2 font-semibold text-black desktop:hidden"
           :class="priorityColor(todo.priority)"
         ></div>
       </div>
     </div>
     <div class="flex justify-between">
       <div
-        class="w-full mt-3 flex text-gray-500 font-semibold text-xl phone:hidden"
+        class="mt-3 flex w-full text-xl font-semibold text-gray-500 phone:hidden"
       >
         {{ todo.description }}
       </div>
-      <div class="flex justify-center items-end phone:items-center">
+      <div class="flex items-end justify-center phone:items-center">
         <div
-          class="w-8 h-8 rounded-full border-4 border-black relative"
+          class="relative h-8 w-8 rounded-full border-4 border-black"
           :class="getCheckButtonCircleColor(todo)"
           @click="toggleTaskState(index)"
         >
@@ -54,7 +54,7 @@
   </div>
 
   <ToDoForm
-    class="transform hover:scale-105 ease-out duration-300"
+    class="transform duration-300 ease-out hover:scale-105"
     v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"

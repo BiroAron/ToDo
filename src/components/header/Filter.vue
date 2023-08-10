@@ -1,6 +1,6 @@
 <template>
   <div class="flex phone:flex-col">
-    <div class="flex align-center items-center space-x-2">
+    <div class="align-center flex items-center space-x-2">
       <SortButton
         class="flex-grow p-2"
         v-for="(button, index) in sortButtons"
@@ -11,12 +11,18 @@
       ></SortButton>
     </div>
     <div
-      class="flex items-center desktop:justify-end phone:justify-start phone:mt-2 w-full"
+      class="flex w-full items-center desktop:justify-end phone:mt-2 phone:justify-start"
     >
       <ArrowButton
-        :sort-ascending="sortAscending"
-        @click="toggleSortOrder"
+        button-color="bg-black"
+        @click="setSortOrderAscending"
       ></ArrowButton>
+      <ArrowButton
+        class="ml-2"
+        button-color="bg-primary"
+        @click="setSortOrderDescending"
+      >
+      </ArrowButton>
     </div>
   </div>
 </template>
@@ -34,7 +40,8 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'sortTodos', sortCriteria: string): void
-  (e: 'toggleSortOrder'): void
+  (e: 'setSortOrderAscending'): void
+  (e: 'setSortOrderDescending'): void
 }>()
 
 const activeButton = computed(() => props.activeButton)
@@ -56,8 +63,12 @@ function sortTodos(sortCriteria: string) {
   emit('sortTodos', sortCriteria)
 }
 
-function toggleSortOrder() {
-  emit('toggleSortOrder')
+function setSortOrderAscending() {
+  emit('setSortOrderAscending')
+}
+
+function setSortOrderDescending() {
+  emit('setSortOrderDescending')
 }
 
 function buttonClasses(button: { name: string; sortCriteria: string }) {

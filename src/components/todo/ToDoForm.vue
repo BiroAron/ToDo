@@ -1,8 +1,8 @@
 <template>
-  <div class="mb-10 border-black rounded-xl border-2" ref="todoFormRef">
-    <div class="w-full h-full px-3 py-4 rounded-md font-custom">
+  <div class="mb-10 rounded-xl border-2 border-black" ref="todoFormRef">
+    <div class="h-full w-full rounded-md px-3 py-4 font-custom">
       <div class="flex justify-between">
-        <div class="flex flex-col w-full">
+        <div class="flex w-full flex-col">
           <TodoTitle
             :title="localTodo.title"
             @update-title="updateTitle"
@@ -23,7 +23,7 @@
         :description="localTodo.description"
         @update-description="updateDescription"
       ></ToDoDescription>
-      <div class="flex justify-start align-center mt-4">
+      <div class="align-center mt-4 flex justify-start">
         <ToDoButton
           buttonstyles="bg-primary text-white"
           button-name="Save"

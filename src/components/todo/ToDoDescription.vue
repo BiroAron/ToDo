@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col phone:text-sm">
     <textarea
       v-model="localDescription"
-      class="w-full pt-2 mt-1 resize-none placeholder-gray-500 font-semibold focus:outline-none max-h-28"
+      class="mt-1 max-h-28 w-full resize-none pt-2 font-semibold placeholder-gray-500 focus:outline-none"
       type="text"
       placeholder="Description"
     ></textarea>
