@@ -1,6 +1,6 @@
 <template>
   <button
-    class="px-2 py-1 rounded-md font-semibold border border-black text-sm"
+    class="rounded-md border border-black px-2 py-1 text-sm font-semibold"
   >
     {{ buttonName }}
   </button>

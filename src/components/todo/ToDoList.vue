@@ -1,6 +1,6 @@
 <template>
-  <div class="w-1/2 h-screen mx-auto max-w-xl min-w-[350px] font-custom">
-    <div class="px-5 h-screen">
+  <div class="mx-auto h-screen w-1/2 min-w-[350px] max-w-xl font-custom">
+    <div class="h-screen px-5">
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
       <Searchbar v-if="todos.length" @set-search-query="setSearchQuery" />
@@ -39,7 +39,7 @@
         v-if="
           !filteredTodos.length && !getEmptyListImage && !isNewElementFormActive
         "
-        class="flex text-xl font-semibold justify-center align-center"
+        class="align-center flex justify-center text-xl font-semibold"
       >
         There are no todos with this keyword
       </div>

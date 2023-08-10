@@ -1,12 +1,12 @@
 <template>
   <div
-    class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50 rounded-lg"
+    class="fixed inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-50 backdrop-blur-sm"
   >
-    <div class="bg-white p-4 rounded-xl shadow-md mt-16p font-medium mx-10">
-      <h1 class="text-center font-semibold text-xl">
+    <div class="mt-16p mx-10 rounded-xl bg-white p-4 font-medium shadow-md">
+      <h1 class="text-center text-xl font-semibold">
         Do you want to delete this element?
       </h1>
-      <div class="flex justify-center mt-4 font-semibold">
+      <div class="mt-4 flex justify-center font-semibold">
         <BaseButton
           buttonstyles="bg-gray-300 text-black"
           button-name="Close"

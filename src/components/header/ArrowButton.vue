@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex py-1 px-2 rounded-md font-semibold items-center"
+    class="flex items-center rounded-md px-2 py-1 font-semibold"
     :class="buttonColor"
   >
     <DownArrowIcon v-if="buttonColor === 'bg-black'"></DownArrowIcon>

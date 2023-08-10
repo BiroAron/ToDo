@@ -1,11 +1,11 @@
 <template>
   <div
-    class="w-full px-3 py-3 flex items-center justify-between rounded-xl border-black border-2 mb-6 font-semibold"
+    class="mb-6 flex w-full items-center justify-between rounded-xl border-2 border-black px-3 py-3 font-semibold"
   >
-    <div class="flex felx-row items-center justify-center">
+    <div class="felx-row flex items-center justify-center">
       <SearchIcon class="min-w-custom" />
       <input
-        class="flex-1 px-2 py-1 focus:outline-none w-full phone:text-sm"
+        class="w-full flex-1 px-2 py-1 focus:outline-none phone:text-sm"
         type="text"
         v-model="searchQuery"
         placeholder="Search Todo"
@@ -13,7 +13,7 @@
       />
     </div>
     <button
-      class="bg-black text-white px-3 py-1 rounded-lg phone:text-sm phone:px-2"
+      class="rounded-lg bg-black px-3 py-1 text-white phone:px-2 phone:text-sm"
     >
       Search
     </button>
