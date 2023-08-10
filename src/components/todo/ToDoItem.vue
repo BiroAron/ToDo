@@ -54,6 +54,7 @@
   </div>
 
   <ToDoForm
+    class="transform hover:scale-105 ease-out duration-300"
     v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"
