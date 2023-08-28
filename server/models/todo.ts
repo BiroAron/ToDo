@@ -7,7 +7,7 @@ interface ITodo {
   priority: TodoPriority;
   description?: String;
   isChecked: boolean;
-  date: String;
+  date: Date;
 }
 
 const TodoSchema = new Schema<ITodo>({
@@ -15,10 +15,8 @@ const TodoSchema = new Schema<ITodo>({
   priority: { type: String, enum: ["High", "Medium", "Low"] },
   description: String,
   isChecked: Boolean,
-  date: String,
+  date: Date,
 });
 
-const todo: Model<ITodo> =
-  mongoose.models.todo || mongoose.model<ITodo>("todo", TodoSchema);
-
-export default todo;
+export default mongoose.models.todo ||
+  mongoose.model<ITodo>("todo", TodoSchema);
