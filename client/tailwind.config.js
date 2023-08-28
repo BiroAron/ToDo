@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/components/*/*.{vue,ts}', './index.html'],
+  content: [
+    './src/components/*/*.{vue,ts}',
+    './index.html',
+    './src/views/*.{vue,ts}'
+  ],
   theme: {
     extend: {
       minWidth: {

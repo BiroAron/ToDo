@@ -49,13 +49,13 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
-import ToDoForm from './ToDoForm.vue'
-import Header from '../header/Header.vue'
-import ToDoItems from './ToDoItems.vue'
-import EmptyListImage from '../icons/EmptyListIcon.vue'
-import Searchbar from '../header/Searchbar.vue'
-import Filter from '../header/Filter.vue'
-import { Todo } from '../../types/Todo'
+import ToDoForm from '../components/todo/ToDoForm.vue'
+import Header from '../components/header/Header.vue'
+import ToDoItems from '../components/todo/ToDoItems.vue'
+import EmptyListImage from '../components/icons/EmptyListIcon.vue'
+import Searchbar from '../components/header/Searchbar.vue'
+import Filter from '../components/header/Filter.vue'
+import { Todo } from '../types/Todo'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>(getFromLocalStorage())
