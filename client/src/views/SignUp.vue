@@ -11,48 +11,40 @@
         </div>
       </header>
       <form @submit.prevent="register">
-        <div class="mb-2 flex flex-row space-x-4">
-          <div>
-            <label class="mb-1 block text-black">Firs name</label>
-            <input
-              v-model="firstName"
-              class="w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
-              type="text"
-            />
-          </div>
-          <div>
-            <label class="mb-1 block text-black">Last name</label>
-            <input
-              v-model="lastName"
-              class="w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
-              type="text"
-            />
-          </div>
+        <div class="mb-2 flex flex-row space-x-2">
+          <BaseInput
+            :input-value="email"
+            input-name="First name"
+            input-type="text"
+            @update-value="updateFirstName"
+          ></BaseInput>
+          <BaseInput
+            :input-value="email"
+            input-name="Last name"
+            input-type="text"
+            @update-value="updateLastName"
+          ></BaseInput>
         </div>
-
-        <div>
-          <label class="mb-1 block text-black">Email</label>
-          <input
-            v-model="email"
-            class="mb-6 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
-            type="text"
-          />
-        </div>
-        <div>
-          <label class="mb-1 block text-black">Password</label>
-          <input
-            v-model="password"
-            class="mb-2 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-200"
-            type="password"
-          />
-        </div>
-        <div>
-          <label class="mb-1 block text-black">Repeat Password</label>
-          <input
-            class="mb-6 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-200"
-            type="password"
-          />
-        </div>
+        <BaseInput
+          :input-value="email"
+          class="pb-2"
+          input-name="Email"
+          input-type="text"
+          @update-value="updateEmail"
+        ></BaseInput>
+        <BaseInput
+          :input-value="password"
+          input-name="Password"
+          input-type="password"
+          @update-value="updatePassword"
+        ></BaseInput>
+        <BaseInput
+          :input-value="repeatPassword"
+          class="pb-6"
+          input-name="Repeat Password"
+          input-type="password"
+          @update-value="updateRepeatPassword"
+        ></BaseInput>
         <div>
           <button
             class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
@@ -84,9 +76,11 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { registerUser, loginUser } from '../api'
 import { ref } from 'vue'
+import BaseInput from '../components/inputfields/BaseInput.vue'
 
 const email = ref('')
 const password = ref('')
+const repeatPassword = ref('')
 const firstName = ref('')
 const lastName = ref('')
 
@@ -107,5 +101,25 @@ async function register() {
   const token = await loginUser(email.value, password.value)
   console.log('JWT Token:', token)
   router.push({ name: 'Dashboard' })
+}
+
+function updateEmail(newEmail: string) {
+  email.value = newEmail
+}
+
+function updatePassword(newPassword: string) {
+  password.value = newPassword
+}
+
+function updateRepeatPassword(newPassword: string) {
+  password.value = newPassword
+}
+
+function updateFirstName(newFirstName: string) {
+  firstName.value = newFirstName
+}
+
+function updateLastName(newLastName: string) {
+  lastName.value = newLastName
 }
 </script>

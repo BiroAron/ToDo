@@ -11,22 +11,19 @@
         </div>
       </header>
       <form @submit.prevent="login">
-        <div>
-          <label class="mb-1 block text-black">Email</label>
-          <input
-            v-model="email"
-            class="mb-4 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
-            type="email"
-          />
-        </div>
-        <div>
-          <label class="mb-1 block text-black">Password</label>
-          <input
-            v-model="password"
-            class="mb-6 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-200"
-            type="password"
-          />
-        </div>
+        <BaseInput
+          :input-value="email"
+          input-name="Email"
+          input-type="text"
+          @update-value="updateEmail"
+        ></BaseInput>
+        <BaseInput
+          :input-value="password"
+          input-name="Password"
+          input-type="password"
+          @update-value="updatePassword"
+          class="pb-6"
+        ></BaseInput>
         <div>
           <button
             class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
@@ -58,6 +55,7 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { loginUser } from '../api'
 import { ref } from 'vue'
+import BaseInput from '../components/inputfields/BaseInput.vue'
 
 const email = ref('')
 const password = ref('')
@@ -71,5 +69,13 @@ async function login() {
   } catch (error) {
     console.error('Error:', error)
   }
+}
+
+function updateEmail(newEmail: string) {
+  email.value = newEmail
+}
+
+function updatePassword(newPassword: string) {
+  password.value = newPassword
 }
 </script>
