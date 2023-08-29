@@ -37,7 +37,7 @@
         ></ToDoButton>
         <DeleteConfirmationPopup
           v-if="isPopupActive"
-          :index="index"
+          :_id="props.todo._id"
           @close-popup="changePopupState"
           @delete-item="deleteItem"
         ></DeleteConfirmationPopup>
@@ -65,13 +65,14 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'addTodo', todo: Todo): void
-  (e: 'editTodo', todo: Todo, index: number): void
+  (e: 'editTodo', todo: Todo): void
   (e: 'toggleEdit'): void
-  (e: 'deleteItem', index: number): void
+  (e: 'deleteItem', _id: string): void
   (e: 'closeEdit'): void
 }>()
 
 const localTodo = reactive<Todo>({
+  _id: props.todo._id,
   title: props.todo.title,
   priority: props.todo.priority,
   description: props.todo.description,
@@ -109,7 +110,6 @@ function handleSaveClick() {
 
 function modifyTodo(index: number) {
   const currentLocalTodo = localTodo
-
   if (!currentLocalTodo.title) {
     return
   }
@@ -120,7 +120,7 @@ function modifyTodo(index: number) {
     return
   }
 
-  emit('editTodo', currentLocalTodo, index)
+  emit('editTodo', currentLocalTodo)
 }
 
 function emptyForm() {
@@ -137,8 +137,8 @@ function toggleEdit() {
   emit('toggleEdit')
 }
 
-function deleteItem(index: number) {
-  emit('deleteItem', index)
+function deleteItem(_id: string) {
+  emit('deleteItem', _id)
   changePopupState()
   emptyForm()
   toggleEdit()

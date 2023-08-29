@@ -26,7 +26,7 @@ export default {
       }
     },
     screens: {
-      desktop: '816px',
+      desktop: '815px',
       phone: { max: '815px' }
     }
   },

@@ -10,15 +10,31 @@
           ToDo App
         </div>
       </header>
-      <form>
-        <BaseInput input-name="Email" input-type="text"></BaseInput>
-        <BaseInput input-name="Password" input-type="password"></BaseInput>
-        <RouterLink
-          class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
-          :to="{ name: 'Dashboard' }"
-        >
-          Login
-        </RouterLink>
+      <form @submit.prevent="login">
+        <div>
+          <label class="mb-1 block text-black">Email</label>
+          <input
+            v-model="email"
+            class="mb-4 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
+            type="email"
+          />
+        </div>
+        <div>
+          <label class="mb-1 block text-black">Password</label>
+          <input
+            v-model="password"
+            class="mb-6 w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-200"
+            type="password"
+          />
+        </div>
+        <div>
+          <button
+            class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
+            type="submit"
+          >
+            Login
+          </button>
+        </div>
       </form>
       <footer>
         <RouterLink
@@ -39,6 +55,21 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import BaseInput from '../components/inputfields/BaseInput.vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { loginUser } from '../api'
+import { ref } from 'vue'
+
+const email = ref('')
+const password = ref('')
+
+const router = useRouter()
+
+async function login() {
+  try {
+    await loginUser(email.value, password.value)
+    router.push({ name: 'Dashboard' })
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
 </script>

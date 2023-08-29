@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import ToDoForm from '../components/todo/ToDoForm.vue'
 import Header from '../components/header/Header.vue'
 import ToDoItems from '../components/todo/ToDoItems.vue'
@@ -56,14 +56,21 @@ import EmptyListImage from '../components/icons/EmptyListIcon.vue'
 import Searchbar from '../components/header/Searchbar.vue'
 import Filter from '../components/header/Filter.vue'
 import { Todo } from '../types/Todo'
+import {
+  addNewTodo,
+  fetchTodos,
+  editCurrentTodo,
+  deleteCurrentTodo
+} from '../api'
 
 const isNewElementFormActive = ref(false)
-const todos = reactive<Todo[]>(getFromLocalStorage())
+const todos = reactive<Todo[]>([])
 const searchQuery = ref('')
 const sortAscending = ref(true)
 const activeButton = ref('')
 
 const emptyTodo = reactive<Todo>({
+  _id: '',
   title: '',
   priority: 'Low',
   description: '',
@@ -150,26 +157,33 @@ function setSearchQuery(searchSentence: string) {
   searchQuery.value = searchSentence
 }
 
-function addTodo(todo: Todo) {
-  const todoCopy = reactive<Todo>({
-    title: todo.title,
-    priority: todo.priority,
-    description: todo.description,
-    isChecked: todo.isChecked,
-    date: todo.date
-  })
-  todos.unshift(todoCopy)
+async function addTodo(todo: Todo) {
+  try {
+    await addNewTodo(
+      todo.title,
+      todo.priority,
+      todo.description,
+      todo.isChecked,
+      todo.date
+    )
+    fetchAndAddTodos()
+  } catch (error) {
+    console.error('Error:', error)
+  }
   toggleNewTodo()
-  saveToLocalStorage()
 }
 
 function deleteNewItem() {
   toggleNewTodo()
 }
 
-function deleteItem(index: number) {
-  todos.splice(index, 1)
-  saveToLocalStorage()
+async function deleteItem(_id) {
+  try {
+    await deleteCurrentTodo(_id)
+    fetchAndAddTodos()
+  } catch (error) {
+    console.error('Error:', error)
+  }
 }
 
 function closeEdit() {
@@ -194,16 +208,21 @@ function setSortOrderDescending() {
   sortTodos(activeButton.value)
 }
 
-function editTodo(todo: Todo, index: number) {
-  const todoCopy = reactive<Todo>({
-    title: todo.title,
-    priority: todo.priority,
-    description: todo.description,
-    isChecked: todo.isChecked,
-    date: todo.date
-  })
-  todos[index] = todoCopy
-  saveToLocalStorage()
+async function editTodo(todo: Todo) {
+  try {
+    //console.log('TodoId: ' + todo.title)
+    await editCurrentTodo(
+      todo._id,
+      todo.title,
+      todo.priority,
+      todo.description,
+      todo.isChecked,
+      todo.date
+    )
+    fetchAndAddTodos()
+  } catch (error) {
+    console.error('Error:', error)
+  }
 }
 
 function updateItemList(index: number) {
@@ -216,12 +235,17 @@ function updateItemList(index: number) {
   }
 }
 
-function saveToLocalStorage() {
-  localStorage.setItem('todos', JSON.stringify(todos))
+// function saveToLocalStorage() {
+//   localStorage.setItem('todos', JSON.stringify(todos))
+// }
+
+async function fetchAndAddTodos() {
+  const todosData = await fetchTodos()
+  todosData.forEach((todo) => {})
+  todos.splice(0, todos.length, ...todosData)
 }
 
-function getFromLocalStorage() {
-  const savedTodos = localStorage.getItem('todos')
-  return savedTodos ? JSON.parse(savedTodos) : []
-}
+onMounted(() => {
+  fetchAndAddTodos()
+})
 </script>
