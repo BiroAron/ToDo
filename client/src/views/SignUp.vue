@@ -1,7 +1,7 @@
 <template>
   <body class="flex h-screen w-screen bg-white">
     <div
-      class="m-auto w-full max-w-lg rounded-2xl border-4 border-black bg-[#fff7f7] p-5 shadow-xl"
+      class="m-auto w-full max-w-lg rounded-2xl border-4 border-black bg-lightGray p-5 shadow-xl"
     >
       <header>
         <div
@@ -11,35 +11,33 @@
         </div>
       </header>
       <form @submit.prevent="register">
-        <div class="mb-2 flex flex-row space-x-2">
+        <div class="mb-2 flex space-x-2">
           <BaseInput
-            :input-value="email"
+            v-model="user.firstName"
             input-name="First name"
             input-type="text"
-            @update-value="updateFirstName"
           ></BaseInput>
           <BaseInput
-            :input-value="email"
+            v-model="user.lastName"
             input-name="Last name"
             input-type="text"
-            @update-value="updateLastName"
           ></BaseInput>
         </div>
         <BaseInput
-          :input-value="email"
+          v-model="user.email"
           class="pb-2"
           input-name="Email"
           input-type="text"
           @update-value="updateEmail"
         ></BaseInput>
         <BaseInput
-          :input-value="password"
+          v-model="user.password"
           input-name="Password"
           input-type="password"
           @update-value="updatePassword"
         ></BaseInput>
         <BaseInput
-          :input-value="repeatPassword"
+          v-model="repeatPassword"
           class="pb-6"
           input-name="Repeat Password"
           input-type="password"
@@ -74,52 +72,50 @@
 
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
-import { registerUser, loginUser } from '../api'
-import { ref } from 'vue'
+import { registerUser, loginUser } from '../services/authentication'
+import { reactive, ref } from 'vue'
 import BaseInput from '../components/inputfields/BaseInput.vue'
+import { User } from '../types/User'
 
-const email = ref('')
-const password = ref('')
+const user: User = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: ''
+})
+
 const repeatPassword = ref('')
-const firstName = ref('')
-const lastName = ref('')
 
 const router = useRouter()
 
 async function register() {
   try {
-    await registerUser(
-      email.value,
-      password.value,
-      firstName.value,
-      lastName.value
-    )
+    await registerUser(user)
   } catch (error) {
     console.error('Error:', error)
   }
 
-  const token = await loginUser(email.value, password.value)
-  console.log('JWT Token:', token)
+  await loginUser(user.email, user.password)
   router.push({ name: 'Dashboard' })
 }
 
 function updateEmail(newEmail: string) {
-  email.value = newEmail
+  user.email = newEmail
 }
 
 function updatePassword(newPassword: string) {
-  password.value = newPassword
+  user.password = newPassword
 }
 
 function updateRepeatPassword(newPassword: string) {
-  password.value = newPassword
+  user.password = newPassword
 }
 
 function updateFirstName(newFirstName: string) {
-  firstName.value = newFirstName
+  user.firstName = newFirstName
 }
 
 function updateLastName(newLastName: string) {
-  lastName.value = newLastName
+  user.lastName = newLastName
 }
 </script>

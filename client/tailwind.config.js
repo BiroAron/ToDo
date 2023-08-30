@@ -18,7 +18,8 @@ export default {
         medium: '#FFAB00', // Orange
         high: '#FF481F', // Red
         primary: '#38CB89', // Green
-        secondary: '#E6E6E6' // Light gray
+        secondary: '#E6E6E6', // Light gray
+        lightGray: '#fff7f7' // almost white
       },
       spacing: {
         128: '32rem',

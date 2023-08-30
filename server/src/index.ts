@@ -4,6 +4,7 @@ import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./router";
+import "dotenv/config";
 
 const app = express();
 
@@ -16,17 +17,10 @@ app.use(
 app.use(compression());
 app.use(bodyParser.json());
 
-const MONGO_URL =
-  "mongodb+srv://biroaron:123@cluster0.y7nbxkk.mongodb.net/ToDo?retryWrites=true&w=majority";
-
 mongoose.Promise = Promise;
 
-// const connectOptions: mongoose.ConnectOptions = {
-//   dbName: 'todo_Biro_Aron',
-// };
-
 mongoose
-  .connect(MONGO_URL /*, connectOptions*/)
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -36,8 +30,6 @@ mongoose
 
 app.use("/", router);
 
-const PORT = 8080;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}/`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on ${process.env.HOST + process.env.PORT}`);
 });

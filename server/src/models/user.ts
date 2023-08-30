@@ -7,8 +7,7 @@ const UserSchema = new Schema({
   authentication: {
     password: { type: String, required: true },
     salt: { type: String, select: false },
-    jwtToken: { type: String, select: false },
   },
 });
 
-export default mongoose.model("User", UserSchema);
+export default mongoose.model("user", UserSchema);

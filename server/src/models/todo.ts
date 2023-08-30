@@ -1,16 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
+export const TodoPriorities = ["High", "Medium", "Low"];
+
 const TodoSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   title: { type: String, required: true },
   priority: {
     type: String,
-    enum: ["High", "Medium", "Low"],
+    enum: TodoPriorities,
     default: "Medium",
   },
   description: String,
   isChecked: { type: Boolean, default: false },
-  date: { type: Date, default: new Date("2023-08-02") },
+  date: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("Todo", TodoSchema);
+export default mongoose.model("todo", TodoSchema);

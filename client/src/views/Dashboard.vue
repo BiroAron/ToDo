@@ -60,8 +60,9 @@ import {
   addNewTodo,
   fetchTodos,
   editCurrentTodo,
-  deleteCurrentTodo
-} from '../api'
+  deleteCurrentTodo,
+  getCurrentTodo
+} from '../services/todo'
 
 const isNewElementFormActive = ref(false)
 const todos = reactive<Todo[]>([])
@@ -85,9 +86,9 @@ const getEmptyListImage = computed(
 const filteredTodos = computed(() => {
   return todos.filter((todo) => {
     const searchLower = searchQuery.value.toLowerCase()
-    const titleLower = todo.title.toLowerCase()
+    const titleLower = todo.title?.toLowerCase()
     const textLower = todo.description?.toLowerCase()
-    return titleLower.includes(searchLower) || textLower.includes(searchLower)
+    return titleLower?.includes(searchLower) || textLower?.includes(searchLower)
   })
 })
 
@@ -159,14 +160,8 @@ function setSearchQuery(searchSentence: string) {
 
 async function addTodo(todo: Todo) {
   try {
-    await addNewTodo(
-      todo.title,
-      todo.priority,
-      todo.description,
-      todo.isChecked,
-      todo.date
-    )
-    fetchAndAddTodos()
+    const response = await addNewTodo(todo)
+    appendTodo(response._id)
   } catch (error) {
     console.error('Error:', error)
   }
@@ -177,10 +172,14 @@ function deleteNewItem() {
   toggleNewTodo()
 }
 
-async function deleteItem(_id) {
+async function deleteItem(_id: string) {
   try {
     await deleteCurrentTodo(_id)
-    fetchAndAddTodos()
+
+    const deletedIndex = findTodoIndexById(_id)
+    if (deletedIndex !== -1) {
+      todos.splice(deletedIndex, 1)
+    }
   } catch (error) {
     console.error('Error:', error)
   }
@@ -208,23 +207,17 @@ function setSortOrderDescending() {
   sortTodos(activeButton.value)
 }
 
-async function editTodo(todo: Todo) {
+async function editTodo(editedTodo: Todo) {
   try {
-    //console.log('TodoId: ' + todo.title)
-    await editCurrentTodo(
-      todo._id,
-      todo.title,
-      todo.priority,
-      todo.description,
-      todo.isChecked,
-      todo.date
-    )
-    fetchAndAddTodos()
+    const editedIndex = findTodoIndexById(editedTodo._id)
+    if (editedIndex !== -1) {
+      await editCurrentTodo(editedTodo)
+      todos.splice(editedIndex, 1, editedTodo)
+    }
   } catch (error) {
     console.error('Error:', error)
   }
 }
-
 function updateItemList(index: number) {
   const todoSave: Todo = todos[index]
   todos.splice(index, 1)[0]
@@ -235,14 +228,22 @@ function updateItemList(index: number) {
   }
 }
 
-// function saveToLocalStorage() {
-//   localStorage.setItem('todos', JSON.stringify(todos))
-// }
+function findTodoIndexById(id: string) {
+  return todos.findIndex((todo) => todo._id === id)
+}
 
 async function fetchAndAddTodos() {
-  const todosData = await fetchTodos()
-  todosData.forEach((todo) => {})
-  todos.splice(0, todos.length, ...todosData)
+  try {
+    const todosData = await fetchTodos()
+    todos.splice(0, todos.length, ...todosData)
+  } catch (error) {
+    console.error('Error fetching todos:', error)
+  }
+}
+
+async function appendTodo(_id: string) {
+  const newTodo = await getCurrentTodo(_id)
+  todos.unshift(newTodo)
 }
 
 onMounted(() => {

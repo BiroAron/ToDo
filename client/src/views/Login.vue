@@ -12,16 +12,14 @@
       </header>
       <form @submit.prevent="login">
         <BaseInput
-          :input-value="email"
+          v-model="email"
           input-name="Email"
           input-type="text"
-          @update-value="updateEmail"
         ></BaseInput>
         <BaseInput
-          :input-value="password"
+          v-model="password"
           input-name="Password"
           input-type="password"
-          @update-value="updatePassword"
           class="pb-6"
         ></BaseInput>
         <div>
@@ -53,7 +51,7 @@
 
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
-import { loginUser } from '../api'
+import { loginUser } from '../services/authentication'
 import { ref } from 'vue'
 import BaseInput from '../components/inputfields/BaseInput.vue'
 

@@ -15,16 +15,17 @@ import { computed } from 'vue'
 interface Props {
   inputName: string
   inputType: string
-  inputValue: string
+  modelValue: string
 }
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'updateValue', email: string, name: string): void
+  (e: 'update:modelValue', email: string, name: string): void
 }>()
 
 const email = computed({
-  get: () => props.inputValue,
-  set: (newDescription) => emit('updateValue', newDescription, props.inputName)
+  get: () => props.modelValue,
+  set: (newDescription) =>
+    emit('update:modelValue', newDescription, props.inputName)
 })
 </script>

@@ -4,14 +4,15 @@ import {
   updateTodo,
   deleteTodo,
   addTodo,
+  getSingleTodo,
 } from "../controller/todos";
-//import { extractUserId } from "../middleware/index";
 
 const router = Router();
 
-router.post("/add-todo", addTodo);
-router.get("/get-all-todos", getAllTodos);
-router.patch("/update-todo/:id", updateTodo);
-router.delete("/delete-todo/:id", deleteTodo);
+router.post("/", addTodo);
+router.get("/", getAllTodos);
+router.get("/:id", getSingleTodo);
+router.patch("/:id", updateTodo);
+router.delete("/:id", deleteTodo);
 
 export default router;
