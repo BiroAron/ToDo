@@ -28,20 +28,17 @@
           class="pb-2"
           input-name="Email"
           input-type="text"
-          @update-value="updateEmail"
         ></BaseInput>
         <BaseInput
           v-model="user.password"
           input-name="Password"
           input-type="password"
-          @update-value="updatePassword"
         ></BaseInput>
         <BaseInput
           v-model="repeatPassword"
           class="pb-6"
           input-name="Repeat Password"
           input-type="password"
-          @update-value="updateRepeatPassword"
         ></BaseInput>
         <div>
           <button
@@ -97,25 +94,5 @@ async function register() {
 
   await loginUser(user.email, user.password)
   router.push({ name: 'Dashboard' })
-}
-
-function updateEmail(newEmail: string) {
-  user.email = newEmail
-}
-
-function updatePassword(newPassword: string) {
-  user.password = newPassword
-}
-
-function updateRepeatPassword(newPassword: string) {
-  user.password = newPassword
-}
-
-function updateFirstName(newFirstName: string) {
-  user.firstName = newFirstName
-}
-
-function updateLastName(newLastName: string) {
-  user.lastName = newLastName
 }
 </script>

@@ -68,12 +68,4 @@ async function login() {
     console.error('Error:', error)
   }
 }
-
-function updateEmail(newEmail: string) {
-  email.value = newEmail
-}
-
-function updatePassword(newPassword: string) {
-  password.value = newPassword
-}
 </script>
