@@ -8,7 +8,7 @@ const TodoSchema = new Schema({
   priority: {
     type: String,
     enum: TodoPriorities,
-    default: "Medium",
+    default: TodoPriorities[1],
   },
   description: String,
   isChecked: { type: Boolean, default: false },
