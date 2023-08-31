@@ -11,6 +11,7 @@ export async function loginUser(email: string, password: string) {
       }
     )
     localStorage.setItem('jwtToken', response.data.token)
+    localStorage.setItem('firstName', response.data.firstName)
   } catch (error) {
     throw error
   }

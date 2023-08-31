@@ -1,6 +1,8 @@
 <template>
   <div class="mx-auto h-screen w-1/2 min-w-[350px] max-w-xl font-custom">
     <div class="h-screen px-5">
+      <Logout></Logout>
+
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
       <Searchbar v-if="todos.length" @set-search-query="setSearchQuery" />
@@ -56,6 +58,7 @@ import EmptyListImage from '../components/icons/EmptyListIcon.vue'
 import Searchbar from '../components/header/Searchbar.vue'
 import Filter from '../components/header/Filter.vue'
 import { Todo } from '../types/Todo'
+import Logout from '../components/header/Logout.vue'
 import {
   addNewTodo,
   fetchTodos,
