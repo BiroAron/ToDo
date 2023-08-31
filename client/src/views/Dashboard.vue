@@ -73,10 +73,10 @@ const activeButton = ref('')
 const emptyTodo = reactive<Todo>({
   _id: '',
   title: '',
-  priority: 'Low',
+  priority: 'Medium',
   description: '',
   isChecked: false,
-  date: formatTimestampToDateString(Date.now())
+  date: new Date()
 })
 
 const getEmptyListImage = computed(
@@ -91,17 +91,6 @@ const filteredTodos = computed(() => {
     return titleLower?.includes(searchLower) || textLower?.includes(searchLower)
   })
 })
-
-function formatTimestampToDateString(timestamp: number) {
-  const currentDate: Date = new Date(timestamp)
-  const day: number = currentDate.getDate()
-  const month: number = currentDate.getMonth() + 1
-  const year: number = currentDate.getFullYear()
-
-  return `${year}-${month.toString().padStart(2, '0')}-${day
-    .toString()
-    .padStart(2, '0')}`
-}
 
 function sortTodos(sortCriteria: string) {
   const sortedTodos = [...todos]
@@ -235,7 +224,15 @@ function findTodoIndexById(id: string) {
 async function fetchAndAddTodos() {
   try {
     const todosData = await fetchTodos()
-    todos.splice(0, todos.length, ...todosData)
+
+    const parsedTodos = todosData.map(function (todo: Todo) {
+      return {
+        ...todo,
+        date: new Date(todo.date)
+      }
+    })
+
+    todos.splice(0, todos.length, ...parsedTodos)
   } catch (error) {
     console.error('Error fetching todos:', error)
   }
@@ -243,6 +240,7 @@ async function fetchAndAddTodos() {
 
 async function appendTodo(_id: string) {
   const newTodo = await getCurrentTodo(_id)
+  newTodo.date = new Date(newTodo.date)
   todos.unshift(newTodo)
 }
 

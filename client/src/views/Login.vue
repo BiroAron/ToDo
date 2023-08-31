@@ -1,7 +1,7 @@
 <template>
   <body class="flex h-screen w-screen bg-white">
     <div
-      class="m-auto w-full max-w-sm rounded-2xl border-4 border-black bg-[#fff7f7] p-5 shadow-xl"
+      class="m-auto w-full max-w-sm rounded-2xl border-4 border-black bg-lightGray p-5 shadow-xl"
     >
       <header>
         <div

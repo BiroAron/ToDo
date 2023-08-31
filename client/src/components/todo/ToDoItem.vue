@@ -16,7 +16,7 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ formatDate(todo.date) }}
+            {{ formatDateToString(todo.date) }}
           </div>
         </div>
       </div>
@@ -67,12 +67,12 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-
 import CheckedIcon from '../icons/CheckedIcon.vue'
 import CalendarIcon from '../icons/CalendarIcon.vue'
 import ToDoForm from './ToDoForm.vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
+import { formatDateToString } from '../../helpers/dateformatting'
 
 interface Props {
   todo: Todo
@@ -113,15 +113,6 @@ function getCheckButtonCircleColor(todo: Todo) {
 
 function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
-}
-
-function formatDate(inputDate: string): string {
-  const parts = inputDate.split('-')
-  const year = parts[0]
-  const month = parts[1]
-  const day = parts[2]
-
-  return `${day}.${month}.${year}`
 }
 
 function toggleTaskState(index: number) {

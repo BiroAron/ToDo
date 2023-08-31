@@ -99,7 +99,7 @@ function updatePriority(priority: TodoPriority) {
   localTodo.priority = priority
 }
 
-function updateDate(date: string) {
+function updateDate(date: Date) {
   localTodo.date = date
 }
 

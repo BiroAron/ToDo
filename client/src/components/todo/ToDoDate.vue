@@ -8,18 +8,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import {
+  formatDateToString,
+  formatStringToDate
+} from '../../helpers/dateformatting'
 
 interface Props {
-  date: string
+  date: Date
 }
 const props = defineProps<Props>()
 
 const localDate = computed({
-  get: () => props.date,
-  set: (newDate) => emit('updateDate', newDate)
+  get: () => formatDateToString(props.date),
+  set: (newDate) => emit('updateDate', formatStringToDate(newDate))
 })
 
 const emit = defineEmits<{
-  (e: 'updateDate', date: string): void
+  (e: 'updateDate', date: Date): void
 }>()
 </script>
