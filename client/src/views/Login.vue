@@ -22,6 +22,12 @@
           input-type="password"
           class="pb-6"
         ></BaseInput>
+        <div
+          v-if="errorMessage"
+          class="px-3 pb-6 text-center text-sm text-red-500"
+        >
+          {{ errorMessage }}
+        </div>
         <div>
           <button
             class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
@@ -34,13 +40,11 @@
       <footer>
         <RouterLink
           class="float-left text-sm text-black hover:text-low"
-          href="#"
           :to="{ name: 'Login' }"
           >Forgot Password?</RouterLink
         >
         <RouterLink
           class="float-right text-sm text-black hover:text-low"
-          href="#"
           :to="{ name: 'SignUp' }"
           >Create Account</RouterLink
         >
@@ -57,6 +61,7 @@ import BaseInput from '../components/inputfields/BaseInput.vue'
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('')
 
 const router = useRouter()
 
@@ -65,7 +70,9 @@ async function login() {
     await loginUser(email.value, password.value)
     router.push({ name: 'Dashboard' })
   } catch (error) {
-    console.error('Error:', error)
+    errorMessage.value =
+      'Login failed. Please check your credentials and try again.'
+    console.error('[loginUser Error]', error)
   }
 }
 </script>

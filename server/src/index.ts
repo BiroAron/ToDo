@@ -19,8 +19,17 @@ app.use(bodyParser.json());
 
 mongoose.Promise = Promise;
 
+const connectOptions: mongoose.ConnectOptions = {
+  retryWrites: true,
+  w: "majority",
+  dbName: "ToDo",
+};
+
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(
+    `${process.env.MONGO_BASE_URL}://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}.${process.env.MONGO_HOSTNAME}/`,
+    connectOptions
+  )
   .then(() => {
     console.log("Connected to MongoDB");
   })

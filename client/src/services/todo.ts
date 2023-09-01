@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { Todo } from '../types/Todo'
+import { checkForJwtToken } from '../helpers/authentication'
 
 export async function addNewTodo(todo: Todo) {
   try {
-    const token = localStorage.getItem('jwtToken')
+    const token = checkForJwtToken()
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/user/todo`, //{{domain}}/user/todo
       {
@@ -28,7 +30,8 @@ export async function addNewTodo(todo: Todo) {
 
 export async function editCurrentTodo(todo: Todo) {
   try {
-    const token = localStorage.getItem('jwtToken')
+    const token = checkForJwtToken()
+
     const response = await axios.patch(
       `${import.meta.env.VITE_API_BASE_URL}/user/todo/${todo._id}`,
       {
@@ -53,7 +56,8 @@ export async function editCurrentTodo(todo: Todo) {
 
 export async function deleteCurrentTodo(id: string) {
   try {
-    const token = localStorage.getItem('jwtToken')
+    const token = checkForJwtToken()
+
     const response = await axios.delete(
       `${import.meta.env.VITE_API_BASE_URL}/user/todo/${id}`,
       {
@@ -69,16 +73,22 @@ export async function deleteCurrentTodo(id: string) {
   }
 }
 
-export async function fetchTodos() {
+export async function fetchTodos(
+  searchQuery: string,
+  filterBy: string,
+  isAscending: boolean
+) {
   try {
-    const token = localStorage.getItem('jwtToken')
-
-    if (!token) {
-      throw new Error('JWT token not found')
-    }
+    const token = checkForJwtToken()
 
     const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL}/user/todo`,
+      `${
+        import.meta.env.VITE_API_BASE_URL
+      }/user/todo?query=${encodeURIComponent(
+        searchQuery
+      )}&filter_by=${encodeURIComponent(
+        filterBy
+      )}&is_ascending=${encodeURIComponent(isAscending)}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -95,11 +105,7 @@ export async function fetchTodos() {
 
 export async function getCurrentTodo(id: string) {
   try {
-    const token = localStorage.getItem('jwtToken')
-
-    if (!token) {
-      throw new Error('JWT token not found')
-    }
+    const token = checkForJwtToken()
 
     const response = await axios.get(
       `${import.meta.env.VITE_API_BASE_URL}/user/todo/${id}`,

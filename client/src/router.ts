@@ -2,7 +2,7 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 import Login from './views/Login.vue'
 import SignUp from './views/SignUp.vue'
 import Dashboard from './views/Dashboard.vue'
-import isAuthenticated from './helpers/authentication'
+import { isAuthenticated } from './helpers/authentication'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: isAuthenticated() ? '/dashboard' : '/login' },

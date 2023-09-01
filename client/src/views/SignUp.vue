@@ -40,6 +40,12 @@
           input-name="Repeat Password"
           input-type="password"
         ></BaseInput>
+        <div
+          v-if="errorMessage"
+          class="px-3 pb-6 text-center text-sm text-red-500"
+        >
+          {{ errorMessage }}
+        </div>
         <div>
           <button
             class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
@@ -52,13 +58,11 @@
       <footer>
         <RouterLink
           class="float-left text-sm text-black hover:text-low"
-          href="#"
           :to="{ name: 'SignUp' }"
           >Forgot Password?</RouterLink
         >
         <RouterLink
           class="float-right text-sm text-black hover:text-low"
-          href="#"
           :to="{ name: 'Login' }"
           >Login</RouterLink
         >
@@ -82,6 +86,7 @@ const user: User = reactive({
 })
 
 const repeatPassword = ref('')
+const errorMessage = ref('')
 
 const router = useRouter()
 
@@ -89,7 +94,9 @@ async function register() {
   try {
     await registerUser(user)
   } catch (error) {
-    console.error('Error:', error)
+    console.error('[register Error]', error)
+    errorMessage.value =
+      'SignUp failed. Please check your credentials and try again.'
   }
 
   await loginUser(user.email, user.password)
