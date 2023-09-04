@@ -5,7 +5,10 @@
 
       <Header @toggle-new-todo="toggleNewTodo"></Header>
 
-      <Searchbar v-if="todos.length" @set-search-query="setSearchQuery" />
+      <Searchbar
+        v-if="todos.length || searchQuery"
+        @set-search-query="debouncedSetSearchQuery"
+      />
 
       <Filter
         v-if="todos.length"
@@ -38,7 +41,7 @@
       <EmptyListImage v-if="getEmptyListImage" />
 
       <div
-        v-if="!todos.length && !getEmptyListImage && !isNewElementFormActive"
+        v-if="!todos.length && !getEmptyListImage && searchQuery"
         class="align-center flex justify-center text-xl font-semibold"
       >
         There are no todos with this keyword
@@ -57,6 +60,7 @@ import Searchbar from '../components/header/Searchbar.vue'
 import Filter from '../components/header/Filter.vue'
 import { Todo } from '../types/Todo'
 import Logout from '../components/header/Logout.vue'
+import { debounce } from 'lodash'
 import {
   addNewTodo,
   fetchTodos,
@@ -81,13 +85,14 @@ const emptyTodo = reactive<Todo>({
 })
 
 const getEmptyListImage = computed(
-  () => !isNewElementFormActive.value && !todos.length
+  () =>
+    !isNewElementFormActive.value && !todos.length && searchQuery.value === ''
 )
 
-function setSearchQuery(searchSentence: string) {
+const debouncedSetSearchQuery = debounce((searchSentence: string) => {
   searchQuery.value = searchSentence
   fetchAndAddTodos()
-}
+}, 500)
 
 function setActiveButton(sortCriteria: string) {
   activeButton.value = sortCriteria
@@ -153,6 +158,7 @@ async function editTodo(editedTodo: Todo) {
     console.error('[editTodo Error]', error)
   }
 }
+
 function updateItemList(index: number) {
   const todoSave: Todo = todos[index]
   todos.splice(index, 1)[0]

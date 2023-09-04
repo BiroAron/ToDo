@@ -84,11 +84,7 @@ export async function fetchTodos(
     const response = await axios.get(
       `${
         import.meta.env.VITE_API_BASE_URL
-      }/user/todo?query=${encodeURIComponent(
-        searchQuery
-      )}&filter_by=${encodeURIComponent(
-        filterBy
-      )}&is_ascending=${encodeURIComponent(isAscending)}`,
+      }/user/todo?query=${searchQuery}&filter_by=${filterBy}&is_ascending=${isAscending}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

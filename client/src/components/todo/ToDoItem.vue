@@ -16,7 +16,7 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ formatDateToString(todo.date) }}
+            {{ formatDateToString(todo.date).replace(/-/g, '.') }}
           </div>
         </div>
       </div>
