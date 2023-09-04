@@ -18,7 +18,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'updateDescription', title: string): void
+  (e: 'updateDescription', description: string): void
 }>()
 
 const localDescription = computed({

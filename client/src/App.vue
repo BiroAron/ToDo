@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import ToDoList from './components/todo/ToDoList.vue'
-</script>
-
 <template>
-  <ToDoList />
+  <RouterView></RouterView>
 </template>
+
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+</script>

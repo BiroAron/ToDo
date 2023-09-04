@@ -1,3 +1,4 @@
+import Checker from 'vite-plugin-checker'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 

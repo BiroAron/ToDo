@@ -15,7 +15,7 @@
         <BaseButton
           buttonstyles="bg-high text-white"
           button-name="Delete"
-          @click="deleteItem(index)"
+          @click="deleteItem(_id)"
         ></BaseButton>
       </div>
     </div>
@@ -25,17 +25,17 @@
 <script setup lang="ts">
 import BaseButton from './BaseButton.vue'
 interface Props {
-  index: number
+  _id: string
 }
 defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'deleteItem', index: number): void
+  (e: 'deleteItem', _id: string): void
   (e: 'closePopup'): void
 }>()
 
-function deleteItem(index: number) {
-  emit('deleteItem', index)
+function deleteItem(_id: string) {
+  emit('deleteItem', _id)
 }
 
 function closePopup() {

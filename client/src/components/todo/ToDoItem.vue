@@ -16,7 +16,7 @@
         >
           <CalendarIcon class="mr-1" />
           <div class="pt-1">
-            {{ formatDate(todo.date) }}
+            {{ formatDateToString(todo.date).replace(/-/g, '.') }}
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
     v-if="isEditingTodoVisible"
     :todo="todo"
     :index="index"
-    @delete-item="deleteItem(index)"
+    @delete-item="deleteItem(todo._id)"
     @edit-todo="editTodo"
     @toggle-edit="toggleEdit"
     @close-edit="closeEdit"
@@ -67,12 +67,12 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-
 import CheckedIcon from '../icons/CheckedIcon.vue'
 import CalendarIcon from '../icons/CalendarIcon.vue'
 import ToDoForm from './ToDoForm.vue'
 import { Todo, TodoPriority } from '../../types/Todo'
 import { ColorMap } from '../../types/ColorMap'
+import { formatDateToString } from '../../helpers/dateformatting'
 
 interface Props {
   todo: Todo
@@ -81,8 +81,8 @@ interface Props {
 defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'deleteItem', index: number): void
-  (e: 'editTodo', todo: Todo, index: number): void
+  (e: 'deleteItem', _id: string): void
+  (e: 'editTodo', todo: Todo): void
   (e: 'toggleTaskState', index: number): void
   (e: 'updateItemList', index: number): void
 }>()
@@ -115,27 +115,18 @@ function priorityColor(priority: TodoPriority) {
   return colorMap[priority]
 }
 
-function formatDate(inputDate: string): string {
-  const parts = inputDate.split('-')
-  const year = parts[0]
-  const month = parts[1]
-  const day = parts[2]
-
-  return `${day}.${month}.${year}`
-}
-
 function toggleTaskState(index: number) {
   emit('toggleTaskState', index)
   updateItemList(index)
   toggleEdit()
 }
 
-function deleteItem(index: number) {
-  emit('deleteItem', index)
+function deleteItem(_id: string) {
+  emit('deleteItem', _id)
 }
 
-function editTodo(todo: Todo, index: number) {
-  emit('editTodo', todo, index)
+function editTodo(todo: Todo) {
+  emit('editTodo', todo)
 }
 
 function updateItemList(index: number) {
