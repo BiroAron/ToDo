@@ -10,7 +10,6 @@ import { get } from "lodash";
 import { sortTodos } from "../helpers";
 
 export async function addTodo(req: express.Request, res: express.Response) {
-  console.log("addTodo");
   try {
     const userId = get(req, "identity._id") as string;
     const { title, description, isChecked, priority, date } = req.body;
@@ -32,7 +31,6 @@ export async function addTodo(req: express.Request, res: express.Response) {
 }
 
 export async function getTodos(req: express.Request, res: express.Response) {
-  console.log("getAllTodos");
   try {
     const userId = get(req, "identity._id") as string;
     const query = req.query.query as string;
@@ -51,13 +49,11 @@ export async function getTodos(req: express.Request, res: express.Response) {
 
     return res.status(201).json(todos);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }
 
 export async function getTodo(req: express.Request, res: express.Response) {
-  console.log("getSingleTodo");
   try {
     const userId = get(req, "identity._id") as string;
     const todoId = req.params.id;
@@ -70,13 +66,11 @@ export async function getTodo(req: express.Request, res: express.Response) {
 
     return res.json(todo);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }
 
 export async function deleteTodo(req: express.Request, res: express.Response) {
-  console.log("deleteTodo");
   try {
     const userId = get(req, "identity._id") as string;
     const todoId = req.params.id;
@@ -91,13 +85,11 @@ export async function deleteTodo(req: express.Request, res: express.Response) {
 
     return res.json({ message: "Todo deleted successfully" });
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }
 
 export async function updateTodo(req: express.Request, res: express.Response) {
-  console.log("updateTodo");
   try {
     const userId = get(req, "identity._id") as string;
     const todoId = req.params.id;
@@ -109,7 +101,6 @@ export async function updateTodo(req: express.Request, res: express.Response) {
     }
     return res.json(updatedTodo);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 }

@@ -6,15 +6,12 @@ import { authentication, random } from "../helpers/index";
 import { User } from "models/user";
 
 export async function register(req: express.Request, res: express.Response) {
-  console.log("register");
-
   try {
     const { email, password, firstname, lastname } = req.body;
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      console.log("User already exists.");
       return res.sendStatus(400);
     }
 
@@ -37,7 +34,6 @@ export async function register(req: express.Request, res: express.Response) {
 }
 
 export async function login(req: express.Request, res: express.Response) {
-  console.log("login");
   try {
     const { email, password } = req.body;
 
