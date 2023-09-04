@@ -91,15 +91,60 @@ const errorMessage = ref('')
 const router = useRouter()
 
 async function register() {
+  if (!isValidInput()) {
+    return
+  }
+
   try {
     await registerUser(user)
   } catch (error) {
     console.error('[register Error]', error)
-    errorMessage.value =
-      'SignUp failed. Please check your credentials and try again.'
+    if (error.response && error.response.status === 400) {
+      errorMessage.value = 'There is already a user with this email.'
+    } else {
+      console.error('[register Error]', error)
+      errorMessage.value =
+        'SignUp failed. Please check your credentials and try again.'
+    }
+
+    await loginUser(user.email, user.password)
+    router.push({ name: 'Dashboard' })
+  }
+}
+
+function isValidInput() {
+  if (
+    user.firstName.trim() === '' ||
+    user.lastName.trim() === '' ||
+    user.email.trim() === '' ||
+    user.password.trim() === '' ||
+    repeatPassword.value.trim() === ''
+  ) {
+    errorMessage.value = 'Please fill in all fields.'
+    return false
   }
 
-  await loginUser(user.email, user.password)
-  router.push({ name: 'Dashboard' })
+  if (!user.email.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)) {
+    errorMessage.value = 'Please enter a valid email address.'
+    return false
+  }
+
+  if (user.password.length < 8) {
+    errorMessage.value = 'Password must be at least 8 characters long.'
+    return false
+  }
+
+  if (user.password !== repeatPassword.value) {
+    errorMessage.value = 'Passwords do not match.'
+    return false
+  }
+
+  if (!/^[A-Z].*/.test(user.firstName) || !/^[A-Z].*/.test(user.lastName)) {
+    errorMessage.value =
+      'First name and last name should start with an uppercase letter.'
+    return false
+  }
+
+  return true
 }
 </script>

@@ -25,7 +25,7 @@
         :todo="emptyTodo"
         :index="-1"
         @add-todo="addTodo"
-        @delete-item="deleteNewItem"
+        @delete-item="toggleNewTodo"
         @close-edit="closeEdit"
       ></ToDoForm>
 
@@ -109,10 +109,6 @@ async function addTodo(todo: Todo) {
   toggleNewTodo()
 }
 
-function deleteNewItem() {
-  toggleNewTodo()
-}
-
 async function deleteItem(_id: string) {
   try {
     await deleteCurrentTodo(_id)
@@ -161,7 +157,7 @@ async function editTodo(editedTodo: Todo) {
 
 function updateItemList(index: number) {
   const todoSave: Todo = todos[index]
-  todos.splice(index, 1)[0]
+  todos.splice(index, 1)
   if (todoSave.isChecked) {
     todos.push(todoSave)
   } else {
@@ -174,8 +170,6 @@ function findTodoIndexById(id: string) {
 }
 
 async function fetchAndAddTodos() {
-  console.log('fetchAndAddTodos')
-
   try {
     const todosData = await fetchTodos(
       searchQuery.value,

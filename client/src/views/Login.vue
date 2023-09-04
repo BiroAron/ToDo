@@ -66,13 +66,30 @@ const errorMessage = ref('')
 const router = useRouter()
 
 async function login() {
+  if (!isValidInput()) {
+    return
+  }
+
   try {
     await loginUser(email.value, password.value)
     router.push({ name: 'Dashboard' })
   } catch (error) {
-    errorMessage.value =
-      'Login failed. Please check your credentials and try again.'
+    errorMessage.value = 'Wrong email or password. Try again.'
     console.error('[loginUser Error]', error)
   }
+}
+
+function isValidInput() {
+  if (email.value.trim() === '' || password.value.trim() === '') {
+    errorMessage.value = 'Please fill in all fields.'
+    return false
+  }
+
+  if (!email.value.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)) {
+    errorMessage.value = 'Please enter a valid email address.'
+    return false
+  }
+
+  return true
 }
 </script>

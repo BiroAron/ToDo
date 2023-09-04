@@ -1,6 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema, Document } from "mongoose";
 
 export const TodoPriorities = ["High", "Medium", "Low"];
+type TodoPriorityType = "High" | "Medium" | "Low";
 
 const TodoSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -13,6 +14,17 @@ const TodoSchema = new Schema({
   description: String,
   isChecked: { type: Boolean, default: false },
   date: { type: Date, default: Date.now },
+  deleteDate: { type: Date },
 });
 
-export default mongoose.model("todo", TodoSchema);
+export interface Todo extends Document {
+  userId: ObjectId;
+  date: Date;
+  title: string;
+  priority: TodoPriorityType;
+  isChecked: boolean;
+  description?: string;
+  deleteDate?: Date;
+}
+
+export default mongoose.model<Todo>("todo", TodoSchema);

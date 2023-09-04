@@ -10,8 +10,8 @@ import {
 const router = Router();
 
 router.post("/", addTodo);
-router.get("/", getTodos);
 router.get("/:id", getTodo);
+router.get("/", getTodos);
 router.patch("/:id", updateTodo);
 router.delete("/:id", deleteTodo);
 
