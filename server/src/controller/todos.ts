@@ -2,12 +2,11 @@ import express from "express";
 import {
   createTodo,
   getTodosByCriteria,
-  sortAndFilterTodos,
   updateTodoById,
 } from "../service/todo";
-import TodoModel, { Todo } from "../models/todo";
+import TodoModel from "../models/todo";
 import { get } from "lodash";
-import { sortTodos } from "../helpers";
+import { sortAndFilterTodos } from "helpers";
 
 export async function addTodo(req: express.Request, res: express.Response) {
   try {
@@ -34,7 +33,11 @@ export async function getTodos(req: express.Request, res: express.Response) {
   try {
     const userId = get(req, "identity._id") as string;
     const query = req.query.query as string;
-    const filterBy = req.query.filter_by as string;
+    const filterBy = req.query.filter_by as
+      | "title"
+      | "description"
+      | "date"
+      | "priority";
     const isAscending = req.query.is_ascending === "true";
 
     const todos = await getTodosByCriteria(userId, query);

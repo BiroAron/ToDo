@@ -17,32 +17,40 @@ export function random() {
 }
 
 export function authentication(salt: string, password: string) {
-  console.log(process.env.JWT_SECRET);
   return crypto
     .createHmac("sha256", [salt, password].join("/"))
     .update(process.env.JWT_SECRET)
     .digest("hex");
 }
 
+export function sortAndFilterTodos(
+  todos: Todo[],
+  filterBy: "title" | "description" | "date" | "priority" | "",
+  isAscending: boolean
+): Todo[] {
+  if (filterBy === "") {
+    const uncheckedTodos = todos.filter((todo) => !todo.isChecked);
+    const checkedTodos = todos.filter((todo) => todo.isChecked);
+    return [...uncheckedTodos, ...checkedTodos];
+  } else {
+    return sortTodos(todos, filterBy, isAscending);
+  }
+}
+
 export function sortTodos(
   todos: Todo[],
-  sortCriteria: string,
+  sortCriteria: "title" | "description" | "date" | "priority",
   sortAscending: boolean
 ) {
-  todos.sort((a, b) => {
-    switch (sortCriteria) {
-      case "title":
-        return sortByTitle(a, b, sortAscending);
-      case "description":
-        return sortByDescription(a, b, sortAscending);
-      case "date":
-        return sortByDate(a, b, sortAscending);
-      case "priority":
-        return sortByPriority(a, b, sortAscending);
-      default:
-        return;
-    }
-  });
+  const sortFunctions = {
+    title: sortByTitle,
+    description: sortByDescription,
+    date: sortByDate,
+    priority: sortByPriority,
+  };
+
+  todos.sort((a, b) => sortFunctions[sortCriteria](a, b, sortAscending));
+
   return todos;
 }
 
