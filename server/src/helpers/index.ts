@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { Todo } from "../models/todo";
-import "dotenv/config";
+import { environmentVariables } from "../../config";
 
 export function random() {
   const charset =
@@ -19,7 +19,7 @@ export function random() {
 export function authentication(salt: string, password: string) {
   return crypto
     .createHmac("sha256", [salt, password].join("/"))
-    .update(process.env.JWT_SECRET)
+    .update(environmentVariables.jwt_sectret)
     .digest("hex");
 }
 
@@ -32,9 +32,8 @@ export function sortAndFilterTodos(
     const uncheckedTodos = todos.filter((todo) => !todo.isChecked);
     const checkedTodos = todos.filter((todo) => todo.isChecked);
     return [...uncheckedTodos, ...checkedTodos];
-  } else {
-    return sortTodos(todos, filterBy, isAscending);
   }
+  return sortTodos(todos, filterBy, isAscending);
 }
 
 export function sortTodos(

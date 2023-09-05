@@ -1,109 +1,113 @@
-import express from "express";
-import {
-  createTodo,
-  getTodosByCriteria,
-  updateTodoById,
-} from "../service/todo";
+import { Request, Response } from "express";
+import { TodoService } from "../service/todo";
 import TodoModel from "../models/todo";
 import { get } from "lodash";
-import { sortAndFilterTodos } from "helpers";
+import { sortAndFilterTodos } from "../helpers/index";
 
-export async function addTodo(req: express.Request, res: express.Response) {
-  try {
-    const userId = get(req, "identity._id") as string;
-    const { title, description, isChecked, priority, date } = req.body;
+export class TodoController {
+  static async addTodo(req: Request, res: Response) {
+    try {
+      const userId = get(req, "identity._id") as string;
+      const { title, description, isChecked, priority, date } = req.body;
 
-    const todo = await createTodo({
-      userId,
-      title,
-      description,
-      priority,
-      isChecked,
-      date,
-    });
+      const todo = await TodoService.createTodo({
+        userId,
+        title,
+        description,
+        priority,
+        isChecked,
+        date,
+      });
 
-    return res.status(201).json(todo);
-  } catch (error) {
-    console.error("Error during registration:", error);
-    return res.sendStatus(500);
-  }
-}
-
-export async function getTodos(req: express.Request, res: express.Response) {
-  try {
-    const userId = get(req, "identity._id") as string;
-    const query = req.query.query as string;
-    const filterBy = req.query.filter_by as
-      | "title"
-      | "description"
-      | "date"
-      | "priority";
-    const isAscending = req.query.is_ascending === "true";
-
-    const todos = await getTodosByCriteria(userId, query);
-
-    const sortedAndFilteredTodos = sortAndFilterTodos(
-      todos,
-      filterBy,
-      isAscending
-    );
-
-    todos.splice(0, todos.length, ...sortedAndFilteredTodos);
-
-    return res.status(201).json(todos);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
-}
-
-export async function getTodo(req: express.Request, res: express.Response) {
-  try {
-    const userId = get(req, "identity._id") as string;
-    const todoId = req.params.id;
-
-    const todo = await TodoModel.findOne({ _id: todoId, userId });
-
-    if (!todo) {
-      return res.status(404).json({ error: "Todo not found" });
+      return res.status(201).json(todo);
+    } catch (error) {
+      console.error("Error during registration:", error);
+      return res.sendStatus(500);
     }
-
-    return res.json(todo);
-  } catch (error) {
-    return res.sendStatus(500);
   }
-}
 
-export async function deleteTodo(req: express.Request, res: express.Response) {
-  try {
-    const userId = get(req, "identity._id") as string;
-    const todoId = req.params.id;
+  static async getTodos(req: Request, res: Response) {
+    try {
+      const userId = get(req, "identity._id") as string;
+      const query = req.query.query as string;
+      const filterBy = req.query.filter_by as
+        | "title"
+        | "description"
+        | "date"
+        | "priority";
+      const isAscending = req.query.is_ascending === "true";
 
-    const todo = await TodoModel.findOne({ _id: todoId, userId });
-    if (!todo) {
-      return res.status(404).json({ error: "Todo not found" });
+      const todos = await TodoService.getTodosByCriteria(userId, query);
+
+      const sortedAndFilteredTodos = sortAndFilterTodos(
+        todos,
+        filterBy,
+        isAscending
+      );
+
+      todos.splice(0, todos.length, ...sortedAndFilteredTodos);
+
+      return res.status(200).json(todos);
+    } catch (error) {
+      return res.sendStatus(500);
     }
-
-    todo.deleteDate = new Date();
-    await todo.save();
-
-    return res.json({ message: "Todo deleted successfully" });
-  } catch (error) {
-    return res.sendStatus(500);
   }
-}
 
-export async function updateTodo(req: express.Request, res: express.Response) {
-  try {
-    const userId = get(req, "identity._id") as string;
-    const todoId = req.params.id;
+  static async getTodo(req: Request, res: Response) {
+    try {
+      const userId = get(req, "identity._id") as string;
+      const todoId = req.params.id;
 
-    const updatedTodo = await updateTodoById(todoId, req.params);
+      const todo = await TodoModel.findOne({ _id: todoId, userId });
 
-    if (!updatedTodo) {
-      return res.status(404).json({ error: "Todo not found" });
+      if (!todo) {
+        return res.sendStatus(404);
+      }
+
+      return res.json(todo);
+    } catch (error) {
+      return res.sendStatus(500);
     }
-    return res.json(updatedTodo);
-  } catch (error) {
-    return res.sendStatus(500);
+  }
+
+  static async deleteTodo(req: Request, res: Response) {
+    try {
+      const userId = get(req, "identity._id") as string;
+      const todoId = req.params.id;
+
+      const todo = await TodoModel.findOne({ _id: todoId, userId });
+
+      if (!todo) {
+        return res.sendStatus(404);
+      }
+
+      const updatedTodo = await TodoService.updateTodoById(todoId, {
+        deleteDate: new Date(),
+      });
+
+      if (!updatedTodo) {
+        res.sendStatus(500);
+        return;
+      }
+
+      return res.sendStatus(204);
+    } catch (error) {
+      return res.sendStatus(500);
+    }
+  }
+
+  static async updateTodo(req: Request, res: Response) {
+    try {
+      const todoId = req.params.id;
+
+      const updatedTodo = await TodoService.updateTodoById(todoId, req.params);
+
+      if (!updatedTodo) {
+        return res.sendStatus(404);
+      }
+      return res.json(updatedTodo);
+    } catch (error) {
+      return res.sendStatus(500);
+    }
   }
 }

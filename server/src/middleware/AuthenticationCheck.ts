@@ -1,15 +1,14 @@
 import express from "express";
-import { get, merge } from "lodash";
+import { merge } from "lodash";
 import jwt from "jsonwebtoken";
-import { getUserById } from "../service/user";
-import "dotenv/config";
+import { UserService } from "../service/user";
+import { environmentVariables } from "../../config";
 
 export async function isAuthenticated(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
-  console.log("isAuthenticated");
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -24,13 +23,16 @@ export async function isAuthenticated(
       exp: number;
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as DecodedToken;
+    const decoded = jwt.verify(
+      token,
+      environmentVariables.jwt_sectret
+    ) as DecodedToken;
 
     if (!decoded) {
       return res.sendStatus(403);
     }
 
-    const existingUser = await getUserById(decoded.userId);
+    const existingUser = await UserService.getUserById(decoded.userId);
 
     if (!existingUser) {
       return res.sendStatus(403);
@@ -40,7 +42,6 @@ export async function isAuthenticated(
 
     return next();
   } catch (error) {
-    console.log(error);
     return res.sendStatus(400);
   }
 }

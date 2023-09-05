@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Todo } from '../types/Todo'
 import { checkForJwtToken } from '../helpers/authentication'
+import { log } from 'console'
 
 export async function addNewTodo(todo: Todo) {
   try {

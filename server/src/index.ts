@@ -4,7 +4,7 @@ import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./router";
-import "dotenv/config";
+import { environmentVariables } from "../config";
 
 const app = express();
 
@@ -29,7 +29,7 @@ const connectOptions: mongoose.ConnectOptions = {
 async function connectToMongoDB() {
   try {
     await mongoose.connect(
-      `${process.env.MONGO_BASE_URL}://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}.${process.env.MONGO_HOSTNAME}/`,
+      `${environmentVariables.mongo_base_url}://${environmentVariables.mongo_user}:${environmentVariables.mongo_password}@${environmentVariables.mongo_cluster}.${environmentVariables.mongo_hostname}/`,
       connectOptions
     );
     console.log("Connected to MongoDB");
@@ -42,7 +42,11 @@ async function startServer() {
   try {
     await connectToMongoDB();
     app.listen(process.env.PORT, () => {
-      console.log(`Server running on ${process.env.HOST + process.env.PORT}`);
+      console.log(
+        `Server running on ${
+          environmentVariables.host + environmentVariables.port
+        }`
+      );
     });
   } catch (error) {
     console.error("Error starting the server:", error);
