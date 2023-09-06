@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import { Todo } from "../models/todo";
 import { environmentVariables } from "../../config";
 
 export function random() {

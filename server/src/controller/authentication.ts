@@ -9,6 +9,10 @@ export class AuthController {
     try {
       const { email, password, firstname, lastname } = req.body;
 
+      if (!email || !password || !firstname || !lastname) {
+        return res.sendStatus(400);
+      }
+
       const existingUser = await UserService.getUserByEmail(email);
 
       if (existingUser) {
@@ -36,6 +40,10 @@ export class AuthController {
   static async login(req: express.Request, res: express.Response) {
     try {
       const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.sendStatus(400);
+      }
 
       const user = await UserService.getUserByEmail(email);
 

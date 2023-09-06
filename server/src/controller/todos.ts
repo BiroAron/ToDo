@@ -3,13 +3,16 @@ import { TodoService } from "../service/todo";
 import TodoModel, { Todo } from "../models/todo";
 import { get } from "lodash";
 import { buildSortPipeline } from "../helpers/index";
-// import { sortAndFilterTodos } from "../helpers/index";
 
 export class TodoController {
   static async addTodo(req: Request, res: Response) {
     try {
       const userId = get(req, "identity._id") as string;
       const { title, description, isChecked, priority, date } = req.body;
+
+      if (!title || !description || !isChecked || !priority || !date) {
+        return res.sendStatus(400);
+      }
 
       const todo = await TodoService.createTodo({
         userId,
@@ -38,6 +41,10 @@ export class TodoController {
         | "date"
         | "priority";
 
+      if (!isAscending) {
+        return res.sendStatus(400);
+      }
+
       const pipeline = buildSortPipeline(userId, query, filterBy, isAscending);
 
       const todos = await TodoModel.aggregate(pipeline);
@@ -65,6 +72,10 @@ export class TodoController {
       const userId = get(req, "identity._id") as string;
       const todoId = req.params.id;
 
+      if (!todoId) {
+        return res.sendStatus(400);
+      }
+
       const todo = await TodoModel.findOne({ _id: todoId, userId });
 
       if (!todo) {
@@ -81,6 +92,10 @@ export class TodoController {
     try {
       const userId = get(req, "identity._id") as string;
       const todoId = req.params.id;
+
+      if (!todoId) {
+        return res.sendStatus(400);
+      }
 
       const todo = await TodoModel.findOne({ _id: todoId, userId });
 
@@ -112,6 +127,7 @@ export class TodoController {
       if (!updatedTodo) {
         return res.sendStatus(404);
       }
+
       return res.json(updatedTodo);
     } catch (error) {
       return res.sendStatus(500);

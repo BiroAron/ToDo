@@ -18,8 +18,6 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use("/", router);
 
-mongoose.Promise = Promise;
-
 const connectOptions: mongoose.ConnectOptions = {
   retryWrites: true,
   w: "majority",
@@ -42,7 +40,7 @@ async function startServer() {
   try {
     await connectToMongoDB();
 
-    app.listen(process.env.PORT, () => {
+    app.listen(environmentVariables.port, () => {
       console.log(
         `Server running on ${
           environmentVariables.host + environmentVariables.port

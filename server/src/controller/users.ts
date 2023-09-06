@@ -10,10 +10,6 @@ export class UserController {
 
       const user = await UserService.getUserById(id);
 
-      if (!id) {
-        return res.sendStatus(404);
-      }
-
       return res.status(200).json(user);
     } catch (error) {
       return res.sendStatus(500);
