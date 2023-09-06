@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TodoService } from "../service/todo";
-import TodoModel, { Todo } from "../models/todo";
+import TodoModel from "../models/todo";
 import { get } from "lodash";
 import { buildSortPipeline } from "../helpers/index";
 
@@ -10,7 +10,7 @@ export class TodoController {
       const userId = get(req, "identity._id") as string;
       const { title, description, isChecked, priority, date } = req.body;
 
-      if (!title || !description || !isChecked || !priority || !date) {
+      if (!title || !priority || !date) {
         return res.sendStatus(400);
       }
 
@@ -41,28 +41,16 @@ export class TodoController {
         | "date"
         | "priority";
 
-      if (!isAscending) {
-        return res.sendStatus(400);
-      }
-
       const pipeline = buildSortPipeline(userId, query, filterBy, isAscending);
 
       const todos = await TodoModel.aggregate(pipeline);
 
-      if (!filterBy) {
-        const isCheckedTrueTodos = todos.filter(
-          (todo) => todo.isChecked === true
-        );
-        const isCheckedFalseTodos = todos.filter(
-          (todo) => todo.isChecked === false
-        );
-
-        const sortedTodos = [...isCheckedTrueTodos, ...isCheckedFalseTodos];
-        todos.splice(0, todos.length, ...sortedTodos);
-      }
+      if (!filterBy)
+        todos.sort((a, b) => Number(a.isChecked) - Number(b.isChecked));
 
       return res.status(200).json(todos);
     } catch (error) {
+      console.log(error);
       return res.sendStatus(500);
     }
   }

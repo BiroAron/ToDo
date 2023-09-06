@@ -55,7 +55,7 @@ export function buildSortPipeline(
     pipeline.push({ $sort: { prioritySortOrder: filteringOrder } });
     pipeline.push({ $unset: "prioritySortOrder" });
   } else if (filterBy) {
-    pipeline.push({ $sort: { [filterBy]: [filteringOrder] } });
+    pipeline.push({ $sort: { [filterBy]: filteringOrder } });
   }
 
   return pipeline;
