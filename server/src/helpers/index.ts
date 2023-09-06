@@ -23,63 +23,41 @@ export function authentication(salt: string, password: string) {
     .digest("hex");
 }
 
-export function sortAndFilterTodos(
-  todos: Todo[],
-  filterBy: "title" | "description" | "date" | "priority" | "",
+export function buildSortPipeline(
+  userId: string,
+  query: string,
+  filterBy: string,
   isAscending: boolean
-): Todo[] {
-  if (filterBy === "") {
-    const uncheckedTodos = todos.filter((todo) => !todo.isChecked);
-    const checkedTodos = todos.filter((todo) => todo.isChecked);
-    return [...uncheckedTodos, ...checkedTodos];
-  }
-  return sortTodos(todos, filterBy, isAscending);
-}
-
-export function sortTodos(
-  todos: Todo[],
-  sortCriteria: "title" | "description" | "date" | "priority",
-  sortAscending: boolean
 ) {
-  const sortFunctions = {
-    title: sortByTitle,
-    description: sortByDescription,
-    date: sortByDate,
-    priority: sortByPriority,
-  };
+  const filteringOrder = isAscending ? 1 : -1;
+  const prioritySortOrder = ["Low", "Medium", "High"];
 
-  todos.sort((a, b) => sortFunctions[sortCriteria](a, b, sortAscending));
+  const pipeline: any[] = [
+    {
+      $match: {
+        userId,
+        deleteDate: { $exists: false },
+        $or: [
+          { title: { $regex: query, $options: "i" } },
+          { description: { $regex: query, $options: "i" } },
+        ],
+      },
+    },
+  ];
 
-  return todos;
-}
+  if (filterBy === "priority") {
+    pipeline.push({
+      $addFields: {
+        prioritySortOrder: {
+          $indexOfArray: [prioritySortOrder, "$priority"],
+        },
+      },
+    });
+    pipeline.push({ $sort: { prioritySortOrder: filteringOrder } });
+    pipeline.push({ $unset: "prioritySortOrder" });
+  } else if (filterBy) {
+    pipeline.push({ $sort: { [filterBy]: [filteringOrder] } });
+  }
 
-function sortByTitle(a: Todo, b: Todo, sortAscending: boolean) {
-  return sortAscending
-    ? a.title.localeCompare(b.title)
-    : b.title.localeCompare(a.title);
-}
-
-function sortByDescription(a: Todo, b: Todo, sortAscending: boolean) {
-  return sortAscending
-    ? a.description.localeCompare(b.description)
-    : b.description.localeCompare(a.description);
-}
-
-function sortByDate(a: Todo, b: Todo, sortAscending: boolean) {
-  const dateA = new Date(a.date);
-  const dateB = new Date(b.date);
-
-  if (sortAscending) return dateA.getTime() - dateB.getTime();
-
-  return dateB.getTime() - dateA.getTime();
-}
-
-function sortByPriority(a: Todo, b: Todo, sortAscending: boolean) {
-  const priorityOrder = ["Low", "Medium", "High"];
-  const priorityA = priorityOrder.indexOf(a.priority);
-  const priorityB = priorityOrder.indexOf(b.priority);
-
-  if (sortAscending) return priorityA - priorityB;
-
-  return priorityB - priorityA;
+  return pipeline;
 }

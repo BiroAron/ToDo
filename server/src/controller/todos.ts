@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { TodoService } from "../service/todo";
-import TodoModel from "../models/todo";
+import TodoModel, { Todo } from "../models/todo";
 import { get } from "lodash";
-import { sortAndFilterTodos } from "../helpers/index";
+import { buildSortPipeline } from "../helpers/index";
+// import { sortAndFilterTodos } from "../helpers/index";
 
 export class TodoController {
   static async addTodo(req: Request, res: Response) {
@@ -30,22 +31,28 @@ export class TodoController {
     try {
       const userId = get(req, "identity._id") as string;
       const query = req.query.query as string;
+      const isAscending = req.query.is_ascending === "true";
       const filterBy = req.query.filter_by as
         | "title"
         | "description"
         | "date"
         | "priority";
-      const isAscending = req.query.is_ascending === "true";
 
-      const todos = await TodoService.getTodosByCriteria(userId, query);
+      const pipeline = buildSortPipeline(userId, query, filterBy, isAscending);
 
-      const sortedAndFilteredTodos = sortAndFilterTodos(
-        todos,
-        filterBy,
-        isAscending
-      );
+      const todos = await TodoModel.aggregate(pipeline);
 
-      todos.splice(0, todos.length, ...sortedAndFilteredTodos);
+      if (!filterBy) {
+        const isCheckedTrueTodos = todos.filter(
+          (todo) => todo.isChecked === true
+        );
+        const isCheckedFalseTodos = todos.filter(
+          (todo) => todo.isChecked === false
+        );
+
+        const sortedTodos = [...isCheckedTrueTodos, ...isCheckedFalseTodos];
+        todos.splice(0, todos.length, ...sortedTodos);
+      }
 
       return res.status(200).json(todos);
     } catch (error) {
@@ -100,7 +107,7 @@ export class TodoController {
     try {
       const todoId = req.params.id;
 
-      const updatedTodo = await TodoService.updateTodoById(todoId, req.params);
+      const updatedTodo = await TodoService.updateTodoById(todoId, req.body);
 
       if (!updatedTodo) {
         return res.sendStatus(404);

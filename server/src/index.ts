@@ -41,6 +41,7 @@ async function connectToMongoDB() {
 async function startServer() {
   try {
     await connectToMongoDB();
+
     app.listen(process.env.PORT, () => {
       console.log(
         `Server running on ${
