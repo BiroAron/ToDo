@@ -50,7 +50,6 @@ export class TodoController {
 
       return res.status(200).json(todos);
     } catch (error) {
-      console.log(error);
       return res.sendStatus(500);
     }
   }
