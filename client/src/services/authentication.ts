@@ -1,17 +1,18 @@
-import axios from 'axios'
+import { axiosInstance } from '../services/axios'
 import { User } from '../types/User'
 
 export async function loginUser(email: string, password: string) {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
-      {
-        email,
-        password
-      }
-    )
+    const response = await axiosInstance.post(`/auth/login`, {
+      email,
+      password
+    })
+    axiosInstance.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${response.data.token}`
     localStorage.setItem('jwtToken', response.data.token)
     localStorage.setItem('firstName', response.data.user.firstname)
+
     return response.data
   } catch (error) {
     throw error
@@ -20,17 +21,19 @@ export async function loginUser(email: string, password: string) {
 
 export async function registerUser(user: User) {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
-      {
-        email: user.email,
-        password: user.password,
-        firstname: user.firstName,
-        lastname: user.lastName
-      }
-    )
+    const response = await axiosInstance.post(`/auth/register`, {
+      email: user.email,
+      password: user.password,
+      firstname: user.firstName,
+      lastname: user.lastName
+    })
+    axiosInstance.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${response.data.token}`
+    localStorage.setItem('jwtToken', response.data.token)
+    localStorage.setItem('firstName', response.data.user.firstname)
 
-    return response.data //userdata
+    return response.data
   } catch (error) {
     throw error
   }

@@ -1,24 +1,16 @@
-import axios from 'axios'
+import { axiosInstance } from '../services/axios'
 import { Todo } from '../types/Todo'
-import { checkForJwtToken } from '../helpers/authentication'
 
 export async function addNewTodo(todo: Todo) {
   try {
-    const token = checkForJwtToken()
-
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/user/todo`, //{{domain}}/user/todo
+    const response = await axiosInstance.post(
+      `/user/todo`, //{{domain}}/user/todo
       {
         title: todo.title,
         priority: todo.priority,
         description: todo.description,
         isChecked: todo.isChecked,
         date: todo.date
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       }
     )
 
@@ -30,23 +22,13 @@ export async function addNewTodo(todo: Todo) {
 
 export async function editCurrentTodo(todo: Todo) {
   try {
-    const token = checkForJwtToken()
-
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_BASE_URL}/user/todo/${todo._id}`,
-      {
-        title: todo.title,
-        priority: todo.priority,
-        description: todo.description,
-        isChecked: todo.isChecked,
-        date: todo.date
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const response = await axiosInstance.patch(`/user/todo/${todo._id}`, {
+      title: todo.title,
+      priority: todo.priority,
+      description: todo.description,
+      isChecked: todo.isChecked,
+      date: todo.date
+    })
 
     return response.data //userdata
   } catch (error) {
@@ -56,16 +38,7 @@ export async function editCurrentTodo(todo: Todo) {
 
 export async function deleteCurrentTodo(id: string) {
   try {
-    const token = checkForJwtToken()
-
-    const response = await axios.delete(
-      `${import.meta.env.VITE_API_BASE_URL}/user/todo/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const response = await axiosInstance.delete(`/user/todo/${id}`)
 
     return response.data //userdata
   } catch (error) {
@@ -79,19 +52,10 @@ export async function fetchTodos(
   isAscending: boolean
 ) {
   try {
-    const token = checkForJwtToken()
-
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_API_BASE_URL
-      }/user/todo?query=${searchQuery}&filter_by=${filterBy}&is_ascending=${isAscending}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
-
+    const url = `/user/todo?query=${searchQuery}&is_ascending=${isAscending}${
+      filterBy ? `&filter_by=${filterBy}` : ''
+    }`
+    const response = await axiosInstance.get(url)
     return response.data
   } catch (error) {
     console.error('Error fetching todos:', error)
@@ -101,16 +65,7 @@ export async function fetchTodos(
 
 export async function getCurrentTodo(id: string) {
   try {
-    const token = checkForJwtToken()
-
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL}/user/todo/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const response = await axiosInstance.get(`/user/todo/${id}`)
 
     return response.data
   } catch (error) {
