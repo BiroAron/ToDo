@@ -97,18 +97,17 @@ async function register() {
 
   try {
     await registerUser(user)
+    await loginUser(user.email, user.password)
+    router.push({ name: 'Dashboard' })
   } catch (error) {
     console.error('[register Error]', error)
-    if (error.response && error.response.status === 400) {
+    if (error.response && error.response.status === 409) {
       errorMessage.value = 'There is already a user with this email.'
     } else {
       console.error('[register Error]', error)
       errorMessage.value =
         'SignUp failed. Please check your credentials and try again.'
     }
-
-    await loginUser(user.email, user.password)
-    router.push({ name: 'Dashboard' })
   }
 }
 

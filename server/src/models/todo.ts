@@ -1,7 +1,7 @@
 import mongoose, { ObjectId, Schema, Document } from "mongoose";
 
 export const TodoPriorities = ["High", "Medium", "Low"];
-type TodoPriorityType = "High" | "Medium" | "Low";
+export type TodoPriorityType = "High" | "Medium" | "Low";
 
 const TodoSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
