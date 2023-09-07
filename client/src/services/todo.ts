@@ -48,19 +48,39 @@ export async function deleteCurrentTodo(id: string) {
 
 export async function fetchTodos(
   searchQuery: string,
-  filterBy: string,
+  filterBy: string | undefined,
   isAscending: boolean
 ) {
   try {
-    const url = `/user/todo?query=${searchQuery}&is_ascending=${isAscending}${
-      filterBy ? `&filter_by=${filterBy}` : ''
-    }`
+    const url = buildTodoURL(searchQuery, filterBy, isAscending)
     const response = await axiosInstance.get(url)
     return response.data
   } catch (error) {
     console.error('Error fetching todos:', error)
     throw error
   }
+}
+
+function buildTodoURL(
+  searchQuery: string | undefined,
+  filterBy: string | undefined,
+  isAscending: boolean
+) {
+  const baseURL = '/user/todo'
+  const queryParameters: string[] = []
+
+  if (searchQuery) {
+    queryParameters.push(`query=${searchQuery}`)
+  }
+
+  if (filterBy) {
+    queryParameters.push(`filter_by=${filterBy}`)
+  }
+
+  queryParameters.push(`is_ascending=${isAscending}`)
+
+  const queryString = queryParameters.join('&')
+  return `${baseURL}?${queryString}`
 }
 
 export async function getCurrentTodo(id: string) {

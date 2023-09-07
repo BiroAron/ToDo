@@ -7,9 +7,7 @@ export async function loginUser(email: string, password: string) {
       email,
       password
     })
-    axiosInstance.defaults.headers.common[
-      'Authorization'
-    ] = `Bearer ${response.data.token}`
+
     localStorage.setItem('jwtToken', response.data.token)
     localStorage.setItem('firstName', response.data.user.firstname)
 
@@ -27,9 +25,7 @@ export async function registerUser(user: User) {
       firstname: user.firstName,
       lastname: user.lastName
     })
-    axiosInstance.defaults.headers.common[
-      'Authorization'
-    ] = `Bearer ${response.data.token}`
+
     localStorage.setItem('jwtToken', response.data.token)
     localStorage.setItem('firstName', response.data.user.firstname)
 
