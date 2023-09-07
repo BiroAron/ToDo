@@ -107,12 +107,19 @@ export class TodoController {
 
   static async updateTodo(req: Request, res: Response) {
     try {
+      const userId = get(req, "identity._id") as string;
       const todoId = req.params.id;
+
+      const todo = await TodoModel.findOne({ _id: todoId, userId });
+
+      if (!todo) {
+        return res.sendStatus(404);
+      }
 
       const updatedTodo = await TodoService.updateTodoById(todoId, req.body);
 
       if (!updatedTodo) {
-        return res.sendStatus(404);
+        return res.sendStatus(500);
       }
 
       return res.json(updatedTodo);

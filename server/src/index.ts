@@ -21,7 +21,7 @@ app.use("/", router);
 const connectOptions: mongoose.ConnectOptions = {
   retryWrites: true,
   w: "majority",
-  dbName: "ToDo",
+  dbName: "todo_Biro_Aron",
 };
 
 async function connectToMongoDB() {

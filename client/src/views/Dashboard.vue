@@ -30,6 +30,7 @@
       ></ToDoForm>
 
       <ToDoItems
+        class="pb-6"
         :todos="todos"
         @update-item-list="updateItemList"
         @toggle-task-state="toggleTaskState"
