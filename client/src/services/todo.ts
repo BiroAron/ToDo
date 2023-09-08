@@ -52,8 +52,9 @@ export async function fetchTodos(
   isAscending: boolean
 ) {
   try {
-    const url = buildTodoURL(searchQuery, filterBy, isAscending)
-    const response = await axiosInstance.get(`/user/todo?${url}`)
+    const response = await axiosInstance.get(
+      `/user/todo?${buildTodoURL(searchQuery, filterBy, isAscending)}`
+    )
     return response.data
   } catch (error) {
     console.error('Error fetching todos:', error)
@@ -66,7 +67,6 @@ function buildTodoURL(
   filterBy: string | undefined,
   isAscending: boolean
 ) {
-  const baseURL = '/user/todo'
   const queryParameters: string[] = []
 
   if (searchQuery) {
