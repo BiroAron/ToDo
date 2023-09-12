@@ -30,7 +30,12 @@ export class AuthController {
         password: saltAndPassword,
       } as User);
 
-      return res.status(201).json(user);
+      const token = jwt.sign(
+        { userId: user._id.toString() },
+        process.env.JWT_SECRET
+      );
+
+      return res.status(201).json({ token, user });
     } catch (error) {
       console.error("Error during registration:", error);
       return res.sendStatus(500);

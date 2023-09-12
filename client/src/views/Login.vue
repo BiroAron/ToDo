@@ -1,13 +1,11 @@
 <template>
-  <body class="flex h-screen w-screen bg-white">
-    <div
-      class="m-auto w-full max-w-sm rounded-2xl border-4 border-black bg-lightGray p-5 shadow-xl"
-    >
+  <body class="flex h-screen w-screen bg-white font-custom">
+    <div class="m-auto w-full max-w-sm rounded-xl border-2 border-black p-3">
       <header>
         <div
-          class="mb-8 flex justify-center text-6xl font-bold text-black opacity-80"
+          class="mb-8 mt-8 flex justify-center text-6xl font-semibold text-black"
         >
-          ToDo App
+          To do app
         </div>
       </header>
       <form @submit.prevent="login">
@@ -22,15 +20,12 @@
           input-type="password"
           class="pb-6"
         ></BaseInput>
-        <div
-          v-if="errorMessage"
-          class="px-3 pb-6 text-center text-sm text-red-500"
-        >
+        <div v-if="errorMessage" class="px-3 pb-6 text-center text-red-500">
           {{ errorMessage }}
         </div>
         <div>
           <button
-            class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
+            class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-2 text-xl font-bold text-white hover:bg-low"
             type="submit"
           >
             Login
@@ -39,12 +34,12 @@
       </form>
       <footer>
         <RouterLink
-          class="float-left text-sm text-black hover:text-low"
+          class="float-left text-black hover:text-low"
           :to="{ name: 'Login' }"
           >Forgot Password?</RouterLink
         >
         <RouterLink
-          class="float-right text-sm text-black hover:text-low"
+          class="float-right text-black hover:text-low"
           :to="{ name: 'SignUp' }"
           >Create Account</RouterLink
         >

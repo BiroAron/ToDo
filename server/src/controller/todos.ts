@@ -33,7 +33,7 @@ export class TodoController {
   static async getTodos(req: Request, res: Response) {
     try {
       const userId = get(req, "identity._id") as string;
-      const query = req.query.query as string;
+      const query = (req.query.query as string) || "";
       const isAscending = req.query.is_ascending === "true";
       const filterBy = req.query.filter_by as
         | "title"
@@ -42,7 +42,6 @@ export class TodoController {
         | "priority";
 
       const pipeline = buildSortPipeline(userId, query, filterBy, isAscending);
-
       const todos = await TodoModel.aggregate(pipeline);
 
       if (!filterBy)

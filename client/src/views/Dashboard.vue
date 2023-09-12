@@ -103,7 +103,10 @@ function setActiveButton(sortCriteria: string) {
 async function addTodo(todo: Todo) {
   try {
     const response = await addNewTodo(todo)
-    appendTodo(response._id)
+    todos.unshift({
+      ...response,
+      date: new Date(response.date)
+    })
   } catch (error) {
     console.error('[addTodo Error]', error)
   }
@@ -189,12 +192,6 @@ async function fetchAndAddTodos() {
   } catch (error) {
     console.error('[fetchAndAddTodos Error]', error)
   }
-}
-
-async function appendTodo(_id: string) {
-  const newTodo = await getCurrentTodo(_id)
-  newTodo.date = new Date(newTodo.date)
-  todos.unshift(newTodo)
 }
 
 onMounted(() => {

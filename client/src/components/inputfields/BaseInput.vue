@@ -1,9 +1,11 @@
 <template>
   <div class="mb-2 flex flex-col">
-    <label class="mb-1 block text-black">{{ inputName }}</label>
+    <label class="mb-1 block pl-1 text-base font-semibold text-black">{{
+      inputName
+    }}</label>
     <input
       v-model="value"
-      class="w-full rounded-lg border-2 border-black p-2 text-black outline-none focus:bg-gray-300"
+      class="w-full rounded-lg border border-black p-2 text-black outline-none focus:bg-gray-300"
       :type="inputType"
     />
   </div>

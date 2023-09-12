@@ -1,23 +1,25 @@
 <template>
-  <body class="flex h-screen w-screen bg-white">
+  <body class="flex h-screen w-screen bg-white font-custom">
     <div
-      class="m-auto w-full max-w-lg rounded-2xl border-4 border-black bg-lightGray p-5 shadow-xl"
+      class="m-auto w-full max-w-lg rounded-xl border-2 border-black bg-white p-5 shadow-xl"
     >
       <header>
         <div
-          class="mb-8 flex justify-center text-6xl font-bold text-black opacity-80"
+          class="mb-8 mt-8 flex justify-center text-6xl font-semibold text-black"
         >
-          ToDo App
+          To do app
         </div>
       </header>
       <form @submit.prevent="register">
-        <div class="mb-2 flex space-x-2">
+        <div class="mb-2 flex w-full space-x-2">
           <BaseInput
+            class="w-full"
             v-model="user.firstName"
             input-name="First name"
             input-type="text"
           ></BaseInput>
           <BaseInput
+            class="w-full"
             v-model="user.lastName"
             input-name="Last name"
             input-type="text"
@@ -40,15 +42,12 @@
           input-name="Repeat Password"
           input-type="password"
         ></BaseInput>
-        <div
-          v-if="errorMessage"
-          class="px-3 pb-6 text-center text-sm text-red-500"
-        >
+        <div v-if="errorMessage" class="px-3 pb-6 text-center text-red-500">
           {{ errorMessage }}
         </div>
         <div>
           <button
-            class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary px-4 py-2 text-xl font-bold text-white hover:bg-low"
+            class="mb-6 flex w-full cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-2 text-xl font-bold text-white hover:bg-low"
             type="submit"
           >
             Register
@@ -57,12 +56,12 @@
       </form>
       <footer>
         <RouterLink
-          class="float-left text-sm text-black hover:text-low"
+          class="float-left text-black hover:text-low"
           :to="{ name: 'SignUp' }"
           >Forgot Password?</RouterLink
         >
         <RouterLink
-          class="float-right text-sm text-black hover:text-low"
+          class="float-right text-black hover:text-low"
           :to="{ name: 'Login' }"
           >Login</RouterLink
         >
@@ -97,7 +96,6 @@ async function register() {
 
   try {
     await registerUser(user)
-    await loginUser(user.email, user.password)
     router.push({ name: 'Dashboard' })
   } catch (error) {
     console.error('[register Error]', error)

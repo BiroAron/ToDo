@@ -5,7 +5,6 @@ import Dashboard from './views/Dashboard.vue'
 import { isAuthenticated } from './helpers/authentication'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: isAuthenticated() ? '/dashboard' : '/login' },
   { path: '/login', name: 'Login', component: Login },
   { path: '/sign-up', name: 'SignUp', component: SignUp },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard }
@@ -14,6 +13,14 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   routes,
   history: createWebHistory()
+})
+
+router.beforeEach(async (to, from) => {
+  if (!isAuthenticated() && to.name === 'Dashboard') {
+    return { name: 'Login' }
+  } else if (isAuthenticated() && to.name !== 'Dashboard') {
+    return { name: 'Dashboard' }
+  }
 })
 
 export default router
