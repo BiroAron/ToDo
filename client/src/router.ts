@@ -5,6 +5,13 @@ import Dashboard from './views/Dashboard.vue'
 import { isAuthenticated } from './helpers/authentication'
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    name: 'Home',
+    redirect: () => {
+      return isAuthenticated() ? '/dashboard' : '/login'
+    }
+  },
   { path: '/login', name: 'Login', component: Login },
   { path: '/sign-up', name: 'SignUp', component: SignUp },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard }
